@@ -1,0 +1,15 @@
+/root/node_modules/egg/lib/start.js:5
+module.exports = async (options = {}) => {
+                       ^
+
+SyntaxError: Unexpected token (
+    at createScript (vm.js:56:10)
+    at Object.runInThisContext (vm.js:97:10)
+    at Module._compile (module.js:549:28)
+    at Object.Module._extensions..js (module.js:586:10)
+    at Module.load (module.js:494:32)
+    at tryModuleLoad (module.js:453:12)
+    at Function.Module._load (module.js:445:3)
+    at Module.require (module.js:504:17)
+    at require (internal/module.js:20:19)
+    at Object.<anonymous> (/root/node_modules/egg/index.js:17:17)
