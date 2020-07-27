@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 //样式
 import 'package:gezhi/style/style.dart';
 
+//小组件
+import 'package:gezhi/widgets/home/diary_list.dart';
+
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -121,10 +124,6 @@ class Home extends StatelessWidget {
             ),
             child: Column(
               children: <Widget>[
-                // SizedBox(
-                //   height: 10,
-                //   width: double.infinity,
-                // ),
                 Center(
                   child: Container(
                       width: 50,
@@ -174,7 +173,13 @@ class Home extends StatelessWidget {
                       },
                     )
                   ],
-                )
+                ),
+                Expanded(
+                    child: Container(
+                  width: double.infinity,
+                  child: DiaryList(),
+                ))
+                // DiaryList(),
               ],
             ),
           );

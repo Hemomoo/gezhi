@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:gezhi/pages/index.dart';
 
 void main() {
-  debugPaintSizeEnabled = !true;
+  debugPaintSizeEnabled = true;
   runApp(MyApp());
 }
 
