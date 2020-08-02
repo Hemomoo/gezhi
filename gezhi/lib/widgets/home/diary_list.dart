@@ -86,7 +86,10 @@ class BottomSheetHead extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Icon(Icons.check),
-        Text('日记本'),
+        Text(
+          '日记本',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
         PopupMenuButton(
           onSelected: (val) {
             Clipboard.setData(ClipboardData(text: val)).then(
@@ -95,6 +98,7 @@ class BottomSheetHead extends StatelessWidget {
               },
             );
           },
+          icon: Icon(Icons.more_horiz),
           itemBuilder: (context) {
             return <PopupMenuEntry<String>>[
               PopupMenuItem<String>(

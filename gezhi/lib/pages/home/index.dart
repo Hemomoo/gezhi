@@ -9,13 +9,20 @@ import 'package:gezhi/widgets/home/diary_list.dart';
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    DateTime today = new DateTime.now();
+    String dateSlug =
+        '''${today.year.toString()}年${today.month.toString().padLeft(2, '0')}月${today.day.toString().padLeft(2, '0')}''';
+
+    String weekDay =
+        ['一', '二', '三', '四', '五', '六', '日'][new DateTime.now().weekday - 1];
+
     return Scaffold(
       body: Container(
         padding: EdgeInsets.all(10.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text('2020年7月19日 星期日'),
+            Text('$dateSlug $weekDay'),
             Text(
               '今天过的怎么杨？',
               textAlign: TextAlign.left,
@@ -70,7 +77,6 @@ class Home extends StatelessWidget {
                 PopupMenuButton(
                   onSelected: (value) {
                     _editeDiary(context);
-                    print('$value');
                   },
                   icon: Icon(Icons.more_horiz),
                   itemBuilder: (context) {
@@ -198,7 +204,6 @@ class Home extends StatelessWidget {
     }
 
     dateList.forEach((element) {
-      print(element["day"]);
       list.add(Container(
         decoration: BoxDecoration(
             border:

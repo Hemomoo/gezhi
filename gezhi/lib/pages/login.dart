@@ -1,0 +1,92 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:gezhi/style/style.dart';
+
+class Login extends StatefulWidget {
+  @override
+  _LoginState createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  List<String> imageList = List();
+  int _currentIndex = 0;
+
+  @override
+  void initState() {
+    imageList = [
+      'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2726034926,4129010873&fm=26&gp=0.jpg',
+      'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3485348007,2192172119&fm=26&gp=0.jpg',
+      'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2594792439,969125047&fm=26&gp=0.jpg',
+      'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=190488632,3936347730&fm=26&gp=0.jpg'
+    ];
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        Container(
+          child: Swiper(
+            itemCount: imageList.length,
+            itemBuilder: _swiperBuilder,
+            pagination: SwiperPagination(
+              alignment: Alignment(0.0, 0.8),
+              margin: const EdgeInsets.fromLTRB(0, 0, 20, 10),
+              builder: DotSwiperPaginationBuilder(
+                  color: Colors.black54, activeColor: Colors.white),
+            ),
+            controller: SwiperController(),
+            scrollDirection: Axis.horizontal,
+            // autoplay: true,
+            onTap: (index) => {
+              setState(
+                () {
+                  _currentIndex = index;
+                },
+              )
+            },
+          ),
+        ),
+        Positioned(
+          bottom: 20,
+          left: 42,
+          child: Column(
+            children: <Widget>[
+              Center(
+                child: RaisedButton(
+                  color: GZColors.primary,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10.0),
+                      ),
+                    ),
+                    child: Text(
+                      "开始",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  onPressed: () {},
+                ),
+              )
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _swiperBuilder(BuildContext context, int index) {
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+            image: NetworkImage(imageList[index]), fit: BoxFit.cover),
+      ),
+    );
+  }
+}
