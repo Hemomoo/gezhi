@@ -11,7 +11,7 @@ module.exports = () => {
         HTTP的header项「Authorization」是在HTTP 1.0引入的，它的值的格式是类型+token，支持多种鉴权方案，bearer只是其中的一种。请求的时候需要加bearer
       */
       authToken = authToken.substring(7);
-      const res = verifyToken(authToken); // 解密token
+      const res = verifyToken(ctx,authToken); // 解密token
      
       // 两个的时间戳字数不一样，一个13位一个10位
       if (Date.parse(new Date()) - res.exp*1000 > 0) {
@@ -20,6 +20,7 @@ module.exports = () => {
           msg: '登录过期请重新登录',
         };
       }
+
       ctx.locals.userid = res.userid;
       await next();
     } else {
@@ -29,15 +30,15 @@ module.exports = () => {
 };
 
 // 解密token
-function verifyToken(token) {
+function verifyToken(ctx,token) {
   const cert = fs.readFileSync(path.join(__dirname, '../public/rsa_private_key.pem'));
   // const cert = fs.readFileSync(path.join(__dirname, '../public/rsa_public_key.pem')); // 公钥，看后面生成方法,公钥私钥生成出问题 倒置无法解密 都有的一个密钥
   let res = '';
   try {
-
-    res = jwt.verify(token, cert) || {};
+    res =  jwt.verify(token, cert) || {};
   } catch (e) {
-    console.log(e);
+    throw new Error(e);
+    ctx.logger.error(e)
   }
   return res;
 }
