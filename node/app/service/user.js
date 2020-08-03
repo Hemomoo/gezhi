@@ -47,19 +47,19 @@ class UserService extends Service {
   async tipLibrary() {
     const { ctx, app } = this;
     const userid = ctx.locals.userid;
-    const dayRes = ctx.helper.format(await app.mysql.select('tipLibrary', {
+    const dayRes = ctx.helper.format(await app.mysql.select('tiplibrary', {
       where: { date: '日', userid },
       columns: [ 'tip' ],
     }));
-    const weekRes = ctx.helper.format(await app.mysql.select('tipLibrary', {
+    const weekRes = ctx.helper.format(await app.mysql.select('tiplibrary', {
       where: { date: '周', userid },
       columns: [ 'tip' ],
     }));
-    const monthRes = ctx.helper.format(await app.mysql.select('tipLibrary', {
+    const monthRes = ctx.helper.format(await app.mysql.select('tiplibrary', {
       where: { date: '月', userid },
       columns: [ 'tip' ],
     }));
-    const yearRes = ctx.helper.format(await app.mysql.select('tipLibrary', {
+    const yearRes = ctx.helper.format(await app.mysql.select('tiplibrary', {
       where: { date: '年', userid },
       columns: [ 'tip' ],
     }));
@@ -74,8 +74,8 @@ class UserService extends Service {
   async famousRemark() {
     const { ctx, app } = this;
     const userid = ctx.locals.userid;
-    const res = await app.mysql.select('famous_remark', { where: { userid }, columns: [ 'remark' ] });
-    return res;
+    const res =  ctx.helper.format( await app.mysql.select('famous_remark', { where: { userid }, columns: [ 'remark' ] }));
+    return res.map(item=>item.remark);
   }
 }
 

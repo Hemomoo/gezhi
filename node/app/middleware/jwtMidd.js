@@ -12,7 +12,9 @@ module.exports = () => {
       */
       authToken = authToken.substring(7);
       const res = verifyToken(authToken); // 解密token
-      if (Date.parse(new Date()) - res.exp > 0) {
+     
+      // 两个的时间戳字数不一样，一个13位一个10位
+      if (Date.parse(new Date()) - res.exp*1000 > 0) {
         ctx.body = {
           code: 5009,
           msg: '登录过期请重新登录',
@@ -32,6 +34,7 @@ function verifyToken(token) {
   // const cert = fs.readFileSync(path.join(__dirname, '../public/rsa_public_key.pem')); // 公钥，看后面生成方法,公钥私钥生成出问题 倒置无法解密 都有的一个密钥
   let res = '';
   try {
+
     res = jwt.verify(token, cert) || {};
   } catch (e) {
     console.log(e);

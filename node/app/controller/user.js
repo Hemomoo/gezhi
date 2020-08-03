@@ -12,7 +12,7 @@ class userController extends Controller {
       const errors = app.validator.validate({ name: 'string', password: {
         type: 'string',
         min: 6,
-      } }, ctx.request.body);
+      }}, ctx.request.body);
       // 如果判断成功就是undefind
       if (errors) {
         ctx.body = { code: 0, errors };
@@ -31,7 +31,6 @@ class userController extends Controller {
     }
   }
 
-  /* 成功会返回一个undefined*/
   // 登录
   async userLogin() {
     const { ctx, app } = this;
@@ -50,7 +49,7 @@ class userController extends Controller {
         ctx.body = { code: 0, res: '', msg: '您还没有注册' };
       } else {
         const cert = fs.readFileSync(path.join(__dirname, '../public/rsa_private_key.pem'));
-        const token = jwt.sign({ userid }, cert, { expiresIn: '1h' }); // token签名 有效期为1小时
+        const token = jwt.sign({ userid }, cert, { expiresIn: '10h' }); // token签名 有效期为1小时
         ctx.body = {
           message: '获取token成功',
           code: 1,
@@ -62,16 +61,15 @@ class userController extends Controller {
   }
 
 
-  async userIndex() {
-
-  }
-
-
   // 提示库数据
   async tipLibrary() {
     const { ctx } = this;
     const res = await ctx.service.user.tipLibrary();
-    ctx.body = res;
+    ctx.body = {
+      code:1,
+      res:res,
+      msg:'获取提示数据成功'
+    }
   }
 
   // 获取名人名言
@@ -80,10 +78,12 @@ class userController extends Controller {
     const res = await ctx.service.user.famousRemark();
     ctx.body = {
       code: 1,
-      res: res[0],
+      res: res  ,
       msg: '获取名言成功',
     };
   }
+
+
 }
 
 module.exports = userController;
