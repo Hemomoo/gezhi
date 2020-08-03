@@ -12,7 +12,7 @@ module.exports = () => {
       */
       authToken = authToken.substring(7);
       const res = verifyToken(ctx,authToken); // 解密token
-     
+      
       // 两个的时间戳字数不一样，一个13位一个10位
       if (Date.parse(new Date()) - res.exp*1000 > 0) {
         ctx.body = {
@@ -38,7 +38,7 @@ function verifyToken(ctx,token) {
     res =  jwt.verify(token, cert) || {};
   } catch (e) {
     throw new Error(e);
-    ctx.logger.error(e)
+    // ctx.logger.error(e)
   }
   return res;
 }

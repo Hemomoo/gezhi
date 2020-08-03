@@ -1,5 +1,6 @@
 "use strict";
 
+
 const Service = require("egg").Service;
 // 一个 Service 文件只能包含一个类， 这个类需要通过 module.exports 的方式返回。
 
@@ -75,20 +76,42 @@ class UserService extends Service {
     };
   }
 
+  // 添加提示库
+  async addTipLibrary(date, tip) {
+    const { ctx, app } = this;
+    const userid = ctx.locals.userid;
+    const res = ctx.helper.format(
+      await app.mysql.insert("tiplibrary", { date: date, tip: tip ,userid:userid})
+    );
+  }
+
+  // 查询名言
   async famousRemark() {
     const { ctx, app } = this;
     const userid = ctx.locals.userid;
-    console.log('userid');
     const res = ctx.helper.format(
-      await app.mysql.query('SELECT * FROM famous_remark Where userid = ? ORDER BY RAND() LIMIT 1',[1]) 
-      // await app.mysql.select("famous_remark", {
-      //   where: { userid },
-      //   columns: ["remark"],
-      //   order:[]
-      // })
+      await app.mysql.query(
+        "SELECT * FROM famous_remark Where userid = ? ORDER BY RAND() LIMIT 1",
+        [userid]
+      )
     );
-    console.log('res',res)
     return res.map((item) => item.remark);
+  }
+
+
+
+
+  // 插入名言
+  async addFamousRemark(remark) {
+    const { ctx, app } = this;
+    const userid = ctx.locals.userid;
+    const insetRes = ctx.helper.format(
+      await app.mysql.insert("famous_remark", {
+        userid: userid,
+        remark: remark,
+      })
+    );
+    return insetRes;
   }
 }
 

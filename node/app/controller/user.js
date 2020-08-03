@@ -1,18 +1,24 @@
-'use strict';
-const Controller = require('egg').Controller;
-const path = require('path');
-const fs = require('fs');
-const jwt = require('jsonwebtoken'); // 引入jsonwebtoken
+"use strict";
+const Controller = require("egg").Controller;
+const path = require("path");
+const fs = require("fs");
+const jwt = require("jsonwebtoken"); // 引入jsonwebtoken
 
 class userController extends Controller {
   // 注册
   async userRegister() {
     const { ctx, app } = this;
     try {
-      const errors = app.validator.validate({ name: 'string', password: {
-        type: 'string',
-        min: 6,
-      }}, ctx.request.body);
+      const errors = app.validator.validate(
+        {
+          name: "string",
+          password: {
+            type: "string",
+            min: 6,
+          },
+        },
+        ctx.request.body
+      );
       // 如果判断成功就是undefind
       if (errors) {
         ctx.body = { code: 0, errors };
@@ -21,54 +27,80 @@ class userController extends Controller {
         const register = await ctx.service.user.userRegister(password, name);
         // 判断是不是注册了
         if (!register) {
-          ctx.body = { code: 0, res: {}, message: '账号已经被注册' };
+          ctx.body = { code: 0, res: {}, message: "账号已经被注册" };
         } else {
-          ctx.body = { code: 1, res: {}, message: '账号注册成功' };
+          ctx.body = { code: 1, res: {}, message: "账号注册成功" };
         }
       }
     } catch (error) {
-      console.log('error: ', error);
+      console.log("error: ", error);
     }
   }
 
   // 登录
   async userLogin() {
     const { ctx, app } = this;
-    const errors = app.validator.validate({ name: 'string', password: {
-      type: 'string',
-      min: 6,
-    } }, ctx.request.body);
+    const errors = app.validator.validate(
+      {
+        name: "string",
+        password: {
+          type: "string",
+          min: 6,
+        },
+      },
+      ctx.request.body
+    );
     const { password, name } = ctx.request.body;
     if (errors) {
       ctx.body = { code: 0, errors };
     } else {
       const login = await ctx.service.user.userLogin(password, name);
-      const [ loginRes ] = login;
+      const [loginRes] = login;
       const { avatar, isVip, userid } = loginRes;
       if (+login.length === 0) {
-        ctx.body = { code: 0, res: '', msg: '您还没有注册' };
+        ctx.body = { code: 0, res: "", msg: "您还没有注册" };
       } else {
-        const cert = fs.readFileSync(path.join(__dirname, '../public/rsa_private_key.pem'));
-        const token = jwt.sign({ userid }, cert, { expiresIn: '10h' }); // token签名 有效期为1小时
+        const cert = fs.readFileSync(
+          path.join(__dirname, "../public/rsa_private_key.pem")
+        );
+        const token = jwt.sign({ userid }, cert, { expiresIn: "10h" }); // token签名 有效期为1小时
         ctx.body = {
-          message: '获取token成功',
+          message: "获取token成功",
           code: 1,
           res: { token, name, avatar, isVip },
         };
       }
-
     }
   }
-
 
   // 提示库数据
   async tipLibrary() {
     const { ctx } = this;
     const res = await ctx.service.user.tipLibrary();
     ctx.body = {
-      code:1,
-      res:res,
-      msg:'获取提示数据成功'
+      code: 1,
+      res: res,
+      msg: "获取提示数据成功",
+    };
+  }
+
+  // 添加提示库
+  async addTipLibrary() {
+    const { ctx, app } = this;
+
+    const errors = app.validator.validate(
+      { date: "string", tip: "string" },
+      ctx.request.body
+    );
+    if (errors) {
+      ctx.body = { code: 0, errors };
+    } else {
+      const { date, tip } = ctx.request.body;
+      const res = await ctx.service.user.addTipLibrary(date, tip);
+      ctx.body = {
+        code: 1,
+        msg: "添加提示成功",
+      };
     }
   }
 
@@ -78,12 +110,29 @@ class userController extends Controller {
     const res = await ctx.service.user.famousRemark();
     ctx.body = {
       code: 1,
-      res: res  ,
-      msg: '获取名言成功',
+      res: res,
+      msg: "获取名言成功",
     };
   }
 
-
+  // 添加名言
+  async addFamousRemark() {
+    const { ctx, app } = this;
+    const errors = app.validator.validate(
+      { remark: "string" },
+      ctx.request.body
+    );
+    if (errors) {
+      ctx.body = { code: 0, errors };
+    } else {
+      const { remark } = ctx.request.body;
+      const res = await ctx.service.user.addFamousRemark(remark);
+      ctx.body = {
+        code: 1,
+        msg: "添加成功",
+      };
+    }
+  }
 }
 
 module.exports = userController;
