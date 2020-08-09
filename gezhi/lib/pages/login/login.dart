@@ -16,8 +16,8 @@ class _LoginState extends State<Login> {
     imageList = [
       'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2726034926,4129010873&fm=26&gp=0.jpg',
       'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3485348007,2192172119&fm=26&gp=0.jpg',
-      'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2594792439,969125047&fm=26&gp=0.jpg',
-      'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=190488632,3936347730&fm=26&gp=0.jpg'
+      'http://ppe.oss-cn-shenzhen.aliyuncs.com/palette/480314/1596695976584/thumb_Thu_Aug_06_2020.jpg',
+      'http://ppe.oss-cn-shenzhen.aliyuncs.com/palette/480314/1596695096677/thumb_Thu_Aug_06_2020.jpg'
     ];
     super.initState();
   }
@@ -34,7 +34,9 @@ class _LoginState extends State<Login> {
               alignment: Alignment(0.0, 0.8),
               margin: const EdgeInsets.fromLTRB(0, 0, 20, 10),
               builder: DotSwiperPaginationBuilder(
-                  color: Colors.black54, activeColor: Colors.white),
+                color: Colors.black54,
+                activeColor: Colors.white,
+              ),
             ),
             controller: SwiperController(),
             scrollDirection: Axis.horizontal,
@@ -50,26 +52,31 @@ class _LoginState extends State<Login> {
         ),
         Positioned(
           bottom: 20,
-          left: 42,
+          // left: 42,
           child: Column(
             children: <Widget>[
-              Center(
-                child: RaisedButton(
-                  color: GZColors.primary,
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10.0),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                child: Center(
+                  child: RaisedButton(
+                    color: GZColors.primary,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
+                        ),
+                      ),
+                      child: Text(
+                        "开始",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white),
                       ),
                     ),
-                    child: Text(
-                      "开始",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white),
-                    ),
+                    onPressed: () {
+                      Navigator.of(context).pushNamed('/survey');
+                    },
                   ),
-                  onPressed: () {},
                 ),
               )
             ],
@@ -79,6 +86,7 @@ class _LoginState extends State<Login> {
     );
   }
 
+  // 首页轮播图
   Widget _swiperBuilder(BuildContext context, int index) {
     return Container(
       height: MediaQuery.of(context).size.height,

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:gezhi/pages/index.dart';
-import 'package:gezhi/pages/login.dart';
+import 'package:gezhi/pages/login/login.dart';
+
+// 路由
+import 'package:gezhi/routes/route.dart';
 
 void main() {
   // debugPaintSizeEnabled = true;
@@ -14,7 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false, // 取消debug
       theme: ThemeData(
         highlightColor: Color.fromARGB(0, 0, 0, 0),
         splashColor: Color.fromARGB(0, 0, 0, 5),
@@ -23,6 +26,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Login(),
+      routes: new Routes(context).routes,
     );
   }
 }

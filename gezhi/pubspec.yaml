@@ -33,6 +33,7 @@ dependencies:
   toast: ^0.1.5
   intl: ^0.16.1
   flutter_swiper: ^1.1.6
+  flutter_screenutil: ^2.3.0
 
 
 
