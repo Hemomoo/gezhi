@@ -9,8 +9,8 @@ class UserService extends Service {
 
   // 搜索日记
   async searchDiary() {
-    const user = await this.app.mysql.query('select * from diary where id = ?', 1);
-    return user;
+    const res = await this.app.mysql.query('select * from diary where FIND_IN_SET("好", diary)');
+    return res;
   }
   // 统计记录总共多少天
   async total() {
