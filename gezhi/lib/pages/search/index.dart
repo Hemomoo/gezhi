@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gezhi/widgets/search/statistics.dart';
 
 class Search extends StatelessWidget {
   @override
@@ -7,7 +8,7 @@ class Search extends StatelessWidget {
       appBar: AppBar(
         title: new Center(
           child: new Text(
-            '时间线',
+            '搜索',
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.black),
           ),
@@ -16,6 +17,13 @@ class Search extends StatelessWidget {
         backgroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
         iconTheme: IconThemeData(color: Colors.black),
+      ),
+      body: Container(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [Statistics()],
+        ),
       ),
     );
   }

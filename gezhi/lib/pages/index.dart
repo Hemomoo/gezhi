@@ -5,6 +5,7 @@ import 'home/index.dart';
 import 'me/index.dart';
 import 'search/index.dart';
 import 'time_line/index.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class IndexPage extends StatefulWidget {
   @override
@@ -30,9 +31,9 @@ class _IndexPageState extends State<IndexPage> {
   }
 
   List<Widget> tabBodies = [Home(), TimeLine(), Calendar(), Search(), Me()];
-
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context, width: 750, height: 1334);
     return Scaffold(
       body: tabBodies[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
