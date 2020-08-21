@@ -11,8 +11,7 @@ class DiaryList extends StatelessWidget {
     );
     Widget divider2 = Divider(color: Colors.grey);
     return ListView.separated(
-      itemCount: 1,
-
+      itemCount: 2,
       //列表项构造器
       itemBuilder: (BuildContext context, int index) {
         return Container(

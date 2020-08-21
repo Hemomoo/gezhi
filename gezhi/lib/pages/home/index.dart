@@ -5,6 +5,8 @@ import 'package:gezhi/style/style.dart';
 
 //小组件
 import 'package:gezhi/widgets/home/diary_list.dart';
+//公用组件
+import 'package:gezhi/widgets/common/common.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -52,7 +54,10 @@ class Home extends StatelessWidget {
                   Expanded(
                     child: Container(
                       decoration: BoxDecoration(
-                          border: Border(top: BorderSide(width: 2))),
+                        border: Border(
+                          top: BorderSide(width: 2),
+                        ),
+                      ),
                       child: Text(
                         '30周',
                         style: TextStyle(
@@ -76,7 +81,9 @@ class Home extends StatelessWidget {
                 ),
                 PopupMenuButton(
                   onSelected: (value) {
-                    _editeDiary(context);
+                    if (value == '编辑日记本') {
+                      _editeDiary(context);
+                    }
                   },
                   icon: Icon(Icons.more_horiz),
                   itemBuilder: (context) {
@@ -116,80 +123,74 @@ class Home extends StatelessWidget {
     );
   }
 
+  // 编辑日记本
   _editeDiary(BuildContext context) {
     showModalBottomSheet(
-        context: context,
-        backgroundColor: Colors.transparent,
-        builder: (BuildContext context) {
-          return Container(
-            margin: EdgeInsets.all(10),
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(14)),
-            ),
-            child: Column(
-              children: <Widget>[
-                Center(
-                  child: Container(
-                      width: 50,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: BorderRadius.all(Radius.circular(4)),
-                      )),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    IconButton(icon: Icon(Icons.edit), onPressed: null),
-                    Text('日记本',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20)),
-                    PopupMenuButton(
-                      icon: Icon(Icons.sort),
-                      itemBuilder: (content) {
-                        return <PopupMenuEntry<String>>[
-                          PopupMenuItem<String>(
-                            value: '新增日记本',
-                            child: Row(
-                              children: <Widget>[
-                                Icon(Icons.library_add,
-                                    color: GZColors.primary),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text('新增日记本'),
-                              ],
-                            ),
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) {
+        return Container(
+          margin: EdgeInsets.all(10),
+          padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(14)),
+          ),
+          child: Column(
+            children: <Widget>[
+              CommonWidget.line(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  IconButton(icon: Icon(Icons.edit), onPressed: null),
+                  Text('日记本',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                  PopupMenuButton(
+                    icon: Icon(Icons.sort),
+                    itemBuilder: (content) {
+                      return <PopupMenuEntry<String>>[
+                        PopupMenuItem<String>(
+                          value: '新增日记本',
+                          child: Row(
+                            children: <Widget>[
+                              Icon(Icons.library_add, color: GZColors.primary),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text('新增日记本'),
+                            ],
                           ),
-                          PopupMenuItem<String>(
-                            value: '编辑日记本',
-                            child: Row(
-                              children: <Widget>[
-                                Icon(Icons.create, color: GZColors.primary),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text('编辑日记本'),
-                              ],
-                            ),
+                        ),
+                        PopupMenuItem<String>(
+                          value: '编辑日记本',
+                          child: Row(
+                            children: <Widget>[
+                              Icon(Icons.create, color: GZColors.primary),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text('编辑日记本'),
+                            ],
                           ),
-                        ];
-                      },
-                    )
-                  ],
-                ),
-                Expanded(
-                    child: Container(
+                        ),
+                      ];
+                    },
+                  )
+                ],
+              ),
+              Expanded(
+                child: Container(
                   width: double.infinity,
                   child: DiaryList(),
-                ))
-                // DiaryList(),
-              ],
-            ),
-          );
-        });
+                ),
+              ),
+              // DiaryList(),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   List<Widget> dayWidgetList() {

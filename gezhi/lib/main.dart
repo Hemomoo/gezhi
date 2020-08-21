@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:gezhi/pages/index.dart';
-import 'package:gezhi/pages/login/login.dart';
+// import 'package:gezhi/pages/login/login.dart';
 
 // 路由
 import 'package:gezhi/routes/route.dart';
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Login(),
+      home: IndexPage(),
       routes: new Routes(context).routes,
     );
   }

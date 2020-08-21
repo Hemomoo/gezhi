@@ -4,7 +4,7 @@ class Me extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text("首页"),
+      child: Text("我的"),
     );
   }
 }
