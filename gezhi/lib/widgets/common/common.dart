@@ -17,4 +17,11 @@ class CommonWidget {
           )),
     );
   }
+
+  static Widget arrow() {
+    return Icon(
+      Icons.keyboard_arrow_right,
+      size: 30,
+    );
+  }
 }

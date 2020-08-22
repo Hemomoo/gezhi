@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gezhi/widgets/search/statistics.dart';
+import 'package:gezhi/widgets/search/img_box.dart';
+import 'package:gezhi/widgets/search/headline.dart';
 
 class Search extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black12, // 整个页面的背景颜色
       appBar: AppBar(
         title: new Center(
           child: new Text(
@@ -18,13 +21,28 @@ class Search extends StatelessWidget {
         shadowColor: Colors.transparent,
         iconTheme: IconThemeData(color: Colors.black),
       ),
-      body: Container(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [Statistics()],
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.all(10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Statistics(),
+              _sizeBox(),
+              ImgBox(),
+              _sizeBox(),
+              Heading()
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _sizeBox() {
+    return SizedBox(
+      height: 20,
+      width: double.infinity,
     );
   }
 }
