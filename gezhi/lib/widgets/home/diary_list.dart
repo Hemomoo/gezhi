@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:toast/toast.dart';
-// import 'package:toast/toast.dart';
 
 class DiaryList extends StatelessWidget {
   @override

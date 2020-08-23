@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:gezhi/widgets/search/search_bar.dart';
 import 'package:gezhi/widgets/search/statistics.dart';
 import 'package:gezhi/widgets/search/img_box.dart';
 import 'package:gezhi/widgets/search/headline.dart';
+import 'package:gezhi/widgets/search/tags.dart';
+import 'package:gezhi/widgets/search/year.dart';
 
 class Search extends StatelessWidget {
   @override
@@ -27,11 +30,16 @@ class Search extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              SearchBar(),
               Statistics(),
               _sizeBox(),
               ImgBox(),
               _sizeBox(),
-              Heading()
+              Heading(),
+              _sizeBox(),
+              Tags(),
+              _sizeBox(),
+              Year()
             ],
           ),
         ),

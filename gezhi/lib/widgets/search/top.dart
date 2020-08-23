@@ -19,7 +19,10 @@ class Top extends StatelessWidget {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             Row(
-              children: [Text(num.toString()), CommonWidget.arrow()],
+              children: [
+                Chip(label: Text(num.toString())),
+                CommonWidget.arrow()
+              ],
             ),
           ],
         ),

@@ -6,8 +6,8 @@ class Heading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 15.0, //设置阴影
-      shape: const RoundedRectangleBorder(
+      elevation: 0, //设置阴影
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(14.0),
         ),
