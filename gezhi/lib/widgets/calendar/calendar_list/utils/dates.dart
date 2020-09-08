@@ -27,3 +27,17 @@ String getMonthName(int month, {List<String> monthNames}) {
       ];
   return names[month - 1];
 }
+
+List<int> getWeekNum(int year, int month) {
+  int days = getDaysInMonth(year, month);
+  int week = DateTime(year, month, 1).weekday;
+  if (days == 31 && (week == 6 || week == 5)) {
+    return [1, 2, 3, 4, 5, 6];
+  } else if (days == 30 && week == 6) {
+    return [1, 2, 3, 4, 5, 6];
+  } else if (days == 28 && week == 7) {
+    return [1, 2, 3, 4];
+  } else {
+    return [1, 2, 3, 4, 5];
+  }
+}

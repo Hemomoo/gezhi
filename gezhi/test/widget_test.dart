@@ -1,48 +1,106 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
+import 'dart:convert';
+import 'dart:io';
 
-class Login extends StatefulWidget {
-  @override
-  _LoginState createState() => _LoginState();
+import 'package:flutter/material.dart';
+import 'package:quill_delta/quill_delta.dart';
+import 'package:zefyr/zefyr.dart';
+
+void main() {
+  runApp(ZefyrApp());
 }
 
-class _LoginState extends State<Login> {
-  List<Widget> imageList = List();
+// Create a Focus Intent that does nothing
+class FakeFocusIntent extends Intent {
+  const FakeFocusIntent();
+}
+
+class ZefyrApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Zefyr Editor',
+      home: EditorPage(),
+    );
+  }
+
+}
+
+
+class EditorPage extends StatefulWidget {
+  @override
+  EditorPageState createState() => EditorPageState();
+}
+
+class EditorPageState extends State<EditorPage> {
+  /// Allows to control the editor and the document.
+  ZefyrController _controller;
+
+  /// Zefyr editor like any other input field requires a focus node.
+  FocusNode _focusNode;
 
   @override
   void initState() {
-    imageList
-      ..add(Image.network(
-        'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2726034926,4129010873&fm=26&gp=0.jpg',
-        fit: BoxFit.fill,
-      ))
-      ..add(Image.network(
-        'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3485348007,2192172119&fm=26&gp=0.jpg',
-        fit: BoxFit.fill,
-      ))
-      ..add(Image.network(
-        'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2594792439,969125047&fm=26&gp=0.jpg',
-        fit: BoxFit.fill,
-      ))
-      ..add(Image.network(
-        'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=190488632,3936347730&fm=26&gp=0.jpg',
-        fit: BoxFit.fill,
-      ));
     super.initState();
+    _focusNode = FocusNode();
+    _loadDocument().then((document) {
+      setState(() {
+        _controller = ZefyrController(document);
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: Container(),
-        ),
-        Container(
-          height: screenHeight * 0.3,
-        )
-      ],
+    final body = (_controller == null)
+        ? Center(child: CircularProgressIndicator())
+        : ZefyrScaffold(
+      child: ZefyrEditor(
+        padding: EdgeInsets.all(16),
+        controller: _controller,
+        focusNode: _focusNode,
+      ),
     );
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Editor page'),
+        actions: <Widget>[
+          Builder(
+            builder: (context) => IconButton(
+              icon: Icon(Icons.save),
+              onPressed: () => _saveDocument(context),
+            ),
+          )
+        ],
+      ),
+      body: body,
+    );
+  }
+
+  /// Loads the document asynchronously from a file if it exists, otherwise
+  /// returns default document.
+  Future<NotusDocument> _loadDocument() async {
+    final file = File(Directory.systemTemp.path + '/quick_start.json');
+    if (await file.exists()) {
+      final contents = await file
+          .readAsString()
+          .then((data) => Future.delayed(Duration(seconds: 1), () => data));
+      return NotusDocument.fromJson(jsonDecode(contents));
+    }
+    final delta = Delta()..insert('Zefyr Quick Start\n');
+    return NotusDocument.fromDelta(delta);
+  }
+
+  void _saveDocument(BuildContext context) {
+    // Notus documents can be easily serialized to JSON by passing to
+    // `jsonEncode` directly:
+    final contents = jsonEncode(_controller.document);
+    // For this example we save our document to a temporary file.
+    final file = File(Directory.systemTemp.path + '/quick_start.json');
+    // And show a snack bar on success.
+    file.writeAsString(contents).then((_) {
+      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Saved.')));
+    });
   }
 }

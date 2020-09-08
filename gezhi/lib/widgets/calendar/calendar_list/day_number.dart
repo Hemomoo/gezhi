@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gezhi/style/style.dart';
 import 'calendar_notification.dart';
 
 class DayNumber extends StatefulWidget {
@@ -31,10 +32,11 @@ class _DayNumberState extends State<DayNumber> {
       margin: EdgeInsets.all(itemMargin),
       alignment: Alignment.center,
       decoration: (isSelected && widget.day > 0)
-          ? BoxDecoration(color: Colors.blue)
-          : widget.isToday ? BoxDecoration(color: widget.todayColor) : null,
-      child: Text(
-        widget.day < 1 ? '' : widget.day.toString(),
+          ? BoxDecoration(color: GZColors.primary,borderRadius: BorderRadiusDirectional.circular(30))
+            : widget.isToday ? BoxDecoration(color: widget.todayColor) : null,
+    child: Text(
+
+    widget.day < 1 ? '' : widget.day.toString(),
         textAlign: TextAlign.center,
         style: TextStyle(
           color: (widget.isToday || isSelected) ? Colors.white : Colors.black87,

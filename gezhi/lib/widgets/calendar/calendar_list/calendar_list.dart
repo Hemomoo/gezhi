@@ -1,9 +1,9 @@
 library calendar_list;
 
+import 'package:event_bus/event_bus.dart';
 import 'package:flutter/material.dart';
 
 import 'month_view.dart';
-import 'weekday_row.dart';
 
 class CalendarList extends StatefulWidget {
   final DateTime firstDate;
@@ -11,13 +11,15 @@ class CalendarList extends StatefulWidget {
   final DateTime selectedStartDate;
   final DateTime selectedEndDate;
   final Function onSelectFinish;
+  final EventBus eventBus;
 
   CalendarList(
       {@required this.firstDate,
       @required this.lastDate,
       this.onSelectFinish,
       this.selectedStartDate,
-      this.selectedEndDate})
+      this.selectedEndDate,
+      this.eventBus})
       : assert(firstDate != null),
         assert(lastDate != null),
         assert(!firstDate.isAfter(lastDate),
@@ -36,6 +38,9 @@ class _CalendarListState extends State<CalendarList> {
   int yearEnd;
   int monthEnd;
   int count;
+  int initCount;
+
+  ScrollController _controller = ScrollController();
 
   @override
   void initState() {
@@ -49,6 +54,19 @@ class _CalendarListState extends State<CalendarList> {
     yearEnd = widget.lastDate.year;
     monthEnd = widget.lastDate.month;
     count = monthEnd - monthStart + (yearEnd - yearStart) * 12 + 1;
+    initCount = DateTime.now().month -
+        monthStart +
+        (DateTime.now().year - yearStart) * 12 +
+        1;
+
+    // 延时1s执行返回
+    Future.delayed(Duration(seconds: 0), () {
+      // print('延时1s执行');
+    });
+
+    _controller.addListener(() {
+      // print(_controller.offset); //打印滚动位置
+    });
   }
 
   // 选项处理回调
@@ -84,101 +102,23 @@ class _CalendarListState extends State<CalendarList> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: <Widget>[
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              height: 55.0,
-              child: Container(
-                padding: EdgeInsets.only(
-                    left: HORIZONTAL_PADDING, right: HORIZONTAL_PADDING),
-                decoration: BoxDecoration(
-                  // border: Border.all(width: 3, color: Color(0xffaaaaaa)),
-                  // 实现阴影效果
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.black12,
-                        offset: Offset(0, 2.0),
-                        blurRadius: 1.0)
-                  ],
-                ),
-                child: WeekdayRow(),
-              ),
+    return Container(
+      child: CustomScrollView(
+        controller: _controller,
+        cacheExtent: 10,
+        semanticChildCount:100,
+        slivers: <Widget>[
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                int month = index + monthStart;
+                DateTime calendarDateTime = DateTime(yearStart, month);
+                return _getMonthView(calendarDateTime, widget.eventBus);
+              },
+              childCount: count,
             ),
-            Container(
-              margin: EdgeInsets.only(top: 55.0, bottom: 100.0),
-              child: CustomScrollView(
-                slivers: <Widget>[
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        int month = index + monthStart;
-                        DateTime calendarDateTime = DateTime(yearStart, month);
-                        return _getMonthView(calendarDateTime);
-                      },
-                      childCount: count,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Positioned(
-              bottom: 0.0,
-              left: 0.0,
-              right: 0.0,
-              height: 100.0,
-              child: Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.only(
-                    left: 15.0, top: 15.0, bottom: 32.0, right: 15.0),
-                decoration: BoxDecoration(
-                  // border: Border.all(width: 3, color: Color(0xffaaaaaa)),
-                  // 实现阴影效果
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.black12,
-                        offset: Offset(0, -4.0),
-                        blurRadius: 4.0)
-                  ],
-                ),
-                child: Flex(
-                  direction: Axis.horizontal,
-                  children: <Widget>[
-                    Expanded(
-                      flex: 1,
-                      child: FlatButton(
-                        color: (selectStartTime != null ||
-                                (selectStartTime != null &&
-                                    selectEndTime != null))
-                            ? Colors.deepOrange
-                            : Colors.grey,
-                        onPressed: _finishSelect,
-                        padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-                        textColor: Colors.white,
-                        child: DefaultTextStyle(
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.0,
-                          ),
-                          child: Text(
-                            '确  定',
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -189,17 +129,18 @@ class _CalendarListState extends State<CalendarList> {
     }
   }
 
-  Widget _getMonthView(DateTime dateTime) {
+  Widget _getMonthView(DateTime dateTime, EventBus eventBus) {
     int year = dateTime.year;
     int month = dateTime.month;
     return MonthView(
       context: context,
       year: year,
       month: month,
-      padding: HORIZONTAL_PADDING,
+      padding: 0,
       dateTimeStart: selectStartTime,
       dateTimeEnd: selectEndTime,
       todayColor: Colors.deepOrange,
+      eventBus: eventBus,
       onSelectDayRang: (dateTime) => onSelectDayChanged(dateTime),
     );
   }

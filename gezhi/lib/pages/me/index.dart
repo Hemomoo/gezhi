@@ -11,24 +11,34 @@ class Me extends StatelessWidget {
           padding: EdgeInsets.all(10),
           child: Column(
             children: [
-              Top(),
+              Padding(
+                padding: EdgeInsets.only(top: 20,bottom: 20),
+                child: Top(),
+              ),
               MeItem(
                 title: '账户',
                 icon: Icons.perm_identity,
                 url: '/me/account',
               ),
               MeItem(title: '同步', icon: Icons.cloud_queue),
-              MeItem(title: '模块库', icon: Icons.perm_identity),
-              MeItem(
-                title: '提示库',
-                icon: Icons.offline_bolt,
-                url: '/me/hint_library',
+              Container(
+                padding: EdgeInsets.only(top: 30, bottom: 30),
+                child: Column(
+                  children: [
+                    MeItem(title: '模块库', icon: Icons.dashboard,url: '/me/model',),
+                    MeItem(
+                      title: '提示库',
+                      icon: Icons.offline_bolt,
+                      url: '/me/hint_library',
+                    ),
+                    MeItem(title: '名言库', icon: Icons.receipt,url: '/me/famous_library',),
+                  ],
+                ),
               ),
-              MeItem(title: '名言库', icon: Icons.perm_identity),
-              MeItem(title: '数据', icon: Icons.supervised_user_circle),
-              MeItem(title: '设置', icon: Icons.settings),
-              MeItem(title: '帮助', icon: Icons.subject),
-              MeItem(title: '关于', icon: Icons.error_outline),
+              MeItem(title: '数据', icon: Icons.folder,url: '/me/data',),
+              MeItem(title: '设置', icon: Icons.settings,url:'/me/setting'),
+              MeItem(title: '帮助', icon: Icons.help,url:'/me/help'),
+              MeItem(title: '关于', icon: Icons.error_outline,url: '/me/about',),
             ],
           ),
         ),

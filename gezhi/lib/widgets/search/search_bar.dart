@@ -34,7 +34,7 @@ class _SearchBarState extends State<SearchBar> {
                   height: double.infinity,
                   child: TextField(
                     controller: controller,
-                    decoration: new InputDecoration(
+                    decoration: InputDecoration(
                       // contentPadding: EdgeInsets.only(top: 0.0),
                       hintText: '搜索日记',
                       border: InputBorder.none,

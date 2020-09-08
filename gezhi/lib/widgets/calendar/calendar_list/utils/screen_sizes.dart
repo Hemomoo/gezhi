@@ -18,11 +18,11 @@ ScreenSizes screenSize(BuildContext context) {
 }
 
 double getDayNumberSize(BuildContext context, double padding) {
-  return (MediaQuery.of(context).size.width - padding * 2) / 7;
+  return (MediaQuery.of(context).size.width*0.8 - padding * 2) / 7;
 }
 
 double getMonthViewHeight(BuildContext context) {
-  const double padding = 8.0;
+  const double padding = 0;
   const double titleHeight = 21.0;
 
   return (2 * padding) + titleHeight + 8.0 + (6 * getDayNumberSize(context, 0));

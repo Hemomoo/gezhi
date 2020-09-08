@@ -1,9 +1,14 @@
+import 'package:event_bus/event_bus.dart';
 import 'package:flutter/material.dart';
-
-import 'day_number.dart';
-
+import 'package:flutter/widgets.dart';
 import 'calendar_notification.dart';
-
+import 'weekday_row.dart';
+import 'day_number.dart';
+import 'month_title.dart';
+import 'utils/dates.dart';
+import 'utils/screen_sizes.dart';
+import 'week_number.dart';
+import 'package:gezhi/widgets/calendar/calendar_list/utils/chang_year.dart';
 
 class MonthView extends StatefulWidget {
   const MonthView({
@@ -14,10 +19,12 @@ class MonthView extends StatefulWidget {
     @required this.dateTimeStart,
     @required this.dateTimeEnd,
     @required this.onSelectDayRang,
+    this.eventBus,
     this.todayColor,
     this.monthNames,
   });
 
+  final EventBus eventBus;
   final BuildContext context;
   final int year;
   final int month;
@@ -37,17 +44,34 @@ class MonthView extends StatefulWidget {
 class _MonthViewState extends State<MonthView> {
   DateTime selectedDate;
 
+  Widget buildWeek(BuildContext context) {
+    List<int> weekList = getWeekNum(widget.year, widget.month);
+    List<Widget> _weekWidgetList() {
+      return weekList.map((e) {
+        return WeekNumber(
+          day: e.toString(),
+          size: widget.itemWidth,
+        );
+      }).toList();
+    }
+    return Column(
+      children: _weekWidgetList(),
+    );
+  }
+
   Widget buildMonthDays(BuildContext context) {
     List<Row> dayRows = <Row>[];
     List<DayNumber> dayRowChildren = <DayNumber>[];
 
     int daysInMonth = getDaysInMonth(widget.year, widget.month);
+    widget.eventBus.fire(Year(widget.year.toString()));
 
     // 日 一 二 三 四 五 六
     int firstWeekdayOfMonth = DateTime(widget.year, widget.month, 2).weekday;
 
     for (int day = 2 - firstWeekdayOfMonth; day <= daysInMonth; day++) {
       DateTime moment = DateTime(widget.year, widget.month, day);
+      // 是不默认选择
       final bool isToday = dateIsToday(moment);
 
       bool isDefaultSelected = false;
@@ -91,6 +115,8 @@ class _MonthViewState extends State<MonthView> {
         );
         dayRowChildren.clear();
       }
+
+
     }
 
     return Column(
@@ -101,29 +127,74 @@ class _MonthViewState extends State<MonthView> {
 
   Widget buildMonthView(BuildContext context) {
     return NotificationListener<CalendarNotification>(
-        onNotification: (notification) {
-          selectedDate =
-              DateTime(widget.year, widget.month, notification.selectDay);
-          widget.onSelectDayRang(selectedDate);
-          return true;
-        },
-        child: Container(
-          width: 7 * getDayNumberSize(context, widget.padding),
-          margin: EdgeInsets.all(widget.padding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              MonthTitle(
-                month: widget.month,
-                monthNames: widget.monthNames,
+      onNotification: (notification) {
+        selectedDate = DateTime(
+          widget.year,
+          widget.month,
+          notification.selectDay,
+        );
+        widget.onSelectDayRang(selectedDate);
+        return true;
+      },
+      child: Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              color: Colors.black12,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  MonthTitle(
+                    month: 1,
+                    color: Colors.transparent,
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 2),
+                    child: Center(
+                      child: DefaultTextStyle(
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14.0,
+                        ),
+                        child: Text(
+                          'CW',
+                          style: TextStyle(color: Colors.black12),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 8.0),
+                    child: buildWeek(context),
+                  )
+                ],
               ),
-              Container(
-                margin: const EdgeInsets.only(top: 8.0),
-                child: buildMonthDays(context),
+            ),
+            SizedBox(
+              width: 14,
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  MonthTitle(
+                    month: widget.month,
+                    monthNames: widget.monthNames,
+                  ),
+                  WeekdayRow(),
+                  Container(
+                    margin: const EdgeInsets.only(top: 8.0),
+                    child: buildMonthDays(context),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ));
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -132,91 +203,4 @@ class _MonthViewState extends State<MonthView> {
       child: buildMonthView(context),
     );
   }
-}
-
-
-class MonthTitle extends StatelessWidget {
-  const MonthTitle({
-    @required this.month,
-    this.monthNames,
-  });
-
-  final int month;
-  final List<String> monthNames;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Text(
-        getMonthName(month, monthNames: monthNames),
-        style: TextStyle(
-          fontSize: 18.0,
-          fontWeight: FontWeight.w600,
-        ),
-        maxLines: 1,
-        overflow: TextOverflow.fade,
-        softWrap: false,
-      ),
-    );
-  }
-}
-
-bool dateIsToday(DateTime date) {
-  final DateTime now = DateTime.now();
-  return date.isAtSameMomentAs(DateTime(now.year, now.month, now.day));
-}
-
-int getDaysInMonth(int year, int month) {
-  return month < DateTime.monthsPerYear
-      ? DateTime(year, month + 1, 0).day
-      : DateTime(year + 1, 1, 0).day;
-}
-
-String getMonthName(int month, {List<String> monthNames}) {
-  final List<String> names = monthNames ??
-      <String>[
-        '一月',
-        '二月',
-        '三月',
-        '四月',
-        '五月',
-        '六月',
-        '七月',
-        '八月',
-        '九月',
-        '十月',
-        '十一月',
-        '十二月',
-      ];
-  return names[month - 1];
-}
-
-
-
-enum ScreenSizes {
-  small,
-  medium,
-  large,
-}
-
-ScreenSizes screenSize(BuildContext context) {
-  final double width = MediaQuery.of(context).size.width;
-  if (width < 340) {
-    return ScreenSizes.small;
-  } else if (width < 540) {
-    return ScreenSizes.medium;
-  } else {
-    return ScreenSizes.large;
-  }
-}
-
-double getDayNumberSize(BuildContext context, double padding) {
-  return (MediaQuery.of(context).size.width - padding * 2) / 7;
-}
-
-double getMonthViewHeight(BuildContext context) {
-  const double padding = 8.0;
-  const double titleHeight = 21.0;
-
-  return (2 * padding) + titleHeight + 8.0 + (6 * getDayNumberSize(context, 0));
 }

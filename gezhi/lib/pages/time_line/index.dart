@@ -1,7 +1,16 @@
+import 'dart:ui';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:gezhi/widgets/common/common.dart';
 
-class TimeLine extends StatelessWidget {
+class TimeLine extends StatefulWidget {
+  @override
+  _TimeLineState createState() => _TimeLineState();
+}
+
+class _TimeLineState extends State<TimeLine> {
   static List<Map> sortList = [
     {'name': '日记本', 'sel': '全部'},
     {'name': '类型', 'sel': '全部'},
@@ -10,15 +19,43 @@ class TimeLine extends StatelessWidget {
     {'name': '年份', 'sel': '全部'},
   ];
 
+  bool isTit = false;
+  ScrollController _controller = new ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    //监听滚动事件，打印滚动位置
+    _controller.addListener(() {
+      print(_controller.offset); //打印滚动位置
+      if (_controller.offset < 50 && isTit) {
+        setState(() {
+          isTit = false;
+        });
+      } else if (_controller.offset >= 50 && isTit == false) {
+        setState(() {
+          isTit = true;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    //为了避免内存泄露，需要调用_controller.dispose
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: new Center(
-          child: new Text(
-            '时间线',
+        title: Center(
+          child: Text(
+            ' ${isTit ? '时间线' : ''}',
             textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
         ),
         elevation: 0,
@@ -30,15 +67,100 @@ class TimeLine extends StatelessWidget {
             // action button
             icon: new Icon(Icons.filter_list),
             onPressed: () {
-              _editeDiary1(context);
+              _editDiary1(context);
             },
           ),
         ],
       ),
+      body: CustomScrollView(controller: _controller, slivers: <Widget>[
+        SliverAppBar(
+          // expandedHeight: 80,
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          flexibleSpace: Padding(
+            padding: EdgeInsets.only(
+              left: 10,
+            ),
+            child: Text(
+              '时间线',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+              ),
+            ),
+          ),
+        ),
+        SliverPersistentHeader(
+          delegate: MyDelegate(),
+          pinned: true,
+        ),
+        SliverFixedExtentList(
+          itemExtent: 100,
+          delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              return Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(width: 1, color: Colors.black12)),
+                ),
+                margin: EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(right: 20),
+                        child: Column(
+                          children: [
+                            Text(
+                              '28',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text('8月')
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 10),
+                              child: Text(
+                                '大张伟，娱乐圈的救护车，综艺节目共享嘉宾，擅长各种救场',
+                                maxLines: 2,
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                            Text(
+                              '日记本',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(color: Colors.black26),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/time_line/time_line_diary');
+                  },
+                ),
+              );
+            },
+            childCount: 50, //50个列表项
+          ),
+        ),
+      ]),
     );
   }
 
-  _editeDiary1(BuildContext context) {
+  void _editDiary1(BuildContext context) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -147,5 +269,32 @@ class TimeLine extends StatelessWidget {
         itemCount: sortList.length,
       ),
     );
+  }
+}
+
+class MyDelegate extends SliverPersistentHeaderDelegate {
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      height: 48,
+      padding: EdgeInsets.only(left: 15, right: 15),
+      color: Colors.white,
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text('2020',style: TextStyle(color: Colors.black38,fontWeight: FontWeight.bold),),
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => 30;
+
+  @override
+  double get minExtent => 30;
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
+    return true;
   }
 }
