@@ -18,11 +18,11 @@ class _IndexPageState extends State<IndexPage> {
   int _currentIndex = 0;
 
   final List<BottomNavigationBarItem> bottomBarList = [
-    BottomNavigationBarItem(icon: Icon(Icons.book), title: Text('日记本')),
-    BottomNavigationBarItem(icon: Icon(Icons.reorder), title: Text('时间线')),
-    BottomNavigationBarItem(icon: Icon(Icons.date_range), title: Text('日历')),
-    BottomNavigationBarItem(icon: Icon(Icons.search), title: Text('发现')),
-    BottomNavigationBarItem(icon: Icon(Icons.perm_identity), title: Text('我'))
+    BottomNavigationBarItem(icon: Icon(Icons.book), label: '日记本'),
+    BottomNavigationBarItem(icon: Icon(Icons.reorder), label: '时间线'),
+    BottomNavigationBarItem(icon: Icon(Icons.date_range), label: '日历'),
+    BottomNavigationBarItem(icon: Icon(Icons.search), label: '发现'),
+    BottomNavigationBarItem(icon: Icon(Icons.perm_identity), label: '我')
   ];
 
   @override
