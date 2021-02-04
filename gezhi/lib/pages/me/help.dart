@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:launch_review/launch_review.dart';
 import 'package:gezhi/widgets/me/appbar.dart';
 
 class Help extends StatefulWidget {
@@ -61,7 +61,11 @@ class _HelpState extends State<Help> {
             ),
             _helpItem(tit: '提建议'),
             _helpItem(tit: '帮助我们翻译'),
-            _helpItem(tit: '在应用商店上评分'),
+            _helpItem(
+                tit: '在应用商店上评分',
+                fn: () => LaunchReview.launch(
+                      androidAppId: "com.android.vending",
+                    )),
           ],
         ),
       ),
@@ -84,7 +88,10 @@ class _HelpState extends State<Help> {
               width: (leading is! CupertinoSwitch) ? 10 : 0,
             ),
             (leading is! CupertinoSwitch)
-                ? Icon(Icons.arrow_forward_ios,size: 18,)
+                ? Icon(
+                    Icons.arrow_forward_ios,
+                    size: 18,
+                  )
                 : SizedBox(
                     width: 0,
                   ),

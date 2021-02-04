@@ -1,32 +1,26 @@
 import 'package:flutter/material.dart';
 
 class MeAppbar extends StatelessWidget {
-  final String tit ;
-  MeAppbar({this.tit = ''});
+  final String tit;
+  final String url;
+  MeAppbar({this.url = '',this.tit=''});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      child: Container(
-        child:  Row(
-          children: [
-            Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
-            ),
-            Text(
-              tit,
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
-            )
-          ],
+      child: Center(
+        child: Icon(
+          Icons.arrow_back_ios,
+          color: Colors.black,
         ),
       ),
       onTap: () => {
-        Navigator.pop(context),
+        if(url == ''){
+          Navigator.pop(context),
+        }else{
+          Navigator.of(context).pushNamed(url)
+        }
+
       },
     );
   }

@@ -31,6 +31,9 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.blue,
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        textTheme: TextTheme(
+
+        ),
       ),
       home: IndexPage(),
       // routes: new Routes(context).routes,

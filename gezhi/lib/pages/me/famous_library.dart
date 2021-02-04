@@ -19,24 +19,23 @@ class FamousLibrary extends StatefulWidget {
 
 class _FamousLibraryState extends State<FamousLibrary> {
   final SqlUtil tipSqlite = SqlUtil.setTable('famous');
-
+  List famousList;
 
   @override
   void initState() {
-
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+
     // print( ModalRoute.of(context).settings.arguments);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
         leading: MeAppbar(
-          tit: '我',
+          url: '/me',
         ),
         title: Text(
           '名言库',
@@ -80,7 +79,7 @@ class _FamousLibraryState extends State<FamousLibrary> {
         })(),
         builder: (BuildContext context, snap) {
           if (snap.hasData) {
-            List famousList = snap.data;
+            famousList =  List.from(snap.data) ;
             return Column(
               children: [
                 Container(
@@ -111,7 +110,6 @@ class _FamousLibraryState extends State<FamousLibrary> {
                         onTap: () {
                           _famousHandle(
                               context,
-                              famousList,
                               famousList[index]['sentence'],
                               famousList[index]['id'],
                               famousList[index]['author']);
@@ -158,8 +156,7 @@ class _FamousLibraryState extends State<FamousLibrary> {
     );
   }
 
-  void _famousHandle(BuildContext context, List famousList, String tit,
-      int id, String author) {
+  void _famousHandle(BuildContext context,  String tit,int id, String author) {
     showModalBottomSheet(
       elevation: 0,
       backgroundColor: Colors.transparent,
@@ -206,10 +203,9 @@ class _FamousLibraryState extends State<FamousLibrary> {
                 ),
                 title: Text('删除文本'),
                 onTap: () async {
-                  famousList.removeAt(
-                      famousList.indexWhere((element) => element['id'] == id));
+                  famousList.removeAt(famousList.indexWhere((element) => element['id'] == id));
+                  await tipSqlite.delete("id", id);
                   setState(() {}); // future 会重绘
-                  await tipSqlite.get();
                   Navigator.pop(context);
                 },
               ),
@@ -337,7 +333,6 @@ class _FamousLibraryState extends State<FamousLibrary> {
                             border: InputBorder.none,
                           ),
                           onChanged: (val) {
-                            print(val);
                             state(() {
                               _author = val;
                             });

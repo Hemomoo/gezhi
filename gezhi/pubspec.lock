@@ -205,6 +205,13 @@ packages:
       url: "https://mirrors.tuna.tsinghua.edu.cn/dart-pub"
     source: hosted
     version: "0.16.1"
+  launch_review:
+    dependency: "direct main"
+    description:
+      name: launch_review
+      url: "https://mirrors.tuna.tsinghua.edu.cn/dart-pub"
+    source: hosted
+    version: "2.0.0"
   left_scroll_actions:
     dependency: "direct main"
     description:
