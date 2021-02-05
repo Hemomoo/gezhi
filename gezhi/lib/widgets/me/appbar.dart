@@ -18,9 +18,8 @@ class MeAppbar extends StatelessWidget {
         if(url == ''){
           Navigator.pop(context),
         }else{
-          Navigator.of(context).pushNamed(url)
+          Navigator.of(context).pushNamed('/me')
         }
-
       },
     );
   }

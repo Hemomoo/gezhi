@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 // page
 import 'package:gezhi/pages/index.dart';
+import 'package:gezhi/pages/me/index.dart';
 import 'package:gezhi/pages/login/login.dart';
 import 'package:gezhi/pages/login/survey.dart';
 import 'package:gezhi/pages/me/about.dart';
@@ -20,10 +21,14 @@ import 'package:gezhi/pages/time_line/time_line_diary.dart';
 import 'package:gezhi/pages/time_line/revised_diary.dart';
 
 
+
+
 final routes = {
   '/home': (BuildContext context,{arguments}) => IndexPage(), // 首页
   '/login': (BuildContext context,{arguments}) => Login(), // 登录页
   '/survey': (BuildContext context,{arguments}) => Survey(),
+  //我的
+  '/me':(BuildContext context,{ arguments}) => Me(),
   '/me/account': (BuildContext context,{arguments}) => Account(), // 账号
   '/me/hint_library': (BuildContext context,{arguments}) => HintLibrary(), // 提示库
   '/me/edit_password': (BuildContext context,{arguments}) => EditPassword(), // 修改密码
@@ -38,6 +43,8 @@ final routes = {
   /* 时间线 */
   '/time_line/time_line_diary': (BuildContext context,{arguments}) => TimeLineDiary(),
   '/time_line/revised_diary': (BuildContext context, {arguments}) => RevisedDiary(arguments: arguments,),
+
+
 }; // 修改日记
 
 // ignore: top_level_function_literal_block

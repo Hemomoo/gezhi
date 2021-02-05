@@ -3,15 +3,38 @@ import 'package:flutter/material.dart';
 import 'package:gezhi/widgets/me/appbar.dart';
 import 'package:gezhi/widgets/me/line_item.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:io';
 
-class Account extends StatelessWidget {
+class Account extends StatefulWidget {
+  @override
+  _AccountState createState() => _AccountState();
+}
+
+class _AccountState extends State<Account> {
   final TextStyle _textStyle = TextStyle(
     color: Colors.black54,
     fontWeight: FontWeight.bold,
     fontSize: 20,
   );
 
+  var avatar;
   final picker = ImagePicker();
+  SharedPreferences prefs;
+
+  //初始化
+
+  @override
+  void initState() {
+    // 延时1s执行返回
+    Future.delayed(Duration(seconds: 0), () async {
+      prefs = await SharedPreferences.getInstance();
+      avatar = prefs.getString('avatar');
+    });
+    print(">>>>");
+    print(avatar);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +42,7 @@ class Account extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        leading: MeAppbar(tit: '我'),
+        leading: MeAppbar(),
         centerTitle: true,
         title: Text(
           '账户',
@@ -28,12 +51,15 @@ class Account extends StatelessWidget {
         actions: [
           Center(
             child: InkWell(
-              child: Text(
-                '登出',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Text(
+                  '登出',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
               onTap: () => {showAlertDialog(context)},
             ),
@@ -83,12 +109,20 @@ class Account extends StatelessWidget {
         LineItem(
           tit: '头像',
           widget: ClipOval(
-            child: Image.network(
-              'https://img.cc0.cn/pixabay/201910282316374919.jpg/content',
-              width: 50,
-              height: 50,
-              fit: BoxFit.cover,
-            ),
+            child: avatar != null
+                ? Image.file(
+                    File(
+                        "/data/user/0/com.example.gezhi/cache/image_picker4380560089892008026.jpg"),
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.cover,
+                  )
+                : Image.network(
+                    'https://img.cc0.cn/pixabay/201910282316374919.jpg/content',
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.cover,
+                  ),
           ),
           onTabFn: _imgSel,
         ),
@@ -237,8 +271,17 @@ class Account extends StatelessWidget {
                     '从相册中选择',
                     style: _textStyle,
                   ),
-                  onTap: () {
-                    picker.getImage(source: ImageSource.gallery);
+                  onTap: () async {
+                    PickedFile pickedFile =
+                        await picker.getImage(source: ImageSource.gallery);
+                    final imageFile = File(pickedFile.path);
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    prefs.setString('avatar', imageFile.toString());
+                    print(imageFile.toString());
+                    setState(() {
+                      this.avatar = imageFile.toString();
+                    });
                   },
                 ),
               ],

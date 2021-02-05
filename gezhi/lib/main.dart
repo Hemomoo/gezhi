@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:gezhi/pages/error/404.dart';
 import 'package:gezhi/pages/index.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import 'package:gezhi/pages/login/login.dart';
@@ -38,6 +39,8 @@ class MyApp extends StatelessWidget {
       home: IndexPage(),
       // routes: new Routes(context).routes,
       onGenerateRoute: onGenerateRoute,
+        //错误的路由跳转到404
+      onUnknownRoute: (settings) =>MaterialPageRoute(builder: (context) => PageNotFound())
     );
   }
 }
