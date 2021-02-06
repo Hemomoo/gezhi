@@ -19,8 +19,7 @@ class _SettingState extends State<Setting> {
         leading: MeAppbar(),
         title: Text(
           '设置',
-          style: TextStyle(
-              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+          style: TextStyle( fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
         ),
         centerTitle: true,
       ),
@@ -77,7 +76,7 @@ class _SettingState extends State<Setting> {
     return ListTile(
       title: Text(
         tit,
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
       ),
       trailing: Container(
         width: 100,
