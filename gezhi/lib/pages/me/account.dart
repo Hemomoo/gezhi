@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:gezhi/widgets/me/appbar.dart';
 import 'package:gezhi/widgets/me/line_item.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,6 +20,7 @@ class _AccountState extends State<Account> {
   );
 
   var avatar;
+  var name;
   final picker = ImagePicker();
   SharedPreferences prefs;
 
@@ -30,10 +32,18 @@ class _AccountState extends State<Account> {
     Future.delayed(Duration(seconds: 0), () async {
       prefs = await SharedPreferences.getInstance();
       avatar = prefs.getString('avatar');
+      name = prefs.getString('name');
+      setState(() {});
     });
-    print(">>>>");
-    print(avatar);
+
     super.initState();
+  }
+
+  @override
+  void deactivate() {
+    // TODO: implement deactivate
+    super.deactivate();
+    print('deactivate');
   }
 
   @override
@@ -55,10 +65,7 @@ class _AccountState extends State<Account> {
                 padding: EdgeInsets.all(10),
                 child: Text(
                   '登出',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
+                  style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
               onTap: () => {showAlertDialog(context)},
@@ -111,8 +118,7 @@ class _AccountState extends State<Account> {
           widget: ClipOval(
             child: avatar != null
                 ? Image.file(
-                    File(
-                        "/data/user/0/com.example.gezhi/cache/image_picker4380560089892008026.jpg"),
+                    File(avatar),
                     width: 50,
                     height: 50,
                     fit: BoxFit.cover,
@@ -128,11 +134,17 @@ class _AccountState extends State<Account> {
         ),
         LineItem(
           tit: '名字',
-          widget: Text(
-            '何默',
-            style: _textStyle,
+          widget: Container(
+            width: MediaQuery.of(context).size.width * 0.5,
+            child: Text(
+              name != null ? name : '何默',
+              style: _textStyle,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
           ),
-        ),
+          onTabFn: _editName,
+        )
       ],
     );
   }
@@ -191,8 +203,7 @@ class _AccountState extends State<Account> {
       barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
           content: Text(
             '你真的要退出吗？',
             textAlign: TextAlign.center,
@@ -272,15 +283,11 @@ class _AccountState extends State<Account> {
                     style: _textStyle,
                   ),
                   onTap: () async {
-                    PickedFile pickedFile =
-                        await picker.getImage(source: ImageSource.gallery);
-                    final imageFile = File(pickedFile.path);
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    prefs.setString('avatar', imageFile.toString());
-                    print(imageFile.toString());
+                    PickedFile pickedFile = await picker.getImage(source: ImageSource.gallery);
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    prefs.setString('avatar', pickedFile.path);
                     setState(() {
-                      this.avatar = imageFile.toString();
+                      this.avatar = pickedFile.path;
                     });
                   },
                 ),
@@ -288,6 +295,75 @@ class _AccountState extends State<Account> {
             ),
           );
         });
+  }
+
+  //修改名字
+
+  void _editName(BuildContext context) {
+    final TextStyle _style = TextStyle(fontWeight: FontWeight.bold, fontSize: 20);
+    String _name;
+
+    showModalBottomSheet(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+      isScrollControlled: true, // 是不是全屏幕
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          color: Colors.transparent,
+          height: MediaQuery.of(context).size.height * 0.9,
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.all(10),
+                color: Colors.black12,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                      child: Text(
+                        '取消',
+                        style: _style,
+                      ),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    Text(
+                      '编辑名字',
+                      style: _style,
+                    ),
+                    InkWell(
+                      child: Text(
+                        '存储',
+                        style: _style,
+                      ),
+                      onTap: () {
+                        setState(() {
+                          this.name = _name;
+                        });
+                        prefs.setString('name', _name);
+                        Navigator.of(context).pop();
+                      },
+                    )
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  child: TextField(
+                    controller: TextEditingController(text: name == null ? '何默' : name),
+                    onChanged: (val) {
+                      _name = val;
+                    },
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    );
   }
 
   // 发送修改邮件的邮箱
