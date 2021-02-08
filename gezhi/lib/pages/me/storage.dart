@@ -20,6 +20,9 @@ class _StorageState extends State<Storage> {
             Icons.arrow_back_ios,
             color: Colors.black,
           ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
         title: Text(
           '存储空间',
@@ -32,7 +35,7 @@ class _StorageState extends State<Storage> {
           children: [
             _storageListWidget(title: '数据库', trailingTex: '70.25M'),
             _storageListWidget(title: '文档', trailingTex: '4.3kb'),
-            _storageListWidget(title: '缓存', trailingTex: '234.56'),
+            _storageListWidget(title: '缓存', trailingTex: '234.56M'),
             _storageListWidget(
                 title: '清除缓存',
                 trailing: Icon(Icons.delete),

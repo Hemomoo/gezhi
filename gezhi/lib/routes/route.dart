@@ -21,6 +21,7 @@ import 'package:gezhi/pages/time_line/time_line_diary.dart';
 import 'package:gezhi/pages/time_line/revised_diary.dart';
 import 'package:gezhi/pages/me/batch_export.dart';
 import 'package:gezhi/pages/me/storage.dart';
+import 'package:gezhi/pages/me/website.dart';
 
 final routes = {
   '/home': (BuildContext context, {arguments}) => IndexPage(), // 首页
@@ -41,11 +42,14 @@ final routes = {
   '/me/about': (BuildContext context, {arguments}) => About(), // 关于
   '/me/batch_export': (BuildContext context, {arguments}) => BatchExport(), // 数据导出
   '/me/storage': (BuildContext context, {arguments}) => Storage(), // 存储空间
+  '/me/website': (BuildContext context, {arguments}) => Website(), // 网站
   /* 时间线 */
   '/time_line/time_line_diary': (BuildContext context, {arguments}) => TimeLineDiary(),
   '/time_line/revised_diary': (BuildContext context, {arguments}) => RevisedDiary(
         arguments: arguments,
       ),
+
+//  网站
 }; // 修改日记
 
 // ignore: top_level_function_literal_block

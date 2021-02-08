@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 import 'package:gezhi/style/style.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class BatchExport extends StatefulWidget {
   @override
@@ -9,7 +12,29 @@ class BatchExport extends StatefulWidget {
 
 class _BatchExportState extends State<BatchExport> {
   bool _isInclude = false;
-  String _exportModeVal = 'Markdown';
+  String _exportModeVal;
+  int selVal;
+  SharedPreferences prefs;
+  List<Map> _modeList = [
+    {'val': 0, 'tit': '纯文本'},
+    {'val': 1, 'tit': 'Markdown'},
+    {'val': 2, 'tit': 'PDF'},
+    {'val': 3, 'tit': '印象笔记'}
+  ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    // 延时1s执行返回
+    Future.delayed(Duration(seconds: 0), () async {
+      prefs = await SharedPreferences.getInstance();
+      selVal = prefs.getInt('selExportType') ?? 0;
+      _exportModeVal = _modeList[selVal]['tit'];
+      setState(() {});
+    });
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +68,7 @@ class _BatchExportState extends State<BatchExport> {
               padding: const EdgeInsets.symmetric(vertical: 18),
               child: _batchExportItem(
                 tit: '格式',
-                leading: Text(_exportModeVal),
+                leading: Text(_exportModeVal ?? ''),
                 fn: _exportMode,
               ),
             ),
@@ -58,17 +83,7 @@ class _BatchExportState extends State<BatchExport> {
                 ),
               ),
             ),
-            _batchExportItem(
-              tit: '包括附件',
-              leading: CupertinoSwitch(
-                value: _isInclude,
-                onChanged: (val) {
-                  setState(() {
-                    _isInclude = val;
-                  });
-                },
-              ),
-            ),
+            _trendsWidget(),
             Container(
               margin: EdgeInsets.only(top: 20),
               child: FlatButton(
@@ -94,7 +109,7 @@ class _BatchExportState extends State<BatchExport> {
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
       ),
       trailing: Container(
-        width: 100,
+        width: 160,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -120,15 +135,7 @@ class _BatchExportState extends State<BatchExport> {
   }
 
 //  选择导出格式
-  void _exportMode() {
-    int selVal = 1;
-    List<Map> _modeList = [
-      {'val': 1, 'tit': '纯文本'},
-      {'val': 2, 'tit': 'Markdown'},
-      {'val': 3, 'tit': 'PDF'},
-      {'val': 4, 'tit': '印象笔记'}
-    ];
-
+  void _exportMode() async {
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
@@ -175,9 +182,12 @@ class _BatchExportState extends State<BatchExport> {
                                 setBottomSheetState(() {
                                   selVal = item['val'];
                                 });
+                                // 存入缓存
+                                prefs.setInt('selExportType', item['val']);
                                 setState(() {
                                   this._exportModeVal = item['tit'];
                                 });
+
                                 Navigator.of(context).pop();
                               },
                             ),
@@ -189,6 +199,131 @@ class _BatchExportState extends State<BatchExport> {
                 ),
               );
             },
+          ),
+        );
+      },
+    );
+  }
+
+//  根据不同的值生产不同的 Widget
+  Widget _trendsWidget() {
+    //是不是授权
+    bool isAuthorization = false;
+    switch (selVal) {
+      case 2:
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 18),
+              child: Container(
+                height: 30,
+                child: Center(
+                  child: _batchExportItem(
+                    tit: 'PDF尺寸',
+                    leading: Text('A4'),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 18),
+              child: Container(
+                height: 30,
+                child: Center(
+                  child: _batchExportItem(
+                    tit: 'PDF文件选项',
+                    leading: Text('合并成一个文件'),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+        break;
+      case 3:
+        {
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 18),
+                child: Container(
+                  height: 30,
+                  child: _batchExportItem(
+                    tit: '印象笔记用户',
+                    leading: Text(
+                      '授权',
+                      style: TextStyle(color: GZColors.primary),
+                    ),
+                    fn: _authEvernotr,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 18),
+                child: Container(
+                  height: 30,
+                  child: _batchExportItem(
+                    tit: '覆盖已经已有标签',
+                    leading: CupertinoSwitch(
+                      value: false,
+                      onChanged: (val) {
+                        print(val);
+                      },
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 18),
+                child: Container(
+                  height: 30,
+                  child: _batchExportItem(
+                    tit: '包含标签',
+                    leading: CupertinoSwitch(
+                      value: false,
+                      onChanged: (val) {
+                        print(val);
+                      },
+                    ),
+                  ),
+                ),
+              )
+            ],
+          );
+        }
+        break;
+      default:
+        {
+          return _batchExportItem(
+            tit: '包括附件',
+            leading: CupertinoSwitch(
+              value: _isInclude,
+              onChanged: (val) {
+                setState(() {
+                  _isInclude = val;
+                });
+              },
+            ),
+          );
+        }
+        break;
+    }
+  }
+
+//  授权webView
+  void _authEvernotr() {
+    showModalBottomSheet(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+      context: context,
+      isScrollControlled: false,
+      enableDrag: false,
+      elevation: 120, // 高度
+      builder: (BuildContext context) {
+        return Container(
+          child: WebView(
+            initialUrl: 'https://griddiaryapp.com/zh/',
+            userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.146 Safari/537.36',
+            javascriptMode: JavascriptMode.unrestricted, // 允许使用js,可以用页面上的事件
           ),
         );
       },
