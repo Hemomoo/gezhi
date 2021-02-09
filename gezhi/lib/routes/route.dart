@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 // page
 import 'package:gezhi/pages/index.dart';
+import 'package:gezhi/pages/me/edit_model_library.dart';
 import 'package:gezhi/pages/me/index.dart';
 import 'package:gezhi/pages/login/login.dart';
 import 'package:gezhi/pages/login/survey.dart';
@@ -43,6 +44,8 @@ final routes = {
   '/me/batch_export': (BuildContext context, {arguments}) => BatchExport(), // 数据导出
   '/me/storage': (BuildContext context, {arguments}) => Storage(), // 存储空间
   '/me/website': (BuildContext context, {arguments}) => Website(), // 网站
+  '/me/edit_model_library': (BuildContext context, {arguments}) => EditModelLibrary(), // 修改模板
+
   /* 时间线 */
   '/time_line/time_line_diary': (BuildContext context, {arguments}) => TimeLineDiary(),
   '/time_line/revised_diary': (BuildContext context, {arguments}) => RevisedDiary(

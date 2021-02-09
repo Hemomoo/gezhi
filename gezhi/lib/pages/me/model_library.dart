@@ -37,7 +37,10 @@ class _ModelLibraryState extends State<ModelLibrary> {
               Icons.add,
               size: 28,
             ),
-            onPressed: () {},
+            onPressed: () {
+              //  跳转到修改页面
+              Navigator.pushNamed(context, '/me/edit_model_library');
+            },
           )
         ],
       ),
@@ -89,17 +92,4 @@ class _ModelLibraryState extends State<ModelLibrary> {
       ),
     );
   }
-
-  // void _editModel() {
-  //   showModalBottomSheet(
-  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-  //     context: context,
-  //     isScrollControlled: false,
-  //     enableDrag: false,
-  //     elevation: 120, // 高度
-  //     builder: (BuildContext context) {
-  //       return Container();
-  //     },
-  //   );
-  // }
 }
