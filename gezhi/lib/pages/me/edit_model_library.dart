@@ -96,7 +96,7 @@ class _EditModelLibraryState extends State<EditModelLibrary> {
                             border: Border(
                               right: (2e+2) % 2 == 0 ? BorderSide(width: 1, color: Color(0xFFF0F2F2)) : BorderSide(width: 0),
                               top: BorderSide(width: 1, color: Color(0xFFF0F2F2)),
-                              bottom: (e == _tipList.length - 1 || e == _tipList.length - 2)
+                              bottom: (e == (_tipList.length - 1) || e == (_tipList.length - 2))
                                   ? BorderSide(width: 1, color: Colors.red)
                                   : BorderSide(width: 0),
                             ),
