@@ -48,15 +48,25 @@ class _ModelLibraryState extends State<ModelLibrary> {
         padding: EdgeInsets.all(20),
         color: Colors.white,
         child: GridView(
-          gridDelegate:
-              SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 30, crossAxisSpacing: 20, childAspectRatio: 0.8),
+          shrinkWrap: true,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisSpacing: 30,
+            crossAxisSpacing: 10,
+            childAspectRatio: 0.8,
+          ),
           children: [1, 2, 3, 4, 5, 6, 7, 8, 10]
               .map(
-                (e) => InkWell(
-                  child: _template(),
-                  onLongPress: () {
-                    print('121');
-                  },
+                (e) => Column(
+                  children: [
+                    InkWell(
+                      child: _template(),
+                      onLongPress: () {
+                        print('121');
+                      },
+                    ),
+                    Text('默认模板')
+                  ],
                 ),
               )
               .toList(),
@@ -72,17 +82,19 @@ class _ModelLibraryState extends State<ModelLibrary> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 10, //阴影模糊程度
-              spreadRadius: 2 //阴影扩散程度
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 8, //阴影模糊程度
+              spreadRadius: 4 //阴影扩散程度
               )
         ],
       ),
       margin: EdgeInsets.all(10),
       padding: EdgeInsets.all(10),
       child: GridView.builder(
+        shrinkWrap: true,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
+          childAspectRatio: 0.85,
         ),
         physics: new NeverScrollableScrollPhysics(), // 禁止滚动
         itemCount: 4,

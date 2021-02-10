@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:gezhi/widgets/common/common.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class TimeLine extends StatefulWidget {
   @override
@@ -101,8 +102,7 @@ class _TimeLineState extends State<TimeLine> {
             (BuildContext context, int index) {
               return Container(
                 decoration: BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(width: 1, color: Colors.black12)),
+                  border: Border(bottom: BorderSide(width: 1, color: Colors.black12)),
                 ),
                 margin: EdgeInsets.symmetric(horizontal: 20),
                 padding: EdgeInsets.symmetric(vertical: 10),
@@ -171,9 +171,7 @@ class _TimeLineState extends State<TimeLine> {
           child: Container(
             margin: EdgeInsets.all(10),
             padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(14))),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(14))),
             child: Stack(
               children: [
                 Column(
@@ -192,8 +190,7 @@ class _TimeLineState extends State<TimeLine> {
                       child: Text(
                         '完成',
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                       ),
                       onTap: () => {print('121')},
                     ),
@@ -274,15 +271,17 @@ class _TimeLineState extends State<TimeLine> {
 
 class MyDelegate extends SliverPersistentHeaderDelegate {
   @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
       height: 48,
       padding: EdgeInsets.only(left: 15, right: 15),
       color: Colors.white,
       child: Align(
         alignment: Alignment.centerLeft,
-        child: Text('2020',style: TextStyle(color: Colors.black38,fontWeight: FontWeight.bold),),
+        child: Text(
+          '2020',
+          style: TextStyle(color: Colors.black38, fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }
