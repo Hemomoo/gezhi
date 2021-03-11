@@ -8,7 +8,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  List<String> imageList = List();
+  List<String> imageList;
   int _currentIndex = 0;
 
   @override
@@ -92,8 +92,7 @@ class _LoginState extends State<Login> {
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-        image: DecorationImage(
-            image: NetworkImage(imageList[index]), fit: BoxFit.cover),
+        image: DecorationImage(image: NetworkImage(imageList[index]), fit: BoxFit.cover),
       ),
     );
   }

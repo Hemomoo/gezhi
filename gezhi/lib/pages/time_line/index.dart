@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:gezhi/style/style.dart';
 import 'package:gezhi/widgets/common/common.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -28,7 +29,6 @@ class _TimeLineState extends State<TimeLine> {
     super.initState();
     //监听滚动事件，打印滚动位置
     _controller.addListener(() {
-      print(_controller.offset); //打印滚动位置
       if (_controller.offset < 50 && isTit) {
         setState(() {
           isTit = false;
@@ -185,12 +185,12 @@ class _TimeLineState extends State<TimeLine> {
                 Positioned(
                   bottom: 0,
                   child: Container(
-                    width: MediaQuery.of(context).size.width,
+                    width: MediaQuery.of(context).size.width - 40,
                     child: InkWell(
                       child: Text(
                         '完成',
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                       ),
                       onTap: () => {print('121')},
                     ),
@@ -235,17 +235,14 @@ class _TimeLineState extends State<TimeLine> {
             children: [
               Text(
                 sortList[index]['name'],
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
                     sortList[index]['sel'],
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: GZColors.primary),
                   ),
                   IconButton(
                     padding: EdgeInsets.zero,

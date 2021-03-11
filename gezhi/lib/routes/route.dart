@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gezhi/config.dart';
 
 // page
 import 'package:gezhi/pages/index.dart';
@@ -23,6 +24,9 @@ import 'package:gezhi/pages/time_line/revised_diary.dart';
 import 'package:gezhi/pages/me/batch_export.dart';
 import 'package:gezhi/pages/me/storage.dart';
 import 'package:gezhi/pages/me/website.dart';
+
+//搜索
+import 'package:gezhi/pages/search/img_list.dart';
 
 final routes = {
   '/home': (BuildContext context, {arguments}) => IndexPage(), // 首页
@@ -52,7 +56,10 @@ final routes = {
         arguments: arguments,
       ),
 
-//  网站
+  //搜索
+  '/search/img_list': (BuildContext context, {arguments}) => ImgList(),
+
+  //  网站
 }; // 修改日记
 
 // ignore: top_level_function_literal_block
