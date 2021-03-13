@@ -3,25 +3,26 @@ import 'package:flutter/material.dart';
 
 //样式
 import 'package:gezhi/style/style.dart';
-
 //小组件
 import 'package:gezhi/widgets/home/diary_list.dart';
 //公用组件
 import 'package:gezhi/widgets/common/common.dart';
-
 import 'package:draggable_flutter_list/draggable_flutter_list.dart';
-
 import 'package:gezhi/widgets/home/small_widget.dart';
+import 'package:gezhi/sqlite/sql_common.dart';
 
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DateTime today = new DateTime.now();
-    String dateSlug =
-        '''${today.year.toString()}年${today.month.toString().padLeft(2, '0')}月${today.day.toString().padLeft(2, '0')}''';
+    String dateSlug = '''${today.year.toString()}年${today.month.toString().padLeft(2, '0')}月${today.day.toString().padLeft(2, '0')}''';
+    String weekDay = ['一', '二', '三', '四', '五', '六', '日'][new DateTime.now().weekday - 1];
+    final SqlUtil tipSqlite = SqlUtil.setTable('famous');
 
-    String weekDay =
-        ['一', '二', '三', '四', '五', '六', '日'][new DateTime.now().weekday - 1];
+    (() async {
+      var a = await tipSqlite.query();
+      print(a);
+    })();
 
     return Scaffold(
       appBar: AppBar(
@@ -87,8 +88,7 @@ class Home extends StatelessWidget {
                       ),
                       child: Text(
                         '30周',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 30),
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
                       ),
                     ),
                   ),
@@ -116,7 +116,7 @@ class Home extends StatelessWidget {
                   ),
                   onSelected: (value) {
                     if (value == '编辑日记本') {
-                      _editeDiary(context);
+                      _editDiary(context);
                     }
                   },
                   icon: Icon(Icons.more_horiz),
@@ -158,7 +158,7 @@ class Home extends StatelessWidget {
   }
 
   // 编辑日记本
-  _editeDiary(BuildContext context) {
+  _editDiary(BuildContext context) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -339,7 +339,7 @@ class Home extends StatelessWidget {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadiusDirectional.circular(0),
                             ),
-                            child:TestAnimation(),
+                            child: TestAnimation(),
                           ),
                         );
                       },

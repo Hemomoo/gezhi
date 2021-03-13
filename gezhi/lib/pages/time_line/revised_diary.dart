@@ -40,9 +40,7 @@ class _RevisedDiaryState extends State<RevisedDiary> {
   Future<NotusDocument> _loadDocument() async {
     final file = File(Directory.systemTemp.path + '/quick_start.json');
     if (await file.exists()) {
-      final contents = await file
-          .readAsString()
-          .then((data) => Future.delayed(Duration(seconds: 1), () => data));
+      final contents = await file.readAsString().then((data) => Future.delayed(Duration(seconds: 1), () => data));
       return NotusDocument.fromJson(jsonDecode(contents));
     }
     final delta = Delta()..insert('\n');
@@ -131,16 +129,18 @@ class _RevisedDiaryState extends State<RevisedDiary> {
                         width: double.infinity,
                         child: Column(
                           children: [
-                            Row(
-                              children: [
-                                Text(
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
                                   _contList[index]['tit'],
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                )
-                              ],
+                                ),
+                              ),
                             ),
                             Expanded(
                               child: (_zefyrController == null)
@@ -180,10 +180,7 @@ class _RevisedDiaryState extends State<RevisedDiary> {
                               padding: EdgeInsets.fromLTRB(14, 8, 14, 8),
                               child: Text(
                                 '完成',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16),
+                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
                               ),
                             ),
                             onTap: () {

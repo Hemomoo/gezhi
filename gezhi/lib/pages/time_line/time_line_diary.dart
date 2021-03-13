@@ -1,11 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gezhi/style/style.dart';
 import 'package:gezhi/widgets/time_line/listing_item.dart';
 import 'package:gezhi/widgets/time_line/grid_item.dart';
-
 
 //字体图标
 import 'package:gezhi/fonts/font.dart';
@@ -51,8 +49,6 @@ class _TimeLineDiaryState extends State<TimeLineDiary> {
 
   bool _isGrid = true;
   bool _isListing = false;
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -151,8 +147,7 @@ class _TimeLineDiaryState extends State<TimeLineDiary> {
                     children: [
                       Text(
                         '26',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 32),
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
                       ),
                       SizedBox(
                         width: 10,
@@ -162,15 +157,11 @@ class _TimeLineDiaryState extends State<TimeLineDiary> {
                         children: [
                           Text(
                             '星期三',
-                            style: TextStyle(
-                                color: Colors.black38,
-                                fontWeight: FontWeight.bold),
+                            style: TextStyle(color: Colors.black38, fontWeight: FontWeight.bold),
                           ),
                           Text(
                             '2020年8月',
-                            style: TextStyle(
-                                color: Colors.black38,
-                                fontWeight: FontWeight.bold),
+                            style: TextStyle(color: Colors.black38, fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -190,11 +181,9 @@ class _TimeLineDiaryState extends State<TimeLineDiary> {
                               ),
                               Padding(
                                 padding: EdgeInsets.only(left: 6, right: 10),
-                                child: Icon(IconFont.icon_smile,
-                                    size: 20, color: Colors.black38),
+                                child: Icon(IconFont.icon_smile, size: 20, color: Colors.black38),
                               ),
-                              Icon(IconFont.icon_tag,
-                                  size: 16, color: Colors.black38),
+                              Icon(IconFont.icon_tag, size: 16, color: Colors.black38),
                             ],
                           ),
                           onTap: () {},
@@ -245,10 +234,8 @@ class _TimeLineDiaryState extends State<TimeLineDiary> {
                   ),
                   trailing: Icon(
                     Icons.arrow_forward_ios,
-                    color: _itemList[index]['isArrow']
-                        ? Colors.black38
-                        : Colors.transparent,
-                    size: 18,
+                    color: _itemList[index]['isArrow'] ? Colors.black38 : Colors.transparent,
+                    size: 16,
                   ));
             },
             separatorBuilder: (BuildContext context, int index) {

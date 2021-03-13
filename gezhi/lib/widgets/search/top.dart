@@ -4,7 +4,8 @@ import 'package:gezhi/widgets/common/common.dart';
 class Top extends StatelessWidget {
   final String title;
   final int num;
-  Top({@required this.title, @required this.num});
+  final String url;
+  Top({@required this.title, @required this.num, this.url = ''});
 
   @override
   Widget build(BuildContext context) {
@@ -19,15 +20,14 @@ class Top extends StatelessWidget {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             Row(
-              children: [
-                Chip(label: Text(num.toString())),
-                CommonWidget.arrow()
-              ],
+              children: [Chip(label: Text(num.toString())), CommonWidget.arrow()],
             ),
           ],
         ),
       ),
-      onTap: () => {print('12121')},
+      onTap: () => {
+        if (url == '') {} else {print('121'), Navigator.pushNamed(context, url)},
+      },
     );
   }
 }

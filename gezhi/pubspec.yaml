@@ -46,12 +46,20 @@ dependencies:
   flutter_markdown: ^0.4.4
   easy_rich_text: ^0.5.0
   flutter_keyboard_visibility: ^3.2.2
+#  webView
   webview_flutter: ^1.0.7
   launch_review: ^2.0.0
-  zefyr:
-    git:
-      url: https://github.com/memspace/zefyr.git
-      path: packages/zefyr
+#  本地缓存
+  shared_preferences: ^0.5.12+4
+#  侧边滑动删除
+  flutter_slidable: ^0.5.7
+
+  zefyr: ^0.12.0
+
+#  zefyr:
+#    git:
+#      url: https://github.com/memspace/zefyr.git
+#      path: packages/zefyr
 
 
 
