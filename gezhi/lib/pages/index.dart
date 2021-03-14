@@ -8,14 +8,16 @@ import 'time_line/index.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class IndexPage extends StatefulWidget {
+  final Map arguments;
+  IndexPage(this.arguments);
   @override
   State<StatefulWidget> createState() {
-    return _IndexPageState();
+    return _IndexPageState(this.arguments);
   }
 }
 
 class _IndexPageState extends State<IndexPage> {
-  int _currentIndex = 0;
+
 
   final List<BottomNavigationBarItem> bottomBarList = [
     BottomNavigationBarItem(icon: Icon(Icons.book), label: ('日记本')),
@@ -25,8 +27,17 @@ class _IndexPageState extends State<IndexPage> {
     BottomNavigationBarItem(icon: Icon(Icons.perm_identity), label: ('我'))
   ];
 
+  Map arguments;
+  int currentIndex;
+
+  @override
+  _IndexPageState(this.arguments){
+    currentIndex = this.arguments['currentIndex'];
+  }
+
   @override
   void initState() {
+    print(this.arguments);
     super.initState();
   }
 
@@ -35,15 +46,15 @@ class _IndexPageState extends State<IndexPage> {
   Widget build(BuildContext context) {
     ScreenUtil.init(context, width: 750, height: 1334);
     return Scaffold(
-      body: tabBodies[_currentIndex],
+      body: tabBodies[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
+        currentIndex: currentIndex,
         items: bottomBarList,
         type: BottomNavigationBarType.fixed,
         fixedColor: GZColors.primary,
         onTap: (int index) {
           setState(() {
-            _currentIndex = index;
+            currentIndex = index;
           });
         },
       ),

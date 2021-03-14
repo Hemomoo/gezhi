@@ -8,7 +8,6 @@ import 'package:gezhi/widgets/common/common.dart';
 
 import 'package:flutter/services.dart';
 import 'package:toast/toast.dart';
-
 import 'package:gezhi/sqlite/sql_common.dart';
 
 
@@ -35,7 +34,7 @@ class _FamousLibraryState extends State<FamousLibrary> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         leading: MeAppbar(
-          url: '/me',
+          url: '/home',
         ),
         title: Text(
           '名言库',
