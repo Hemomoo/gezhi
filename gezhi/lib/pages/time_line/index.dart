@@ -77,6 +77,9 @@ class _TimeLineState extends State<TimeLine> {
         SliverAppBar(
           // expandedHeight: 80,
           elevation: 0,
+          leading: Container(
+            color: Colors.transparent,
+          ),
           backgroundColor: Colors.transparent,
           flexibleSpace: Padding(
             padding: EdgeInsets.only(

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class MeAppbar extends StatelessWidget {
   final String tit;
   final String url;
-  MeAppbar({this.url = '',this.tit=''});
+  MeAppbar({@required this.url = '',this.tit=''});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,9 @@ class MeAppbar extends StatelessWidget {
         if(url == ''){
           Navigator.pop(context),
         }else{
-          Navigator.of(context).pushNamed('/me')
+          if(url=='/home'){
+            Navigator.of(context).pushNamed(url,arguments: {'currentIndex':4})
+          }
         }
       },
     );

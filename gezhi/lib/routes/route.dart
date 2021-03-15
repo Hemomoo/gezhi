@@ -29,7 +29,7 @@ import 'package:gezhi/pages/me/website.dart';
 import 'package:gezhi/pages/search/img_list.dart';
 
 final routes = {
-  '/home': (BuildContext context, {arguments}) => IndexPage(), // 首页
+  '/home': (BuildContext context, {arguments}) => IndexPage(arguments), // 首页
   '/login': (BuildContext context, {arguments}) => Login(), // 登录页
   '/survey': (BuildContext context, {arguments}) => Survey(),
   //我的
@@ -74,5 +74,5 @@ var onGenerateRoute = (RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => pageBuilder(context));
     }
   }
-  return MaterialPageRoute(builder: (context) => IndexPage());
+  return MaterialPageRoute(builder: (context) => IndexPage({'currentIndex':0}));
 };

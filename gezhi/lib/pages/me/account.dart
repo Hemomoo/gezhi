@@ -1,50 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:gezhi/widgets/me/appbar.dart';
 import 'package:gezhi/widgets/me/line_item.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:io';
 
-class Account extends StatefulWidget {
-  @override
-  _AccountState createState() => _AccountState();
-}
-
-class _AccountState extends State<Account> {
+class Account extends StatelessWidget {
   final TextStyle _textStyle = TextStyle(
     color: Colors.black54,
     fontWeight: FontWeight.bold,
     fontSize: 20,
   );
 
-  var avatar;
-  var name;
   final picker = ImagePicker();
-  SharedPreferences prefs;
-
-  //初始化
-
-  @override
-  void initState() {
-    // 延时1s执行返回
-    Future.delayed(Duration(seconds: 0), () async {
-      prefs = await SharedPreferences.getInstance();
-      avatar = prefs.getString('avatar');
-      name = prefs.getString('name');
-      setState(() {});
-    });
-
-    super.initState();
-  }
-
-  @override
-  void deactivate() {
-    // TODO: implement deactivate
-    super.deactivate();
-    print('deactivate');
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +19,7 @@ class _AccountState extends State<Account> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        leading: MeAppbar(),
+        leading: MeAppbar(tit: '我'),
         centerTitle: true,
         title: Text(
           '账户',
@@ -61,12 +28,12 @@ class _AccountState extends State<Account> {
         actions: [
           Center(
             child: InkWell(
-              child: Padding(
-                padding: EdgeInsets.all(10),
-                child: Text(
-                  '登出',
-                  style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
-                ),
+              child: Text(
+                '登出',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
               ),
               onTap: () => {showAlertDialog(context)},
             ),
@@ -116,35 +83,22 @@ class _AccountState extends State<Account> {
         LineItem(
           tit: '头像',
           widget: ClipOval(
-            child: avatar != null
-                ? Image.file(
-                    File(avatar),
-                    width: 50,
-                    height: 50,
-                    fit: BoxFit.cover,
-                  )
-                : Image.network(
-                    'https://img.cc0.cn/pixabay/201910282316374919.jpg/content',
-                    width: 50,
-                    height: 50,
-                    fit: BoxFit.cover,
-                  ),
+            child: Image.network(
+              'https://img.cc0.cn/pixabay/201910282316374919.jpg/content',
+              width: 50,
+              height: 50,
+              fit: BoxFit.cover,
+            ),
           ),
           onTabFn: _imgSel,
         ),
         LineItem(
           tit: '名字',
-          widget: Container(
-            width: MediaQuery.of(context).size.width * 0.5,
-            child: Text(
-              name != null ? name : '何默',
-              style: _textStyle,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-            ),
+          widget: Text(
+            '何默',
+            style: _textStyle,
           ),
-          onTabFn: _editName,
-        )
+        ),
       ],
     );
   }
@@ -203,7 +157,8 @@ class _AccountState extends State<Account> {
       barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
           content: Text(
             '你真的要退出吗？',
             textAlign: TextAlign.center,
@@ -282,88 +237,14 @@ class _AccountState extends State<Account> {
                     '从相册中选择',
                     style: _textStyle,
                   ),
-                  onTap: () async {
-                    PickedFile pickedFile = await picker.getImage(source: ImageSource.gallery);
-                    SharedPreferences prefs = await SharedPreferences.getInstance();
-                    prefs.setString('avatar', pickedFile.path);
-                    setState(() {
-                      this.avatar = pickedFile.path;
-                    });
+                  onTap: () {
+                    picker.getImage(source: ImageSource.gallery);
                   },
                 ),
               ],
             ),
           );
         });
-  }
-
-  //修改名字
-
-  void _editName(BuildContext context) {
-    final TextStyle _style = TextStyle(fontWeight: FontWeight.bold, fontSize: 20);
-    String _name;
-
-    showModalBottomSheet(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-      isScrollControlled: true, // 是不是全屏幕
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          color: Colors.transparent,
-          height: MediaQuery.of(context).size.height * 0.9,
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.all(10),
-                color: Colors.black12,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    InkWell(
-                      child: Text(
-                        '取消',
-                        style: _style,
-                      ),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    Text(
-                      '编辑名字',
-                      style: _style,
-                    ),
-                    InkWell(
-                      child: Text(
-                        '存储',
-                        style: _style,
-                      ),
-                      onTap: () {
-                        setState(() {
-                          this.name = _name;
-                        });
-                        prefs.setString('name', _name);
-                        Navigator.of(context).pop();
-                      },
-                    )
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.all(10),
-                  child: TextField(
-                    controller: TextEditingController(text: name == null ? '何默' : name),
-                    onChanged: (val) {
-                      _name = val;
-                    },
-                  ),
-                ),
-              )
-            ],
-          ),
-        );
-      },
-    );
   }
 
   // 发送修改邮件的邮箱
