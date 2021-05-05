@@ -54,7 +54,7 @@ dependencies:
 #  侧边滑动删除
   flutter_slidable: ^0.5.7
 
-  zefyr: ^0.12.0
+  zefyr: ^1.0.0-dev.2.0
 
 #  zefyr:
 #    git:

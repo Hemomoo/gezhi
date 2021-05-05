@@ -7,7 +7,7 @@ import 'package:gezhi/style/style.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 import 'package:quill_delta/quill_delta.dart';
-import 'package:zefyr/zefyr.dart';
+// import 'package:zefyr/zefyr.dart';
 
 class RevisedDiary extends StatefulWidget {
   final Map arguments;
@@ -21,65 +21,83 @@ class _RevisedDiaryState extends State<RevisedDiary> {
   bool focus = false;
   // FocusNode _commentFocus = FocusNode();
   int _page = 0;
+
   PageController _pageController = PageController();
 
-  final List<Map<String, dynamic>> _contList = [
-    {'tit': '你好1', 'cont': '你好啊'},
-    {'tit': '你好2', 'cont': '你好啊'},
-    {'tit': '你好3', 'cont': '你好啊'},
-    {'tit': '你好4', 'cont': '你好啊'},
-    {'tit': '你好5', 'cont': '你好啊'},
-    {'tit': '你好6', 'cont': '你好啊'},
-  ];
+  // final List<Map<String, dynamic>> _contList = [
+  //   {'tit': '你好1', 'cont': '你好啊'},
+  //   {'tit': '你好2', 'cont': '你好啊'},
+  //   {'tit': '你好3', 'cont': '你好啊'},
+  //   {'tit': '你好4', 'cont': '你好啊'},
+  //   {'tit': '你好5', 'cont': '你好啊'},
+  //   {'tit': '你好6', 'cont': '你好啊'},
+  // ];
+  //
+  // // ZefyrController _zefyrController;
+  // FocusNode _focusNode;
+  // ZefyrController _controller;
 
-  ZefyrController _zefyrController;
-  FocusNode _zefyrFocusNode = FocusNode();
+  // FocusNode _zefyrFocusNode = FocusNode();
 
   /// Loads the document asynchronously from a file if it exists, otherwise
   /// returns default document.
-  Future<NotusDocument> _loadDocument() async {
-    final file = File(Directory.systemTemp.path + '/quick_start.json');
-    if (await file.exists()) {
-      final contents = await file.readAsString().then((data) => Future.delayed(Duration(seconds: 1), () => data));
-      return NotusDocument.fromJson(jsonDecode(contents));
-    }
-    final delta = Delta()..insert('\n');
-    return NotusDocument.fromDelta(delta);
-  }
+  // Future<NotusDocument> _loadDocument() async {
+  //   final file = File(Directory.systemTemp.path + '/quick_start.json');
+  //   if (await file.exists()) {
+  //     final contents = await file.readAsString().then((data) => Future.delayed(Duration(seconds: 1), () => data));
+  //     return NotusDocument.fromJson(jsonDecode(contents));
+  //   }
+  //   final delta = Delta()..insert('\n');
+  //   return NotusDocument.fromDelta(delta);
+  // }
 
-  void _saveDocument(BuildContext context) {
-    // Notus documents can be easily serialized to JSON by passing to
-    // `jsonEncode` directly:
-    final contents = jsonEncode(_zefyrController.document);
-    // For this example we save our document to a temporary file.
-    final file = File(Directory.systemTemp.path + '/quick_start.json');
-    // And show a snack bar on success.
-    file.writeAsString(contents).then((_) {
-      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Saved.')));
-    });
-  }
+  // void _saveDocument(BuildContext context) {
+  //   // Notus documents can be easily serialized to JSON by passing to
+  //   // `jsonEncode` directly:
+  //   final contents = jsonEncode(_zefyrController.document);
+  //   // For this example we save our document to a temporary file.
+  //   final file = File(Directory.systemTemp.path + '/quick_start.json');
+  //   // And show a snack bar on success.
+  //   file.writeAsString(contents).then((_) {
+  //     Scaffold.of(context).showSnackBar(SnackBar(content: Text('Saved.')));
+  //   });
+  // }
+
+
+  // NotusDocument _loadDocument() {
+  //   // For simplicity we hardcode a simple document with one line of text
+  //   // saying "Zefyr Quick Start".
+  //   // (Note that delta must always end with newline.)
+  //   final Delta delta = Delta()..insert("Zefyr Quick Start\n");
+  //   return NotusDocument.fromDelta(delta);
+  // }
+
 
   @override
   void initState() {
-    _zefyrFocusNode.addListener(() {
-      // 获取焦点失去焦点
-      setState(() {
-        focus = _zefyrFocusNode.hasFocus;
-      });
-    });
-    // 监听键盘
-    KeyboardVisibility.onChange.listen((bool visible) {
-      print('121');
-      setState(() {
-        focus = visible;
-      });
-    });
-    //初始化zefyr
-    _loadDocument().then((document) {
-      setState(() {
-        _zefyrController = ZefyrController(document);
-      });
-    });
+    // final document = _loadDocument();
+    // _controller = ZefyrController(document);
+    // _focusNode = FocusNode();
+
+    // _zefyrFocusNode.addListener(() {
+    //   // 获取焦点失去焦点
+    //   setState(() {
+    //     focus = _zefyrFocusNode.hasFocus;
+    //   });
+    // });
+    // // 监听键盘
+    // KeyboardVisibility.onChange.listen((bool visible) {
+    //   print('121');
+    //   setState(() {
+    //     focus = visible;
+    //   });
+    // });
+    // //初始化zefyr
+    // _loadDocument().then((document) {
+    //   setState(() {
+    //     _zefyrController = ZefyrController(document);
+    //   });
+    // });
     super.initState();
   }
 
@@ -115,87 +133,86 @@ class _RevisedDiaryState extends State<RevisedDiary> {
       body: Container(
         child: Container(
           child: Stack(
-            children: [
-              PageView.builder(
-                  onPageChanged: (page) {
-                    setState(() {
-                      _page = page;
-                    });
-                  },
-                  controller: _pageController,
-                  itemCount: _contList.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                        width: double.infinity,
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  _contList[index]['tit'],
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: (_zefyrController == null)
-                                  ? Center(child: CircularProgressIndicator())
-                                  : ZefyrScaffold(
-                                      child: ZefyrEditor(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 20,
-                                        ),
-                                        controller: _zefyrController,
-                                        focusNode: _zefyrFocusNode,
-                                        autofocus: false,
-                                      ),
-                                    ),
-                            ),
-                          ],
-                        ));
-                  }),
-              Positioned(
-                bottom: focus ? 60.0 : 0.0,
-                right: 0,
-                child: Container(
-                  // padding: EdgeInsets.symmetric(horizontal: 10),
-                  width: MediaQuery.of(context).size.width,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(right: 10, bottom: 10),
-                        child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: GestureDetector(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4),
-                                color: GZColors.primary,
-                              ),
-                              padding: EdgeInsets.fromLTRB(14, 8, 14, 8),
-                              child: Text(
-                                '完成',
-                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
-                              ),
-                            ),
-                            onTap: () {
-                              _saveDocument(context);
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ),
-                      ),
-                      focus ? Container() : _bottomWidget()
-                    ],
-                  ),
-                ),
-              )
-            ],
+            // children: [
+            //   PageView.builder(
+            //       onPageChanged: (page) {
+            //         setState(() {
+            //           _page = page;
+            //         });
+            //       },
+            //       controller: _pageController,
+            //       itemCount: _contList.length,
+            //       itemBuilder: (context, index) {
+            //         return Container(
+            //             width: double.infinity,
+            //             child: Column(
+            //               children: [
+            //                 Padding(
+            //                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            //                   child: Align(
+            //                     alignment: Alignment.centerLeft,
+            //                     child: Text(
+            //                       _contList[index]['tit'],
+            //                       style: TextStyle(
+            //                         fontSize: 20,
+            //                         fontWeight: FontWeight.bold,
+            //                       ),
+            //                     ),
+            //                   ),
+            //                 ),
+            //                 Expanded(
+            //                   child: (_controller == null)
+            //                       ? Center(child: CircularProgressIndicator())
+            //                       :
+            //                           ZefyrEditor(
+            //                             padding: EdgeInsets.symmetric(
+            //                               horizontal: 20,
+            //                             ),
+            //                             controller: _controller,
+            //                             focusNode: _focusNode,
+            //                             autofocus: false,
+            //                         ),
+            //                 ),
+            //               ],
+            //             ));
+            //       }),
+            //   Positioned(
+            //     bottom: focus ? 60.0 : 0.0,
+            //     right: 0,
+            //     child: Container(
+            //       // padding: EdgeInsets.symmetric(horizontal: 10),
+            //       width: MediaQuery.of(context).size.width,
+            //       child: Column(
+            //         children: [
+            //           Padding(
+            //             padding: EdgeInsets.only(right: 10, bottom: 10),
+            //             child: Align(
+            //               alignment: Alignment.bottomRight,
+            //               child: GestureDetector(
+            //                 child: Container(
+            //                   decoration: BoxDecoration(
+            //                     borderRadius: BorderRadius.circular(4),
+            //                     color: GZColors.primary,
+            //                   ),
+            //                   padding: EdgeInsets.fromLTRB(14, 8, 14, 8),
+            //                   child: Text(
+            //                     '完成',
+            //                     style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+            //                   ),
+            //                 ),
+            //                 onTap: () {
+            //                   // _saveDocument(context);
+            //                   Navigator.pop(context);
+            //                 },
+            //               ),
+            //             ),
+            //           ),
+            //           focus ? Container() : _bottomWidget()
+            //         ],
+            //       ),
+            //     ),
+            //   )
+            // ],
           ),
         ),
       ),
@@ -261,9 +278,9 @@ class _RevisedDiaryState extends State<RevisedDiary> {
                   setState(() {
                     focus = !focus;
                     if (!focus) {
-                      _zefyrFocusNode.unfocus();
+                      // _zefyrFocusNode.unfocus();
                     } else {
-                      FocusScope.of(context).requestFocus(_zefyrFocusNode);
+                      // FocusScope.of(context).requestFocus(_zefyrFocusNode);
                     }
                   });
                 },

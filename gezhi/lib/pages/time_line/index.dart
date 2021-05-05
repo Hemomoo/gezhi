@@ -21,8 +21,12 @@ class _TimeLineState extends State<TimeLine> {
     {'name': '年份', 'sel': '全部'},
   ];
 
+
+
   bool isTit = false;
   ScrollController _controller = new ScrollController();
+
+  int listLength = 10;
 
   @override
   void initState() {
@@ -103,60 +107,40 @@ class _TimeLineState extends State<TimeLine> {
           itemExtent: 100,
           delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
-              return Container(
-                decoration: BoxDecoration(
-                  border: Border(bottom: BorderSide(width: 1, color: Colors.black12)),
+              return Dismissible(
+                key: UniqueKey(),  // 不能使用index做key,因为删除后index做的key会重复
+                background: Container(
+                  // color: Colors.red,
+                  alignment: Alignment.centerRight,
+                  child:Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                   children: [
+                     Container(
+                       height: 100,
+                       width: 100,
+                       color: Colors.black26,
+                       child: Icon(Icons.more_horiz,color: Colors.white,),
+                     ),
+                     Container(
+                       height: 100,
+                       width: 100,
+                       color: GZColors.primary,
+                         child: Icon(Icons.edit,color: Colors.white,),
+                     ),
+                   ],
+                  )
+                  // child: Text('删除',style:TextStyle(color: Colors.white)),
                 ),
-                margin: EdgeInsets.symmetric(horizontal: 20),
-                padding: EdgeInsets.symmetric(vertical: 10),
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(right: 20),
-                        child: Column(
-                          children: [
-                            Text(
-                              '28',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text('8月')
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(bottom: 10),
-                              child: Text(
-                                '大张伟，娱乐圈的救护车，综艺节目共享嘉宾，擅长各种救场',
-                                maxLines: 2,
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ),
-                            Text(
-                              '日记本',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(color: Colors.black26),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  onTap: () {
-                    Navigator.pushNamed(context, '/time_line/time_line_diary');
-                  },
-                ),
+                onDismissed: (direction) {
+                  listLength--;
+                  setState(() {});
+                  // 返回的值是一个future
+                  Navigator.pushNamed(context, '/time_line/time_line_diary');
+                },
+                child: _listWidgetItem(),
               );
             },
-            childCount: 50, //50个列表项
+            childCount: listLength, //50个列表项
           ),
         ),
       ]),
@@ -267,6 +251,64 @@ class _TimeLineState extends State<TimeLine> {
       ),
     );
   }
+
+
+  //  列表widget
+  Widget _listWidgetItem (){
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(width: 1, color: Colors.black12)),
+      ),
+      margin: EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(vertical: 10),
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        child: Row(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(right: 20),
+              child: Column(
+                children: [
+                  Text(
+                    '28',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text('8月')
+                ],
+              ),
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 10),
+                    child: Text(
+                      '大张伟，娱乐圈的救护车，综艺节目共享嘉宾，擅长各种救场',
+                      maxLines: 2,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                  Text(
+                    '日记本',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(color: Colors.black26),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+        onTap: () {
+          Navigator.pushNamed(context, '/time_line/time_line_diary');
+        },
+      ),
+    );
+  }
+
 }
 
 class MyDelegate extends SliverPersistentHeaderDelegate {

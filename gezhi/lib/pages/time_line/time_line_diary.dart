@@ -52,157 +52,163 @@ class _TimeLineDiaryState extends State<TimeLineDiary> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        // automaticallyImplyLeading: false,
-        iconTheme: IconThemeData(color: Colors.black),
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        leading: IconButton(
-            padding: EdgeInsets.zero,
-            constraints: BoxConstraints(),
-            icon: Icon(
-              Icons.arrow_back_ios,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
-        title: Container(
-          padding: EdgeInsets.all(4),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4),
-            color: Color(0XFFe7e7eb),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              GestureDetector(
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    color: _isGrid ? Colors.white : Color(0XFFe7e7eb),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(4),
-                    child: Icon(
-                      Icons.border_all,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  setState(() {
-                    _isGrid = true;
-                    _isListing = false;
-                  });
-                },
+    return WillPopScope(
+      onWillPop: (){
+        Navigator.of(context).pop('返回'); // 传过去的值
+        return Future.value(true); // true 跳转 false 不跳转
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          // automaticallyImplyLeading: false,
+          iconTheme: IconThemeData(color: Colors.black),
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          leading: IconButton(
+              padding: EdgeInsets.zero,
+              constraints: BoxConstraints(),
+              icon: Icon(
+                Icons.arrow_back_ios,
               ),
-              GestureDetector(
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    color: _isListing ? Colors.white : Color(0XFFe7e7eb),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(4),
-                    child: Icon(
-                      Icons.sort,
-                      color: Colors.black,
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+          title: Container(
+            padding: EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              color: Color(0XFFe7e7eb),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GestureDetector(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                      color: _isGrid ? Colors.white : Color(0XFFe7e7eb),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(4),
+                      child: Icon(
+                        Icons.border_all,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
+                  onTap: () {
+                    setState(() {
+                      _isGrid = true;
+                      _isListing = false;
+                    });
+                  },
                 ),
-                onTap: () {
-                  setState(() {
-                    _isGrid = false;
-                    _isListing = true;
-                  });
-                },
-              )
-            ],
-          ),
-        ),
-        centerTitle: true,
-        actions: [
-          IconButton(icon: Icon(Icons.edit), onPressed: () {}),
-          IconButton(
-            icon: Icon(Icons.more_horiz),
-            onPressed: () {
-              _showBottom();
-            },
-          )
-        ],
-      ),
-      body: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  child: Row(
-                    children: [
-                      Text(
-                        '26',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
+                GestureDetector(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                      color: _isListing ? Colors.white : Color(0XFFe7e7eb),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(4),
+                      child: Icon(
+                        Icons.sort,
+                        color: Colors.black,
                       ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '星期三',
-                            style: TextStyle(color: Colors.black38, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            '2020年8月',
-                            style: TextStyle(color: Colors.black38, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  child: _isGrid
-                      ? GestureDetector(
-                          child: Row(
-                            children: [
-                              Icon(
-                                IconFont.icon_taiyang,
-                                size: 26,
-                                color: Colors.black38,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(left: 6, right: 10),
-                                child: Icon(IconFont.icon_smile, size: 20, color: Colors.black38),
-                              ),
-                              Icon(IconFont.icon_tag, size: 16, color: Colors.black38),
-                            ],
-                          ),
-                          onTap: () {},
-                        )
-                      : Row(
-                          children: [
-                            Icon(
-                              Icons.book,
-                              color: Colors.black12,
-                            ),
-                            Text(('日记本'))
-                          ],
-                        ),
-                ),
+                  onTap: () {
+                    setState(() {
+                      _isGrid = false;
+                      _isListing = true;
+                    });
+                  },
+                )
               ],
             ),
           ),
-          _isGrid ? GridItem() : ListingItem()
-        ],
+          centerTitle: true,
+          actions: [
+            IconButton(icon: Icon(Icons.edit), onPressed: () {}),
+            IconButton(
+              icon: Icon(Icons.more_horiz),
+              onPressed: () {
+                _showBottom();
+              },
+            )
+          ],
+        ),
+        body: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      children: [
+                        Text(
+                          '26',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '星期三',
+                              style: TextStyle(color: Colors.black38, fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              '2020年8月',
+                              style: TextStyle(color: Colors.black38, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    child: _isGrid
+                        ? GestureDetector(
+                            child: Row(
+                              children: [
+                                Icon(
+                                  IconFont.icon_taiyang,
+                                  size: 26,
+                                  color: Colors.black38,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 6, right: 10),
+                                  child: Icon(IconFont.icon_smile, size: 20, color: Colors.black38),
+                                ),
+                                Icon(IconFont.icon_tag, size: 16, color: Colors.black38),
+                              ],
+                            ),
+                            onTap: () {},
+                          )
+                        : Row(
+                            children: [
+                              Icon(
+                                Icons.book,
+                                color: Colors.black12,
+                              ),
+                              Text(('日记本'))
+                            ],
+                          ),
+                  ),
+                ],
+              ),
+            ),
+            _isGrid ? GridItem() : ListingItem()
+          ],
+        ),
       ),
     );
   }

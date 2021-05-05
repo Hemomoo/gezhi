@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -10,13 +12,85 @@ import 'package:gezhi/widgets/common/common.dart';
 import 'package:draggable_flutter_list/draggable_flutter_list.dart';
 import 'package:gezhi/widgets/home/small_widget.dart';
 import 'package:gezhi/sqlite/sql_common.dart';
+// import 'package:zefyr/zefyr.dart';
 
-class Home extends StatelessWidget {
+import 'package:flutter/material.dart';
+
+class PositionItem extends StatefulWidget {
+  PositionItem({this.tit,this.index, Key key}) : super(key: key);
+  final String tit;
+  final int index;
+  @override
+  _PositionItemState createState() => _PositionItemState(tit: this.tit,index:this.index);
+}
+
+class _PositionItemState extends State<PositionItem> {
+  final String tit;
+  final int index ;
+  bool isDel = false;
+
+  _PositionItemState({this.tit,this.index});
+
   @override
   Widget build(BuildContext context) {
+    return Container(
+      height: 60,
+      alignment: Alignment.center,
+      width: MediaQuery.of(context).size.width,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              IconButton(
+                  icon: Icon(Icons.remove_circle),
+                  onPressed: () { setState(() {
+                      isDel = !isDel;
+                    });
+                  }),
+              Icon(Icons.date_range),
+              // Icon(Icons.date_range),
+              Text(tit)
+            ],
+          ),
+          Row(
+            children: [
+              IconButton(
+                  icon: Icon(Icons.settings),
+                  onPressed: () => {print('点击了设置')}),
+              Icon(Icons.menu),
+              isDel
+                  ? Container(
+                      alignment: Alignment.center,
+                      width: 40,
+                      child: Text('移除'),
+                    )
+                  : Container()
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  double screenWidth;
+
+  @override
+  Widget build(BuildContext context) {
+    screenWidth = MediaQuery.of(context).size.width;
+
     DateTime today = new DateTime.now();
-    String dateSlug = '''${today.year.toString()}年${today.month.toString().padLeft(2, '0')}月${today.day.toString().padLeft(2, '0')}''';
-    String weekDay = ['一', '二', '三', '四', '五', '六', '日'][new DateTime.now().weekday - 1];
+    String dateSlug =
+        '''${today.year.toString()}年${today.month.toString().padLeft(2, '0')}月${today.day.toString().padLeft(2, '0')}''';
+    String weekDay =
+        ['一', '二', '三', '四', '五', '六', '日'][new DateTime.now().weekday - 1];
     final SqlUtil tipSqlite = SqlUtil.setTable('famous');
 
     (() async {
@@ -88,7 +162,8 @@ class Home extends StatelessWidget {
                       ),
                       child: Text(
                         '30周',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 30),
                       ),
                     ),
                   ),
@@ -117,7 +192,10 @@ class Home extends StatelessWidget {
                   onSelected: (value) {
                     if (value == '编辑日记本') {
                       _editDiary(context);
+                    }else{
+                      _addDiary(context);
                     }
+
                   },
                   icon: Icon(Icons.more_horiz),
                   itemBuilder: (context) {
@@ -229,15 +307,62 @@ class Home extends StatelessWidget {
   }
 
   List<Widget> dayWidgetList() {
-    List<Widget> list = new List();
-    int week = DateTime.now().weekday;
-    int day = DateTime.now().day - week;
-    List<String> weekList = ['日', '一', '二', '三', '四', '五', '六'];
+    List<Widget> list = [];
+
+    int week = DateTime.now().weekday; // 星期几
+    int day = DateTime.now().day; // 今天是几号
+    int monthDay = new DateTime(DateTime.now().year, DateTime.now().month+1, 0).day; // 本月最后一天是几号
+    // int monthWeekday = new DateTime(DateTime.now().year, DateTime.now().month+1, monthDay).weekday; // 本月最后一天星期几
+    print(monthDay);
+    // 判断上一个月有多少天啊
+    int prevLastDay = new DateTime(DateTime.now().year, DateTime.now().month, 0).day; // 上个月有几天
+
+    List<String> weekList = ['一', '二', '三', '四', '五', '六', '日'];
     List<Map<String, String>> dateList = [];
 
-    for (var i = 0; i < 7; i++) {
-      dateList.add({"weekday": weekList[i], "day": (day + i).toString()});
+    for (var i = 1; i < 8; i++) {
+      /*
+      * 1. 如果是月初需要考虑这个星期有几天是上个月的
+      * 2. 如果是月末需要考虑，后面有几个填是下个月的
+      * 3. 使用了i=i 是为了和星期几相对应
+      * */
+      // 如果是月底，需要判断今天
+      if(monthDay-day<7){
+        if(week>i){
+          dateList.add({"weekday": weekList[i - 1],"day": (prevLastDay - (week-i)+1).toString()});
+        }else if(week==i){
+          dateList.add({"weekday": weekList[i - 1], "day": (day).toString()});
+        }else{
+          if(day+(i-week)<monthDay){
+            dateList.add({"weekday": weekList[i - 1], "day": (day + (i-week)).toString()});
+          }else{
+            dateList.add({"weekday": weekList[i - 1], "day": ((i-week)).toString()});
+          }
+        }
+      }else{
+        // 如果是这个月不超过7天就从上个月开始计算
+        if( day > week){
+          if(week < i){
+            dateList.add({"weekday": weekList[i - 1], "day": (day + (i-week)).toString()});
+          }else if(week == i ){
+            dateList.add({"weekday": weekList[i - 1], "day": (day).toString()});
+          }else{
+            dateList.add({"weekday": weekList[i - 1], "day": (day - (week-i)).toString()});
+          }
+        }else{
+          if(week > i){
+            dateList.add({"weekday": weekList[i - 1],"day": (prevLastDay - (week-i)+1).toString()});
+          }else if(week == i ){
+            dateList.add({"weekday": weekList[i - 1], "day": (day).toString()});
+          }else{
+            dateList.add({"weekday": weekList[i - 1], "day": (day + (i-week)).toString()});
+          }
+        }
+      }
     }
+
+    // dateList.insert(0, dateList.removeLast());
+    print(dateList);
 
     dateList.forEach(
       (element) {
@@ -275,8 +400,17 @@ class Home extends StatelessWidget {
 
   // 添加小部件
   _addWidget(BuildContext context) {
+    List<Widget> _positionItemList = [
+      PositionItem(tit: '日程', key: ValueKey(1)),
+      PositionItem(tit: '名言', key: ValueKey(2)),
+      PositionItem(tit: '回忆', key: ValueKey(3))
+    ];
+
+    List<Widget> _removePositionItemList = [
+      Text('ll')
+    ];
+
     TextStyle textStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 20);
-    List<String> items = ['0', '1', 'd'];
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -288,6 +422,7 @@ class Home extends StatelessWidget {
           builder: (BuildContext context, state) {
             return Container(
               height: MediaQuery.of(context).size.height * 0.9,
+              // width: MediaQuery.of(context).size.width,
               child: Column(
                 children: [
                   Container(
@@ -329,32 +464,85 @@ class Home extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                    child: DragAndDropList(
-                      items.length,
-                      itemBuilder: (BuildContext context, index) {
-                        return SizedBox(
-                          child: Card(
-                            shadowColor: Colors.transparent,
-                            margin: EdgeInsets.zero,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadiusDirectional.circular(0),
-                            ),
-                            child: TestAnimation(),
+                      child: Column(
+                      children: [
+
+                        Container(
+                          height: 400,
+                          child: ReorderableListView(
+                            // shrinkWrap:true,
+                            onReorder: (int oldIndex, int newIndex) {
+                              if (newIndex > oldIndex) {
+                                newIndex -= 1;
+                              }
+                              final item = _positionItemList.removeAt(oldIndex);
+                              _positionItemList.insert(newIndex, item);
+                            },
+                            children: _positionItemList,
                           ),
-                        );
-                      },
-                      onDragFinish: (before, after) {
-                        String data = items[before];
-                        items.removeAt(before);
-                        items.insert(after, data);
-                      },
-                      canDrag: (index) {
-                        return index < 5; //disable drag for index 3
-                      },
-                      canBeDraggedTo: (from, to) {
-                        return to < 5;
-                      },
-                      dragElevation: 8.0,
+                        ),
+                        Column(children: _removePositionItemList)
+                        ],
+                  )),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+
+  void _addDiary(BuildContext context){
+    double fontSize = 20;
+
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadiusDirectional.circular(14),
+      ),
+      builder: (BuildContext context) {
+        print('有没有刷新widget');
+        return StatefulBuilder(
+          builder: (BuildContext context,  addDiaryState) {
+            return Container(
+              padding: EdgeInsets.all(10),
+              color: Colors.black12,
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(icon:Icon(Icons.close) , onPressed: (){
+                        Navigator.of(context).pop();
+                      }),
+                      Text('自定义',style: TextStyle(fontSize: 20.0),)
+                    ],
+                  ),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Column(
+                      children: [
+                        Text('1/2'),
+                        Text('你想要通过日记实现'),
+                        Text('什么目的', textAlign: TextAlign.left,),
+                        IconButton(icon: Icon(Icons.ac_unit), onPressed: (){
+                          addDiaryState(() {
+
+                          });
+                        }),
+                        Column(
+                          children: [
+                            AddDiaryItem('记录生活'),
+                            AddDiaryItem('练习关爱自己'),
+                            AddDiaryItem('养成习惯'),
+                            AddDiaryItem('实现目标'),
+                            AddDiaryItem('掌握生活平衡')
+                          ],
+                        )
+                      ],
                     ),
                   )
                 ],
@@ -366,3 +554,44 @@ class Home extends StatelessWidget {
     );
   }
 }
+
+
+class AddDiaryItem extends StatefulWidget {
+  String tit;
+  AddDiaryItem(this.tit);
+
+  @override
+  _AddDiaryItemState createState() => _AddDiaryItemState(tit);
+}
+
+class _AddDiaryItemState extends State<AddDiaryItem> {
+  double fontSize = 20;
+  String tit;
+  bool  isBorder = false;
+
+  _AddDiaryItemState(this.tit);
+
+  @override
+  Widget build(BuildContext context) {
+    return  InkWell(
+      onLongPress:(){
+        setState(() {
+          fontSize = 18;
+          isBorder = !isBorder;
+        });
+      },
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          color:Colors.white60,
+          borderRadius: BorderRadius.circular(10),
+          border: isBorder? Border.all(color:GZColors.primary):null,
+        ),
+        child: Text(widget.tit,style: TextStyle(fontSize: fontSize),),
+      ),
+    );
+  }
+}
+
