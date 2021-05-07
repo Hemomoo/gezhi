@@ -4,32 +4,79 @@ import 'package:gezhi/style/style.dart';
 
 // ignore: must_be_immutable
 class AddDiaryList extends StatefulWidget {
-  List<Map> addDiaryList;
   final UniqueKey key;
   final Function selCallBack;
   final int step;
+  final int selIndex;
 
-  AddDiaryList(
-    this.addDiaryList,
-    this.key,
-    this.selCallBack,
-    this.step,
-  );
+  AddDiaryList(this.key, this.selCallBack, this.step, this.selIndex);
 
   @override
-  _AddDiaryListState createState() => _AddDiaryListState(addDiaryList, selCallBack, step);
+  _AddDiaryListState createState() => _AddDiaryListState(selCallBack, step, selIndex);
 }
 
 class _AddDiaryListState extends State<AddDiaryList> {
-  List<Map> addDiaryList;
   final Function selCallBack;
-  final step; // 步进器
+  final int step; // 步进器
+  final int selIndex;
 
-  _AddDiaryListState(this.addDiaryList, this.selCallBack, this.step);
+  List<Map> addDiaryList = [];
+
+  _AddDiaryListState(this.selCallBack, this.step, this.selIndex);
+
+  List<Map> oneStepDiaryList = [
+    {
+      "id": 0,
+      "tit": '记录生活',
+      "isSel": false,
+    },
+    {
+      "id": 1,
+      "tit": '练习关爱自己',
+      "isSel": false,
+    },
+    {
+      "id": 2,
+      "tit": '养成习惯',
+      "isSel": false,
+    },
+    {
+      "id": 3,
+      "tit": '实现目标',
+      "isSel": false,
+    },
+    {
+      "id": 4,
+      "tit": '掌握生活平衡',
+      "isSel": false,
+    }
+  ];
+
+  List<Map> twoStepDiaryList = [
+    {
+      "id": 0,
+      "tit": '偶尔谢谢',
+      "isSel": false,
+    },
+    {
+      "id": 0,
+      "tit": '经常写',
+      "isSel": false,
+    },
+    {
+      "id": 0,
+      "tit": '每日',
+      "isSel": false,
+    },
+  ];
 
   @override
   void initState() {
     // TODO: implement initState
+    addDiaryList = step == 1 ? oneStepDiaryList : twoStepDiaryList;
+    if (selIndex != -1) {
+      addDiaryList[selIndex]['isSel'] = true;
+    }
     super.initState();
   }
 

@@ -249,12 +249,13 @@ class _HomeState extends State<Home> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  IconButton(icon: Icon(Icons.edit), onPressed: null),
+                  Icon(Icons.check_circle),
                   Text(
                     '日记本',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
                   PopupMenuButton(
+                    padding: EdgeInsets.zero,
                     icon: Icon(Icons.sort),
                     itemBuilder: (content) {
                       return <PopupMenuEntry<String>>[
@@ -263,22 +264,18 @@ class _HomeState extends State<Home> {
                           child: Row(
                             children: <Widget>[
                               Icon(Icons.library_add, color: GZColors.primary),
-                              SizedBox(
-                                width: 10,
-                              ),
+                              SizedBox(width: 10),
                               Text('新增日记本'),
                             ],
                           ),
                         ),
                         PopupMenuItem<String>(
-                          value: '编辑日记本',
+                          value: '管理日记本',
                           child: Row(
                             children: <Widget>[
                               Icon(Icons.create, color: GZColors.primary),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text('编辑日记本'),
+                              SizedBox(width: 10),
+                              Text('管理日记本'),
                             ],
                           ),
                         ),
@@ -301,6 +298,7 @@ class _HomeState extends State<Home> {
     );
   }
 
+  //今天是周几
   List<Widget> dayWidgetList() {
     List<Widget> list = [];
 
@@ -357,7 +355,6 @@ class _HomeState extends State<Home> {
     }
 
     // dateList.insert(0, dateList.removeLast());
-    print(dateList);
 
     dateList.forEach(
       (element) {
@@ -485,55 +482,10 @@ class _HomeState extends State<Home> {
     );
   }
 
+  //新增日记本
   void _addDiary(BuildContext context) {
     int selIndex = -1;
     int step = 1;
-
-    List<Map> oneStepDiaryList = [
-      {
-        "id": 0,
-        "tit": '记录生活',
-        "isSel": false,
-      },
-      {
-        "id": 1,
-        "tit": '练习关爱自己',
-        "isSel": false,
-      },
-      {
-        "id": 2,
-        "tit": '养成习惯',
-        "isSel": false,
-      },
-      {
-        "id": 3,
-        "tit": '实现目标',
-        "isSel": false,
-      },
-      {
-        "id": 4,
-        "tit": '掌握生活平衡',
-        "isSel": false,
-      }
-    ];
-
-    List<Map> twoStepDiaryList = [
-      {
-        "id": 0,
-        "tit": '偶尔谢谢',
-        "isSel": false,
-      },
-      {
-        "id": 0,
-        "tit": '经常写',
-        "isSel": false,
-      },
-      {
-        "id": 0,
-        "tit": '每日',
-        "isSel": false,
-      },
-    ];
 
     showModalBottomSheet(
       isScrollControlled: true,
@@ -553,11 +505,12 @@ class _HomeState extends State<Home> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      IconButton(
-                          icon: Icon(Icons.close),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          }),
+                      GestureDetector(
+                        child: Icon(Icons.close),
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
                       Text(
                         '自定义',
                         style: TextStyle(fontSize: 20.0),
@@ -571,44 +524,93 @@ class _HomeState extends State<Home> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('1/2'),
-                            Text('你想要通过日记实现'),
-                            Text(
-                              '什么目的',
-                              textAlign: TextAlign.left,
-                            ),
+                            step == 1 || step == 2
+                                ? Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text('$step/2'),
+                                      Text('你想要通过日记实现'),
+                                      Text(
+                                        '什么目的',
+                                        textAlign: TextAlign.left,
+                                      ),
+                                    ],
+                                  )
+                                : Container(),
                             step == 1
-                                ? AddDiaryList(oneStepDiaryList, UniqueKey(), (index) {
+                                ? AddDiaryList(UniqueKey(), (index) {
                                     addDiaryState(() {
                                       selIndex = index;
                                     });
-                                  }, step)
-                                : AddDiaryList(oneStepDiaryList, UniqueKey(), (index) {
-                                    addDiaryState(() {
-                                      selIndex = index;
-                                    });
-                                  }, step)
-
-                            // Expanded(child: Text('年后'))
+                                  }, step, selIndex)
+                                : step == 2
+                                    ? AddDiaryList(UniqueKey(), (index) {
+                                        addDiaryState(() {
+                                          selIndex = index;
+                                        });
+                                      }, step, selIndex)
+                                    : Container(
+                                        alignment: Alignment.center,
+                                        child: Column(
+                                          children: [
+                                            AnimatedContainer(
+                                              height: 200,
+                                              width: 150,
+                                              alignment: Alignment.center,
+                                              duration: Duration(seconds: 3),
+                                              decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                    image: NetworkImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                  borderRadius: BorderRadius.all(Radius.circular(
+                                                    10,
+                                                  ))),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                            step != 1 && step != 2
+                                ? Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text('你完成'),
+                                      Text(
+                                        '你的日记本已经准备',
+                                        style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        '就绪',
+                                        style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  )
+                                : Container()
                           ],
                         ),
                         Positioned(
                           left: 0,
                           right: 0,
                           bottom: 10,
-                          child: GestureDetector(
-                            onTap: () {
-                              addDiaryState(() {
-                                step = 2;
-                              });
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                  color: selIndex == -1 ? Colors.black12 : Colors.black54, borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                              padding: const EdgeInsets.symmetric(vertical: 10.0),
-                              child: Text('继续', style: TextStyle(color: Colors.white, fontSize: 20)),
-                            ),
+                          child: Column(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  addDiaryState(() {
+                                    step++;
+                                    selIndex = -1;
+                                    if (step == 4) Navigator.of(context).pop();
+                                  });
+                                },
+                                child: _stepWidget(selIndex, step),
+                              ),
+                              step != 1 && step != 2
+                                  ? Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 10),
+                                      child: GestureDetector(child: Text('日记设置', style: TextStyle(color: GZColors.primary))),
+                                    )
+                                  : Text(''),
+                            ],
                           ),
                         ),
                       ],
@@ -620,6 +622,22 @@ class _HomeState extends State<Home> {
           },
         );
       },
+    );
+  }
+
+  //按钮widget封装
+  Widget _stepWidget(selIndex, step) {
+    return Container(
+      key: UniqueKey(),
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: selIndex == -1 && step != 3 ? Colors.black12 : Colors.black87,
+        borderRadius: BorderRadius.all(
+          Radius.circular(10.0),
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Text(step == 1 || step == 2 ? '继续' : '保存', style: TextStyle(color: Colors.white, fontSize: 20)),
     );
   }
 }

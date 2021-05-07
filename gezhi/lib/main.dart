@@ -35,7 +35,8 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
           textTheme: TextTheme(),
         ),
-        home: IndexPage({'currentIndex':0}),
+        // initialRoute: '/home',
+        home: IndexPage({'currentIndex': 0}),
         // routes: new Routes(context).routes,
         onGenerateRoute: onGenerateRoute,
         //错误的路由跳转到404

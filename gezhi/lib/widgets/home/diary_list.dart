@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:toast/toast.dart';
+import 'package:gezhi/widgets/home/diary_setting.dart';
 
 class DiaryList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Widget divider1 = Divider(
-      color: Colors.transparent,
-    );
-    Widget divider2 = Divider(color: Colors.grey);
     return ListView.separated(
-      itemCount: 2,
+      itemCount: 10,
       //列表项构造器
       itemBuilder: (BuildContext context, int index) {
         return Container(
+          height: 40,
           child: InkWell(
             child: Container(
               child: Row(
@@ -26,33 +22,33 @@ class DiaryList extends StatelessWidget {
                         width: 20,
                         height: 100,
                       ),
-                      Text('日记本'),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 4),
+                        child: Text('日记本'),
+                      ),
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text('701'),
-                      Icon(Icons.arrow_forward_ios)
-                    ],
+                    children: <Widget>[Text('701'), Icon(Icons.arrow_forward_ios)],
                   )
                 ],
               ),
             ),
             onTap: () {
-              _editeDiary1(context);
+              _editDiary1(context);
             },
           ),
         );
       },
       //分割器构造器
       separatorBuilder: (BuildContext context, int index) {
-        return index % 2 == 0 ? divider1 : divider2;
+        return Divider(color: Colors.black54);
       },
     );
   }
 
-  _editeDiary1(BuildContext context) {
+  _editDiary1(BuildContext context) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -64,54 +60,12 @@ class DiaryList extends StatelessWidget {
             padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(14), topRight: Radius.circular(14)),
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(14), topRight: Radius.circular(14)),
             ),
-            child: Column(
-              children: <Widget>[BottomSheetHead()],
-            ),
+            child: DiarySetting(),
           ),
         );
       },
-    );
-  }
-}
-
-class BottomSheetHead extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Icon(Icons.check),
-        Text(
-          '日记本',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-        PopupMenuButton(
-          onSelected: (val) {
-            Clipboard.setData(ClipboardData(text: val)).then(
-              (value) => {
-                Toast.show("复制成功", context),
-              },
-            );
-          },
-          icon: Icon(Icons.more_horiz),
-          itemBuilder: (context) {
-            return <PopupMenuEntry<String>>[
-              PopupMenuItem<String>(
-                value: '14',
-                child: Row(
-                  children: <Widget>[
-                    Icon(Icons.content_copy),
-                    Text('拷贝日记本ID'),
-                  ],
-                ),
-              )
-            ];
-          },
-        )
-      ],
     );
   }
 }

@@ -7,16 +7,12 @@ import 'package:event_bus/event_bus.dart';
 import 'package:gezhi/widgets/calendar/calendar_item.dart';
 import 'package:gezhi/widgets/calendar/calendar_list/calendar_list.dart';
 
-
 import 'package:gezhi/widgets/calendar/calendar_list/utils/chang_year.dart';
-
-
 
 class Calendar extends StatefulWidget {
   @override
   _CalendarState createState() => _CalendarState();
 }
-
 
 class _CalendarState extends State<Calendar> {
   EventBus eventBus = EventBus(); // 注册eventBus
@@ -28,14 +24,13 @@ class _CalendarState extends State<Calendar> {
 
     eventBus.on<Year>().listen((event) {
       setState(() {
-        if(_year != event.year){
+        if (_year != event.year) {
           _year = event.year;
         }
       });
     });
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +54,7 @@ class _CalendarState extends State<Calendar> {
             child: Padding(
               padding: EdgeInsets.only(right: 10),
               child: Icon(
-                Icons.sort,
+                Icons.filter_list,
                 color: Colors.black,
               ),
             ),
@@ -73,7 +68,7 @@ class _CalendarState extends State<Calendar> {
         children: [
           Container(
             margin: EdgeInsets.only(top: 50),
-            child:  CalendarList(
+            child: CalendarList(
               eventBus: eventBus,
               firstDate: DateTime(2000, 1),
               lastDate: DateTime(2100, 8),
@@ -102,14 +97,19 @@ class _CalendarState extends State<Calendar> {
                       borderRadius: BorderRadius.circular(20.0),
                       border: Border.all(width: 1, color: Colors.black12),
                     ),
-                    child: Center(child: Text(_year,style: TextStyle(fontSize: 12),),),
+                    child: Center(
+                      child: Text(
+                        _year,
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ),
                   ),
                   SizedBox(
                     width: 20,
                   ),
                   Text(
                     _year,
-                    style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   )
                 ],
               ),
@@ -120,6 +120,3 @@ class _CalendarState extends State<Calendar> {
     );
   }
 }
-
-
-
