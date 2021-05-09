@@ -17,8 +17,8 @@ class DiaryList extends StatelessWidget {
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      Image.network(
-                        'http://ppe.oss-cn-shenzhen.aliyuncs.com/collections/73/8/thumb.jpg',
+                      Image.asset(
+                        'assets/imgs/diary-bg.jpg',
                         width: 20,
                         height: 100,
                       ),

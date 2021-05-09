@@ -55,7 +55,7 @@ class _AddDiaryListState extends State<AddDiaryList> {
   List<Map> twoStepDiaryList = [
     {
       "id": 0,
-      "tit": '偶尔谢谢',
+      "tit": '偶尔写写',
       "isSel": false,
     },
     {
