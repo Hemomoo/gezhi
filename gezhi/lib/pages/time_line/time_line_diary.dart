@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:gezhi/style/style.dart';
 import 'package:gezhi/widgets/time_line/listing_item.dart';
 import 'package:gezhi/widgets/time_line/grid_item.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 
 //字体图标
 import 'package:gezhi/fonts/font.dart';
@@ -53,7 +54,7 @@ class _TimeLineDiaryState extends State<TimeLineDiary> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: (){
+      onWillPop: () {
         Navigator.of(context).pop('返回'); // 传过去的值
         return Future.value(true); // true 跳转 false 不跳转
       },
@@ -177,19 +178,24 @@ class _TimeLineDiaryState extends State<TimeLineDiary> {
                     padding: EdgeInsets.symmetric(vertical: 10),
                     child: _isGrid
                         ? GestureDetector(
-                            child: Row(
-                              children: [
-                                Icon(
-                                  IconFont.icon_taiyang,
-                                  size: 26,
-                                  color: Colors.black38,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(left: 6, right: 10),
-                                  child: Icon(IconFont.icon_smile, size: 20, color: Colors.black38),
-                                ),
-                                Icon(IconFont.icon_tag, size: 16, color: Colors.black38),
-                              ],
+                            child: GestureDetector(
+                              onTap: () {
+                                _stickersLabels();
+                              },
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    IconFont.icon_taiyang,
+                                    size: 26,
+                                    color: Colors.black38,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 6, right: 10),
+                                    child: Icon(IconFont.icon_smile, size: 20, color: Colors.black38),
+                                  ),
+                                  Icon(IconFont.icon_tag, size: 16, color: Colors.black38),
+                                ],
+                              ),
                             ),
                             onTap: () {},
                           )
@@ -258,6 +264,108 @@ class _TimeLineDiaryState extends State<TimeLineDiary> {
         );
       },
     );
+  }
+
+  //贴纸和标签
+  void _stickersLabels() {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        backgroundColor: Colors.transparent,
+        builder: (BuildContext context) {
+          int _currentIndex = 0;
+          return StatefulBuilder(
+            builder: (context, state) {
+              return Container(
+                  height: MediaQuery.of(context).size.height * 0.9,
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(14),
+                    color: Colors.white,
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                '贴纸',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: _currentIndex == 0 ? Colors.black : Colors.black54,
+                                ),
+                              ),
+                              Text(
+                                '标签',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: _currentIndex == 1 ? Colors.black : Colors.black54,
+                                ),
+                              )
+                            ],
+                          ),
+                          PopupMenuButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadiusDirectional.circular(8),
+                            ),
+                            onSelected: (value) {},
+                            icon: Icon(Icons.more_horiz),
+                            itemBuilder: (context) {
+                              return <PopupMenuEntry<String>>[
+                                PopupMenuItem<String>(
+                                  value: '新增日记本',
+                                  child: Row(
+                                    children: <Widget>[
+                                      Icon(Icons.library_add, color: GZColors.primary),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text('新增日记本'),
+                                    ],
+                                  ),
+                                ),
+                                PopupMenuItem<String>(
+                                  value: '编辑日记本',
+                                  child: Row(
+                                    children: <Widget>[
+                                      Icon(Icons.create, color: GZColors.primary),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text('编辑日记本'),
+                                    ],
+                                  ),
+                                ),
+                              ];
+                            },
+                          )
+                        ],
+                      ),
+                      Expanded(
+                        child: PageView.builder(
+                          onPageChanged: (int index) {
+                            state(() {
+                              _currentIndex = index;
+                            });
+                            print(_currentIndex);
+                          },
+                          controller: PageController(),
+                          itemBuilder: (context, index) {
+                            if (index == 0) {
+                              return Text('贴纸');
+                            } else {
+                              return Text('标签');
+                            }
+                          },
+                        ),
+                      )
+                    ],
+                  ));
+            },
+          );
+        });
   }
 
   // 导出

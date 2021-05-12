@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gezhi/utils/weekIndex.dart';
 
-
 //样式
 import 'package:gezhi/style/style.dart';
 //小组件
@@ -23,8 +22,7 @@ class PositionItem extends StatefulWidget {
   final String tit;
   final int index;
   @override
-  _PositionItemState createState() =>
-      _PositionItemState(tit: this.tit, index: this.index);
+  _PositionItemState createState() => _PositionItemState(tit: this.tit, index: this.index);
 }
 
 class _PositionItemState extends State<PositionItem> {
@@ -34,10 +32,8 @@ class _PositionItemState extends State<PositionItem> {
 
   _PositionItemState({this.tit, this.index});
 
-
   @override
   Widget build(BuildContext context) {
-
     return Container(
       height: 60,
       alignment: Alignment.center,
@@ -61,9 +57,7 @@ class _PositionItemState extends State<PositionItem> {
           ),
           Row(
             children: [
-              IconButton(
-                  icon: Icon(Icons.settings),
-                  onPressed: () => {print('点击了设置')}),
+              IconButton(icon: Icon(Icons.settings), onPressed: () => {print('点击了设置')}),
               Icon(Icons.menu),
               isDel
                   ? Container(
@@ -92,10 +86,8 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     screenWidth = MediaQuery.of(context).size.width;
     DateTime today = new DateTime.now();
-    String dateSlug =
-        '''${today.year.toString()}年${today.month.toString().padLeft(2, '0')}月${today.day.toString().padLeft(2, '0')}''';
-    String weekDay =
-        ['一', '二', '三', '四', '五', '六', '日'][new DateTime.now().weekday - 1];
+    String dateSlug = '''${today.year.toString()}年${today.month.toString().padLeft(2, '0')}月${today.day.toString().padLeft(2, '0')}''';
+    String weekDay = ['一', '二', '三', '四', '五', '六', '日'][new DateTime.now().weekday - 1];
     final SqlUtil tipSqlite = SqlUtil.setTable('famous');
 
     (() async {
@@ -167,8 +159,7 @@ class _HomeState extends State<Home> {
                       ),
                       child: Text(
                         '${WeekIndex.weekSinceEpoch()}周',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 30),
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
                       ),
                     ),
                   ),
@@ -252,10 +243,12 @@ class _HomeState extends State<Home> {
                       left: 0,
                       right: 0,
                       child: Container(
-                        color: Colors.black12,
-                        padding: EdgeInsets.only(left: 10,top: 8,bottom: 8),
-                        child: Text('日记本',style: TextStyle(color: Colors.white),)
-                      ))
+                          color: Colors.black12,
+                          padding: EdgeInsets.only(left: 10, top: 8, bottom: 8),
+                          child: Text(
+                            '日记本',
+                            style: TextStyle(color: Colors.white),
+                          )))
                 ],
               ),
             )
@@ -314,6 +307,17 @@ class _HomeState extends State<Home> {
                             ],
                           ),
                         ),
+                        PopupMenuItem(
+                            value: '锁住',
+                            child: Row(
+                              children: [
+                                Icon(Icons.lock),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 10),
+                                  child: Text('锁住'),
+                                )
+                              ],
+                            ))
                       ];
                     },
                   )
@@ -339,14 +343,11 @@ class _HomeState extends State<Home> {
 
     int week = DateTime.now().weekday; // 星期几
     int day = DateTime.now().day; // 今天是几号
-    int monthDay =
-        new DateTime(DateTime.now().year, DateTime.now().month + 1, 0)
-            .day; // 本月最后一天是几号
+    int monthDay = new DateTime(DateTime.now().year, DateTime.now().month + 1, 0).day; // 本月最后一天是几号
     // int monthWeekday = new DateTime(DateTime.now().year, DateTime.now().month+1, monthDay).weekday; // 本月最后一天星期几
     print(monthDay);
     // 判断上一个月有多少天啊
-    int prevLastDay = new DateTime(DateTime.now().year, DateTime.now().month, 0)
-        .day; // 上个月有几天
+    int prevLastDay = new DateTime(DateTime.now().year, DateTime.now().month, 0).day; // 上个月有几天
 
     List<String> weekList = ['一', '二', '三', '四', '五', '六', '日'];
     List<Map<String, String>> dateList = [];
@@ -360,52 +361,33 @@ class _HomeState extends State<Home> {
       // 如果是月底，需要判断今天
       if (monthDay - day < 7) {
         if (week > i) {
-          dateList.add({
-            "weekday": weekList[i - 1],
-            "day": (prevLastDay - (week - i) + 1).toString()
-          });
+          dateList.add({"weekday": weekList[i - 1], "day": (prevLastDay - (week - i) + 1).toString()});
         } else if (week == i) {
           dateList.add({"weekday": weekList[i - 1], "day": (day).toString()});
         } else {
           if (day + (i - week) < monthDay) {
-            dateList.add({
-              "weekday": weekList[i - 1],
-              "day": (day + (i - week)).toString()
-            });
+            dateList.add({"weekday": weekList[i - 1], "day": (day + (i - week)).toString()});
           } else {
-            dateList.add(
-                {"weekday": weekList[i - 1], "day": ((i - week)).toString()});
+            dateList.add({"weekday": weekList[i - 1], "day": ((i - week)).toString()});
           }
         }
       } else {
         // 如果是这个月不超过7天就从上个月开始计算
         if (day > week) {
           if (week < i) {
-            dateList.add({
-              "weekday": weekList[i - 1],
-              "day": (day + (i - week)).toString()
-            });
+            dateList.add({"weekday": weekList[i - 1], "day": (day + (i - week)).toString()});
           } else if (week == i) {
             dateList.add({"weekday": weekList[i - 1], "day": (day).toString()});
           } else {
-            dateList.add({
-              "weekday": weekList[i - 1],
-              "day": (day - (week - i)).toString()
-            });
+            dateList.add({"weekday": weekList[i - 1], "day": (day - (week - i)).toString()});
           }
         } else {
           if (week > i) {
-            dateList.add({
-              "weekday": weekList[i - 1],
-              "day": (prevLastDay - (week - i) + 1).toString()
-            });
+            dateList.add({"weekday": weekList[i - 1], "day": (prevLastDay - (week - i) + 1).toString()});
           } else if (week == i) {
             dateList.add({"weekday": weekList[i - 1], "day": (day).toString()});
           } else {
-            dateList.add({
-              "weekday": weekList[i - 1],
-              "day": (day + (i - week)).toString()
-            });
+            dateList.add({"weekday": weekList[i - 1], "day": (day + (i - week)).toString()});
           }
         }
       }
@@ -431,20 +413,14 @@ class _HomeState extends State<Home> {
               Text(
                 element["weekday"],
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: day == int.parse(element["day"])
-                        ? GZColors.primary
-                        : Colors.black),
+                style: TextStyle(color: day == int.parse(element["day"]) ? GZColors.primary : Colors.black),
               ),
               Padding(
                 padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: Text(
                   element["day"],
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: day == int.parse(element["day"])
-                          ? GZColors.primary
-                          : Colors.black),
+                  style: TextStyle(color: day == int.parse(element["day"]) ? GZColors.primary : Colors.black),
                 ),
               )
             ],
@@ -462,8 +438,6 @@ class _HomeState extends State<Home> {
       PositionItem(tit: '名言', key: ValueKey(2)),
       PositionItem(tit: '回忆', key: ValueKey(3))
     ];
-
-    List<Widget> _removePositionItemList = [Text('ll')];
 
     TextStyle textStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 20);
     showModalBottomSheet(
@@ -535,7 +509,6 @@ class _HomeState extends State<Home> {
                           children: _positionItemList,
                         ),
                       ),
-                      Column(children: _removePositionItemList)
                     ],
                   )),
                 ],
@@ -591,8 +564,7 @@ class _HomeState extends State<Home> {
                           children: [
                             step == 1 || step == 2
                                 ? Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text('$step/2'),
                                       Text('你想要通过日记实现'),
@@ -626,13 +598,10 @@ class _HomeState extends State<Home> {
                                               duration: Duration(seconds: 3),
                                               decoration: BoxDecoration(
                                                   image: DecorationImage(
-                                                    image: NetworkImage(
-                                                        'https://seaside-station.com/wpbin/wp-content/uploads/mori_12.jpg'),
+                                                    image: NetworkImage('https://seaside-station.com/wpbin/wp-content/uploads/mori_12.jpg'),
                                                     fit: BoxFit.cover,
                                                   ),
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(
+                                                  borderRadius: BorderRadius.all(Radius.circular(
                                                     10,
                                                   ))),
                                             )
@@ -641,21 +610,16 @@ class _HomeState extends State<Home> {
                                       ),
                             step != 1 && step != 2
                                 ? Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text('你完成'),
                                       Text(
                                         '你的日记本已经准备',
-                                        style: TextStyle(
-                                            fontSize: 30,
-                                            fontWeight: FontWeight.bold),
+                                        style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                                       ),
                                       Text(
                                         '就绪',
-                                        style: TextStyle(
-                                            fontSize: 30,
-                                            fontWeight: FontWeight.bold),
+                                        style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   )
@@ -680,12 +644,8 @@ class _HomeState extends State<Home> {
                               ),
                               step != 1 && step != 2
                                   ? Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10),
-                                      child: GestureDetector(
-                                          child: Text('日记设置',
-                                              style: TextStyle(
-                                                  color: GZColors.primary))),
+                                      padding: const EdgeInsets.symmetric(vertical: 10),
+                                      child: GestureDetector(child: Text('日记设置', style: TextStyle(color: GZColors.primary))),
                                     )
                                   : Text(''),
                             ],
@@ -715,8 +675,7 @@ class _HomeState extends State<Home> {
         ),
       ),
       padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: Text(step == 1 || step == 2 ? '继续' : '保存',
-          style: TextStyle(color: Colors.white, fontSize: 20)),
+      child: Text(step == 1 || step == 2 ? '继续' : '保存', style: TextStyle(color: Colors.white, fontSize: 20)),
     );
   }
 }
