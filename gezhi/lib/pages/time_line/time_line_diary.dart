@@ -6,6 +6,7 @@ import 'package:gezhi/widgets/time_line/listing_item.dart';
 import 'package:gezhi/widgets/time_line/grid_item.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:gezhi/widgets/common/common.dart';
+import 'package:gezhi/widgets/time_line/label_widget.dart';
 
 //字体图标
 import 'package:gezhi/fonts/font.dart';
@@ -401,7 +402,8 @@ class _TimeLineDiaryState extends State<TimeLineDiary> {
                             if (index == 0) {
                               return Text('贴纸');
                             } else {
-                              return Text('标签');
+                              return LabelWidget();
+                              // return Text('标签');
                             }
                           },
                         ),
