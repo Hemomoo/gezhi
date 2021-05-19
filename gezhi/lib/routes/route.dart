@@ -24,6 +24,7 @@ import 'package:gezhi/pages/time_line/revised_diary.dart';
 import 'package:gezhi/pages/me/batch_export.dart';
 import 'package:gezhi/pages/me/storage.dart';
 import 'package:gezhi/pages/me/website.dart';
+import 'package:gezhi/pages/time_line/revised_diary.dart';
 
 //搜索
 import 'package:gezhi/pages/search/img_list.dart';
@@ -52,9 +53,7 @@ final routes = {
 
   /* 时间线 */
   '/time_line/time_line_diary': (BuildContext context, {arguments}) => TimeLineDiary(),
-  '/time_line/revised_diary': (BuildContext context, {arguments}) => RevisedDiary(
-        arguments: arguments,
-      ),
+  '/time_line/revised_diary': (BuildContext context, {arguments}) => RevisedDiary(arguments: arguments),
 
   //搜索
   '/search/img_list': (BuildContext context, {arguments}) => ImgList(),
@@ -74,5 +73,5 @@ var onGenerateRoute = (RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => pageBuilder(context));
     }
   }
-  return MaterialPageRoute(builder: (context) => IndexPage({'currentIndex':0}));
+  return MaterialPageRoute(builder: (context) => IndexPage({'currentIndex': 0}));
 };

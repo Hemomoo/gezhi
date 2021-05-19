@@ -32,11 +32,12 @@ class _DayNumberState extends State<DayNumber> {
       margin: EdgeInsets.all(itemMargin),
       alignment: Alignment.center,
       decoration: (isSelected && widget.day > 0)
-          ? BoxDecoration(color: GZColors.primary,borderRadius: BorderRadiusDirectional.circular(30))
-            : widget.isToday ? BoxDecoration(color: widget.todayColor) : null,
-    child: Text(
-
-    widget.day < 1 ? '' : widget.day.toString(),
+          ? BoxDecoration(color: GZColors.primary, borderRadius: BorderRadiusDirectional.circular(30))
+          : widget.isToday
+              ? BoxDecoration(color: widget.todayColor)
+              : null,
+      child: Text(
+        widget.day < 1 ? '' : widget.day.toString(),
         textAlign: TextAlign.center,
         style: TextStyle(
           color: (widget.isToday || isSelected) ? Colors.white : Colors.black87,
@@ -52,8 +53,10 @@ class _DayNumberState extends State<DayNumber> {
     isSelected = widget.isDefaultSelected;
     return widget.day > 0
         ? InkWell(
-            onTap: () => CalendarNotification(widget.day).dispatch(context),
-            child: _dayItem())
+            onTap: () {},
+            // onTap: () => CalendarNotification(widget.day).dispatch(context),
+            child: _dayItem(),
+          )
         : _dayItem();
   }
 }

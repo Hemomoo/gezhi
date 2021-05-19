@@ -17,6 +17,7 @@ class Calendar extends StatefulWidget {
 class _CalendarState extends State<Calendar> {
   EventBus eventBus = EventBus(); // 注册eventBus
   String _year = '';
+  double initialScrollOffset; // 默认滚动距离
 
   @override
   void initState() {
@@ -29,6 +30,13 @@ class _CalendarState extends State<Calendar> {
         }
       });
     });
+
+    //  获取当前年月
+    // int year = DateTime.now().year; // 今年
+    // print(year);
+    int month = DateTime.now().month;
+    initialScrollOffset = (month * 220).toDouble();
+
     super.initState();
   }
 
@@ -70,8 +78,9 @@ class _CalendarState extends State<Calendar> {
             margin: EdgeInsets.only(top: 50),
             child: CalendarList(
               eventBus: eventBus,
-              firstDate: DateTime(2000, 1),
+              firstDate: DateTime(DateTime.now().year, 1),
               lastDate: DateTime(2100, 8),
+              initialScrollOffset: initialScrollOffset,
               onSelectFinish: (selectStartTime, selectEndTime) {
                 List<DateTime> result = <DateTime>[];
                 result.add(selectStartTime);

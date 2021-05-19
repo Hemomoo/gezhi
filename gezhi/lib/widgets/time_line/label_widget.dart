@@ -12,6 +12,7 @@ class LabelWidget extends StatefulWidget {
 
 class _LabelWidgetState extends State<LabelWidget> {
   FocusNode _focusNode = FocusNode();
+  final _formKey = GlobalKey<FormState>();
   bool isCancel = true;
   List<Map> labelList = [
     {
@@ -60,9 +61,13 @@ class _LabelWidgetState extends State<LabelWidget> {
                   decoration: BoxDecoration(color: Colors.black12, borderRadius: BorderRadius.circular(6)),
                   child: Row(
                     children: [
-                      Icon(Icons.search),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Icon(Icons.search),
+                      ),
                       Expanded(
                         child: TextField(
+                          key: _formKey,
                           focusNode: _focusNode,
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.all(0.0),
@@ -80,11 +85,16 @@ class _LabelWidgetState extends State<LabelWidget> {
                   ? SizedBox(
                       width: 0,
                     )
-                  : Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: Text(
-                        '取消',
-                        style: TextStyle(color: GZColors.primary),
+                  : GestureDetector(
+                      onTap: () {
+                        _focusNode.unfocus();
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Text(
+                          '取消',
+                          style: TextStyle(color: GZColors.primary),
+                        ),
                       ),
                     )
             ],
@@ -109,30 +119,36 @@ class _LabelWidgetState extends State<LabelWidget> {
                 setState(() {});
               },
               child: Container(
-                padding: EdgeInsets.symmetric(vertical: 10),
+                padding: EdgeInsets.only(bottom: 10),
                 child: Row(
                   children: [
                     Transform.rotate(angle: 10, child: Icon(Icons.label, color: e['isSel'] ? GZColors.primary : Colors.black26)),
                     Expanded(
                       child: Container(
                         decoration: BoxDecoration(border: Border(bottom: BorderSide(width: 1, color: Colors.black12))),
-                        margin: EdgeInsets.only(left: 10),
-                        padding: EdgeInsets.symmetric(vertical: 10),
-                        child: Text(
-                          e['label'],
-                          style: TextStyle(fontSize: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(left: 10),
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              child: Text(
+                                e['label'],
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              child: Icon(
+                                Icons.check,
+                                size: 22,
+                                color: e['isSel'] ? GZColors.primary : Colors.transparent,
+                              ),
+                            )
+                          ],
                         ),
                       ),
                     ),
-                    Container(
-                      decoration: BoxDecoration(border: Border(bottom: BorderSide(width: 1, color: Colors.black12))),
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Icon(
-                        Icons.check,
-                        size: 22,
-                        color: e['isSel'] ? GZColors.primary : Colors.transparent,
-                      ),
-                    )
                   ],
                 ),
               ),

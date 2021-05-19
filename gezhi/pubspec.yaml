@@ -54,12 +54,18 @@ dependencies:
 #  侧边滑动删除
   flutter_slidable: ^0.5.7
 
-  zefyr: ^1.0.0-dev.2.0
+#  zefyr: ^1.0.0-dev.2.0
+  jpush_flutter: ^2.0.5
+  android_intent: ^2.0.0
+#  吸顶插件
+  sticky_headers: ^0.1.8
 
-#  zefyr:
-#    git:
-#      url: https://github.com/memspace/zefyr.git
-#      path: packages/zefyr
+  zefyr:
+    git:
+      url: https://github.com/memspace/zefyr.git
+      path: packages/zefyr
+      ref: master
+      commit: 9b032d8
 
 
 

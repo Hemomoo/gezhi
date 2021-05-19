@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gezhi/style/style.dart';
 import 'package:gezhi/widgets/time_line/listing_item.dart';
@@ -7,6 +8,7 @@ import 'package:gezhi/widgets/time_line/grid_item.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:gezhi/widgets/common/common.dart';
 import 'package:gezhi/widgets/time_line/label_widget.dart';
+import 'package:gezhi/widgets/time_line/paster.dart';
 
 //字体图标
 import 'package:gezhi/fonts/font.dart';
@@ -61,6 +63,7 @@ class _TimeLineDiaryState extends State<TimeLineDiary> {
         return Future.value(true); // true 跳转 false 不跳转
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           // automaticallyImplyLeading: false,
           iconTheme: IconThemeData(color: Colors.black),
@@ -229,9 +232,11 @@ class _TimeLineDiaryState extends State<TimeLineDiary> {
       context: context,
       builder: (BuildContext context) {
         return Container(
-          margin: EdgeInsets.all(10),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(14),
+              topLeft: Radius.circular(14),
+            ),
             color: Colors.white,
           ),
           child: ListView.separated(
@@ -270,21 +275,24 @@ class _TimeLineDiaryState extends State<TimeLineDiary> {
 
   //贴纸和标签
   void _stickersLabels() {
+    int _currentIndex = 0;
+    Color _color = Colors.black;
+    PageController _pageController = PageController(initialPage: 0);
     showModalBottomSheet(
         isScrollControlled: true,
         context: context,
         backgroundColor: Colors.transparent,
         builder: (BuildContext context) {
-          int _currentIndex = 0;
-          Color _color = Colors.black;
-          PageController _pageController = PageController(initialPage: 0);
           return StatefulBuilder(
             builder: (context, state) {
               return Container(
                   height: MediaQuery.of(context).size.height * 0.9,
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(14),
+                      topLeft: Radius.circular(14),
+                    ),
                     color: Colors.white,
                   ),
                   child: Column(
@@ -353,26 +361,26 @@ class _TimeLineDiaryState extends State<TimeLineDiary> {
                                     itemBuilder: (context) {
                                       return <PopupMenuEntry<String>>[
                                         PopupMenuItem<String>(
-                                          value: '新增日记本',
+                                          value: '新建标签',
                                           child: Row(
                                             children: <Widget>[
                                               Icon(Icons.library_add, color: GZColors.primary),
                                               SizedBox(
                                                 width: 10,
                                               ),
-                                              Text('新增日记本'),
+                                              Text('新建标签'),
                                             ],
                                           ),
                                         ),
                                         PopupMenuItem<String>(
-                                          value: '编辑日记本',
+                                          value: '管理标签',
                                           child: Row(
                                             children: <Widget>[
                                               Icon(Icons.create, color: GZColors.primary),
                                               SizedBox(
                                                 width: 10,
                                               ),
-                                              Text('编辑日记本'),
+                                              Text('管理标签'),
                                             ],
                                           ),
                                         ),
@@ -394,16 +402,16 @@ class _TimeLineDiaryState extends State<TimeLineDiary> {
                           onPageChanged: (int index) {
                             _color = index == 0 ? Colors.transparent : Colors.black;
                             _currentIndex = index;
+                            FocusScope.of(context).requestFocus(FocusNode()); // 关闭键盘
                             state(() {});
                           },
                           // DrivenScrollActivity
                           controller: _pageController,
                           itemBuilder: (context, index) {
                             if (index == 0) {
-                              return Text('贴纸');
+                              return Paster();
                             } else {
                               return LabelWidget();
-                              // return Text('标签');
                             }
                           },
                         ),
