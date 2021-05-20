@@ -67,10 +67,12 @@ class _CalendarListState extends State<CalendarList> {
     _controller = ScrollController(initialScrollOffset: widget.initialScrollOffset);
 
     _controller.addListener(() {
-      if (_controller.offset < 10) {
-        monthStart = monthStart - 1;
-        setState(() {});
-      }
+      // if (_controller.offset == 100) {
+      //   Future.delayed(Duration(microseconds: 1)).then((value) {
+      //     monthStart = monthStart - 1;
+      //     setState(() {});
+      //   });
+      // }
 
       // print(_controller.offset); //打印滚动位置
     });
@@ -146,7 +148,7 @@ class _CalendarListState extends State<CalendarList> {
       padding: 0,
       dateTimeStart: selectStartTime,
       dateTimeEnd: selectEndTime,
-      todayColor: Colors.deepOrange,
+      todayColor: Color(0XFF00acc1),
       eventBus: eventBus,
       onSelectDayRang: (dateTime) => onSelectDayChanged(dateTime),
     );

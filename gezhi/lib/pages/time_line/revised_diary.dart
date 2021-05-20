@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:gezhi/style/style.dart';
+import 'package:gezhi/sqlite/sql_common.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 // import 'package:quill_delta/quill_delta.dart';
@@ -22,16 +23,13 @@ class _RevisedDiaryState extends State<RevisedDiary> {
   FocusNode _commentFocus = FocusNode();
   int _page = 0;
 
+  final SqlUtil hintSql = SqlUtil.setTable('tips');
+  final SqlUtil diarySql = SqlUtil.setTable('diary');
   PageController _pageController = PageController();
 
-  final List<Map<String, dynamic>> _contList = [
-    {'tit': '你好1', 'cont': '你好啊'},
-    {'tit': '你好2', 'cont': '你好啊'},
-    {'tit': '你好3', 'cont': '你好啊'},
-    {'tit': '你好4', 'cont': '你好啊'},
-    {'tit': '你好5', 'cont': '你好啊'},
-    {'tit': '你好6', 'cont': '你好啊'},
-  ];
+  List<Map<String, dynamic>> _contList = [];
+
+  TextEditingController _diaryController = TextEditingController();
 
   // ZefyrController _zefyrController;
   // FocusNode _focusNode;
@@ -73,6 +71,12 @@ class _RevisedDiaryState extends State<RevisedDiary> {
 
   @override
   void initState() {
+    (() async {
+      // 查询前7条数据
+      _contList = await hintSql.limitQuery('tips', 7);
+      setState(() {});
+    })();
+
     // final document = _loadDocument();
     // _controller = ZefyrController(document);
     // _focusNode = FocusNode();
@@ -149,7 +153,7 @@ class _RevisedDiaryState extends State<RevisedDiary> {
                               child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  _contList[index]['tit'],
+                                  _contList[index]['tip'],
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
@@ -157,18 +161,10 @@ class _RevisedDiaryState extends State<RevisedDiary> {
                                 ),
                               ),
                             ),
-                            // Expanded(
-                            //   child: (_controller == null)
-                            //       ? Center(child: CircularProgressIndicator())
-                            //       : ZefyrEditor(
-                            //           padding: EdgeInsets.symmetric(
-                            //             horizontal: 20,
-                            //           ),
-                            //           controller: _controller,
-                            //           focusNode: _focusNode,
-                            //           autofocus: false,
-                            //         ),
-                            // ),
+                            Expanded(
+                                child: TextField(
+                              controller: _diaryController,
+                            )),
                           ],
                         ));
                   }),
@@ -198,6 +194,7 @@ class _RevisedDiaryState extends State<RevisedDiary> {
                             ),
                             onTap: () {
                               // _saveDocument(context);
+                              diarySql.insert(params) 
                               Navigator.pop(context);
                             },
                           ),

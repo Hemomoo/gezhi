@@ -65,6 +65,7 @@ final routes = {
 var onGenerateRoute = (RouteSettings settings) {
   // 获取声明的路由页面函数
   var pageBuilder = routes[settings.name];
+  print('跳转到那个页面${routes[settings.name]}');
   if (pageBuilder != null) {
     if (settings.arguments != null) {
       // 创建路由页面并携带参数
