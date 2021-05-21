@@ -8,7 +8,9 @@ import 'package:gezhi/widgets/common/common.dart';
 import 'package:gezhi/widgets/time_line/index/list_diary_widget_item.dart';
 import 'package:gezhi/widgets/time_line/index/sort_sel_list.dart';
 import 'package:gezhi/widgets/time_line/index/date_line_delegate.dart';
+import 'package:gezhi/sqlite/sql_common.dart';
 
+import 'package:gezhi/model/time_line/diary.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class TimeLine extends StatefulWidget {
@@ -19,12 +21,12 @@ class TimeLine extends StatefulWidget {
 class _TimeLineState extends State<TimeLine> {
   bool isTit = false;
   ScrollController _controller = new ScrollController();
-
+  final SqlUtil diarySql = SqlUtil.setTable('diary');
+  List<Map<String, dynamic>> _diaryList = [];
   int listLength = 10;
 
   @override
   void initState() {
-    super.initState();
     //监听滚动事件，打印滚动位置
     _controller.addListener(() {
       if (_controller.offset < 50 && isTit) {
@@ -34,6 +36,14 @@ class _TimeLineState extends State<TimeLine> {
       }
       setState(() {});
     });
+
+    (() async {
+      //获取所有数据
+      _diaryList = await diarySql.query();
+      setState(() {});
+    })();
+
+    super.initState();
   }
 
   @override
@@ -97,50 +107,49 @@ class _TimeLineState extends State<TimeLine> {
             pinned: true,
           ),
           SliverFixedExtentList(
+            key: UniqueKey(),
             itemExtent: 100,
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return Dismissible(
-                  key: UniqueKey(), // 不能使用index做key,因为删除后index做的key会重复
-                  background: Container(
-                      // color: Colors.red,
-                      alignment: Alignment.centerRight,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Container(
-                            height: 100,
-                            width: 100,
-                            color: Colors.black26,
-                            child: Icon(
-                              Icons.more_horiz,
-                              color: Colors.white,
-                            ),
+            delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+              return Dismissible(
+                key: ValueKey(index), // 不能使用index做key,因为删除后index做的key会重复
+                background: Container(
+                    // color: Colors.red,
+                    alignment: Alignment.centerRight,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Container(
+                          height: 100,
+                          width: 100,
+                          color: Colors.black26,
+                          child: Icon(
+                            Icons.more_horiz,
+                            color: Colors.white,
                           ),
-                          Container(
-                            height: 100,
-                            width: 100,
-                            color: GZColors.primary,
-                            child: Icon(
-                              Icons.edit,
-                              color: Colors.white,
-                            ),
+                        ),
+                        Container(
+                          height: 100,
+                          width: 100,
+                          color: GZColors.primary,
+                          child: Icon(
+                            Icons.edit,
+                            color: Colors.white,
                           ),
-                        ],
-                      )
-                      // child: Text('删除',style:TextStyle(color: Colors.white)),
-                      ),
-                  onDismissed: (direction) {
-                    listLength--;
-                    setState(() {});
-                    // 返回的值是一个future
-                    Navigator.pushNamed(context, '/time_line/time_line_diary');
-                  },
-                  child: ListDiaryWidgetItem(),
-                );
-              },
-              childCount: listLength, //50个列表项
-            ),
+                        ),
+                      ],
+                    )
+                    // child: Text('删除',style:TextStyle(color: Colors.white)),
+                    ),
+                onDismissed: (direction) {
+                  listLength--;
+                  setState(() {});
+                  // 返回的值是一个future
+                  Navigator.pushNamed(context, '/time_line/time_line_diary', arguments: {'date': _diaryList[index]['date']});
+                },
+                child: ListDiaryWidgetItem(_diaryList[index], _diaryList[index]['date'], key: UniqueKey()),
+              );
+            }, childCount: _diaryList.length //50个列表项
+                ),
           ),
         ],
       ),

@@ -1,14 +1,20 @@
 // 首页列表的item widget
 import 'package:flutter/material.dart';
+import 'package:gezhi/model/time_line/diary.dart';
 
 class ListDiaryWidgetItem extends StatelessWidget {
-  const ListDiaryWidgetItem({Key key}) : super(key: key);
+  final Map<String, dynamic> diary;
+  final String date;
+  const ListDiaryWidgetItem(this.diary, this.date, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 100.0,
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(width: 1, color: Colors.black12)),
+        border: Border(
+          bottom: BorderSide(width: 1, color: Colors.black12),
+        ),
       ),
       margin: EdgeInsets.symmetric(horizontal: 20),
       padding: EdgeInsets.symmetric(vertical: 10),
@@ -33,12 +39,13 @@ class ListDiaryWidgetItem extends StatelessWidget {
             ),
             Expanded(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
                     padding: EdgeInsets.only(bottom: 10),
                     child: Text(
-                      '大张伟，娱乐圈的救护车，综艺节目共享嘉宾，擅长各种救场',
+                      diary['diaryInfo'],
                       maxLines: 2,
                       style: TextStyle(fontSize: 16),
                     ),
@@ -54,7 +61,7 @@ class ListDiaryWidgetItem extends StatelessWidget {
           ],
         ),
         onTap: () {
-          Navigator.pushNamed(context, '/time_line/time_line_diary');
+          Navigator.pushNamed(context, '/time_line/time_line_diary', arguments: {'date': date});
         },
       ),
     );

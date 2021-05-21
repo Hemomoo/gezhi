@@ -28,8 +28,10 @@ class _RevisedDiaryState extends State<RevisedDiary> {
   PageController _pageController = PageController();
 
   List<Map<String, dynamic>> _contList = [];
+  List<TextEditingController> _textEditingControllerList = [];
+  String dateTit;
 
-  TextEditingController _diaryController = TextEditingController();
+  // TextEditingController _diaryController = TextEditingController();
 
   // ZefyrController _zefyrController;
   // FocusNode _focusNode;
@@ -74,31 +76,15 @@ class _RevisedDiaryState extends State<RevisedDiary> {
     (() async {
       // 查询前7条数据
       _contList = await hintSql.limitQuery('tips', 7);
+      //循环变量生成文本controller
+      for (int i = 0; i < _contList.length; i++) {
+        _textEditingControllerList.add(TextEditingController());
+      }
       setState(() {});
     })();
 
-    // final document = _loadDocument();
-    // _controller = ZefyrController(document);
-    // _focusNode = FocusNode();
-    //
-    // _zefyrFocusNode.addListener(() {
-    //   // 获取焦点失去焦点
-    //   setState(() {
-    //     focus = _zefyrFocusNode.hasFocus;
-    //   });
-    // });
-    // // 监听键盘
-    // KeyboardVisibility.onChange.listen((bool visible) {
-    //   setState(() {
-    //     focus = visible;
-    //   });
-    // });
-    //初始化zefyr
-    // _loadDocument().then((document) {
-    //   setState(() {
-    //     _zefyrController = ZefyrController(document);
-    //   });
-    // });
+    List<String> dateList = widget.arguments['date'].split('-');
+    dateTit = '${dateList[0]}年${dateList[1]}月${dateList[2]}日';
     super.initState();
   }
 
@@ -118,7 +104,7 @@ class _RevisedDiaryState extends State<RevisedDiary> {
           },
         ),
         title: Text(
-          widget.arguments['tit'],
+          dateTit,
           style: TextStyle(color: Colors.black),
         ),
         actionsIconTheme: IconThemeData(color: Colors.black),
@@ -162,9 +148,10 @@ class _RevisedDiaryState extends State<RevisedDiary> {
                               ),
                             ),
                             Expanded(
-                                child: TextField(
-                              controller: _diaryController,
-                            )),
+                              child: TextField(
+                                controller: _textEditingControllerList[0],
+                              ),
+                            ),
                           ],
                         ));
                   }),
@@ -194,7 +181,8 @@ class _RevisedDiaryState extends State<RevisedDiary> {
                             ),
                             onTap: () {
                               // _saveDocument(context);
-                              diarySql.insert(params) 
+                              diarySql
+                                  .insert({'tip': _contList[_page]['tip'], 'date': '2021-5-21', 'diaryInfo': _textEditingControllerList[_page].text});
                               Navigator.pop(context);
                             },
                           ),

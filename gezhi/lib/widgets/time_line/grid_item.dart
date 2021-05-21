@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 class GridItem extends StatelessWidget {
+  final String date;
+
+  GridItem(this.date);
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -27,7 +31,7 @@ class GridItem extends StatelessWidget {
               ),
             ),
             onTap: () {
-              Navigator.pushNamed(context, '/time_line/revised_diary', arguments: {'index': index, 'tit': '2020年8月26日'});
+              Navigator.pushNamed(context, '/time_line/revised_diary', arguments: {'index': index, 'date': date});
             },
           );
         },

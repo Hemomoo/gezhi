@@ -14,11 +14,17 @@ import 'package:gezhi/widgets/time_line/paster.dart';
 import 'package:gezhi/fonts/font.dart';
 
 class TimeLineDiary extends StatefulWidget {
+  final Map<String, dynamic> arguments;
+  TimeLineDiary({this.arguments});
+
   @override
-  _TimeLineDiaryState createState() => _TimeLineDiaryState();
+  _TimeLineDiaryState createState() => _TimeLineDiaryState(arguments);
 }
 
 class _TimeLineDiaryState extends State<TimeLineDiary> {
+  final Map<String, dynamic> arguments;
+  _TimeLineDiaryState(this.arguments);
+
   final List<Map<String, dynamic>> _itemList = [
     {
       'icon': Icons.arrow_upward,
@@ -52,8 +58,20 @@ class _TimeLineDiaryState extends State<TimeLineDiary> {
     }
   ];
 
+  PageController _pageController = PageController();
+  List<String> weekList = ['一', '二', '三', '四', '五', '六', '日'];
+
   bool _isGrid = true;
   bool _isListing = false;
+  int day; // 日期
+  int weekday; // 星期几
+
+  @override
+  void initState() {
+    day = int.parse(widget.arguments['date'].split('-').last);
+    weekday = int.parse(weekList[DateTime.parse(widget.arguments['date']).weekday - 1]);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -146,79 +164,91 @@ class _TimeLineDiaryState extends State<TimeLineDiary> {
             )
           ],
         ),
-        body: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    child: Row(
-                      children: [
-                        Text(
-                          '26',
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+        body: PageView.builder(
+          controller: _pageController,
+          onPageChanged: (page) {
+            print(page);
+            day = day + 1;
+            weekday = weekday +1;
+
+            setState(() {});
+          },
+          itemBuilder: (BuildContext context, index) {
+            return Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        child: Row(
                           children: [
                             Text(
-                              '星期三',
-                              style: TextStyle(color: Colors.black38, fontWeight: FontWeight.bold),
+                              day.toString(),
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
                             ),
-                            Text(
-                              '2020年8月',
-                              style: TextStyle(color: Colors.black38, fontWeight: FontWeight.bold),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '星期${}',
+                                  style: TextStyle(color: Colors.black38, fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  widget.arguments['date'],
+                                  style: TextStyle(color: Colors.black38, fontWeight: FontWeight.bold),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    child: _isGrid
-                        ? GestureDetector(
-                            child: GestureDetector(
-                              onTap: () {
-                                _stickersLabels();
-                              },
-                              child: Row(
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        child: _isGrid
+                            ? GestureDetector(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    _stickersLabels();
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        IconFont.icon_taiyang,
+                                        size: 26,
+                                        color: Colors.black38,
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 6, right: 10),
+                                        child: Icon(IconFont.icon_smile, size: 20, color: Colors.black38),
+                                      ),
+                                      Icon(IconFont.icon_tag, size: 16, color: Colors.black38),
+                                    ],
+                                  ),
+                                ),
+                                onTap: () {},
+                              )
+                            : Row(
                                 children: [
                                   Icon(
-                                    IconFont.icon_taiyang,
-                                    size: 26,
-                                    color: Colors.black38,
+                                    Icons.book,
+                                    color: Colors.black12,
                                   ),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 6, right: 10),
-                                    child: Icon(IconFont.icon_smile, size: 20, color: Colors.black38),
-                                  ),
-                                  Icon(IconFont.icon_tag, size: 16, color: Colors.black38),
+                                  Text(('日记本'))
                                 ],
                               ),
-                            ),
-                            onTap: () {},
-                          )
-                        : Row(
-                            children: [
-                              Icon(
-                                Icons.book,
-                                color: Colors.black12,
-                              ),
-                              Text(('日记本'))
-                            ],
-                          ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            _isGrid ? GridItem() : ListingItem()
-          ],
+                ),
+                _isGrid ? GridItem(widget.arguments['date']) : ListingItem()
+              ],
+            );
+          },
         ),
       ),
     );

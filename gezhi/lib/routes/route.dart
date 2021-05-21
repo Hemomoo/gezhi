@@ -52,7 +52,7 @@ final routes = {
   '/me/edit_model_library': (BuildContext context, {arguments}) => EditModelLibrary(), // 修改模板
 
   /* 时间线 */
-  '/time_line/time_line_diary': (BuildContext context, {arguments}) => TimeLineDiary(),
+  '/time_line/time_line_diary': (BuildContext context, {arguments}) => TimeLineDiary(arguments: arguments),
   '/time_line/revised_diary': (BuildContext context, {arguments}) => RevisedDiary(arguments: arguments),
 
   //搜索
@@ -65,7 +65,9 @@ final routes = {
 var onGenerateRoute = (RouteSettings settings) {
   // 获取声明的路由页面函数
   var pageBuilder = routes[settings.name];
+  print(settings);
   print('跳转到那个页面${routes[settings.name]}');
+  print('携带的参数${routes[settings.arguments]}');
   if (pageBuilder != null) {
     if (settings.arguments != null) {
       // 创建路由页面并携带参数
