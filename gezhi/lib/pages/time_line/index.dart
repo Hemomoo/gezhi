@@ -9,6 +9,7 @@ import 'package:gezhi/widgets/time_line/index/list_diary_widget_item.dart';
 import 'package:gezhi/widgets/time_line/index/sort_sel_list.dart';
 import 'package:gezhi/widgets/time_line/index/date_line_delegate.dart';
 import 'package:gezhi/sqlite/sql_common.dart';
+import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 
 import 'package:gezhi/model/time_line/diary.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -24,6 +25,7 @@ class _TimeLineState extends State<TimeLine> {
   final SqlUtil diarySql = SqlUtil.setTable('diary');
   List<Map<String, dynamic>> _diaryList = [];
   int listLength = 10;
+  int selId;
 
   @override
   void initState() {
@@ -39,7 +41,8 @@ class _TimeLineState extends State<TimeLine> {
 
     (() async {
       //获取所有数据
-      _diaryList = await diarySql.query();
+      // _diaryList = await diarySql.rawQuery('delete from diary where diary.rowid not in (select MAX(diary.rowid) from diary group by date)', null);
+      _diaryList = await diarySql.rawQuery('SELECT * from diary group by date', null);
       setState(() {});
     })();
 
@@ -109,47 +112,40 @@ class _TimeLineState extends State<TimeLine> {
           SliverFixedExtentList(
             key: UniqueKey(),
             itemExtent: 100,
-            delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-              return Dismissible(
-                key: ValueKey(index), // 不能使用index做key,因为删除后index做的key会重复
-                background: Container(
-                    // color: Colors.red,
-                    alignment: Alignment.centerRight,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Container(
-                          height: 100,
-                          width: 100,
-                          color: Colors.black26,
-                          child: Icon(
-                            Icons.more_horiz,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Container(
-                          height: 100,
-                          width: 100,
-                          color: GZColors.primary,
-                          child: Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    )
-                    // child: Text('删除',style:TextStyle(color: Colors.white)),
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return Slidable(
+                  actionPane: SlidableScrollActionPane(), //滑出选项的面板 动画
+                  actionExtentRatio: 0.16,
+                  child: ListDiaryWidgetItem(_diaryList[index], _diaryList[index]['date'], key: UniqueKey()),
+                  secondaryActions: <Widget>[
+                    //右侧按钮列表
+                    IconSlideAction(
+                      // caption: 'More',
+                      color: Colors.black26,
+                      icon: Icons.more_horiz,
+                      closeOnTap: false,
+                      onTap: () {
+                        selId = _diaryList[index]['id'];
+                        _editDiaryInfo(context);
+                      },
                     ),
-                onDismissed: (direction) {
-                  listLength--;
-                  setState(() {});
-                  // 返回的值是一个future
-                  Navigator.pushNamed(context, '/time_line/time_line_diary', arguments: {'date': _diaryList[index]['date']});
-                },
-                child: ListDiaryWidgetItem(_diaryList[index], _diaryList[index]['date'], key: UniqueKey()),
-              );
-            }, childCount: _diaryList.length //50个列表项
-                ),
+                    IconSlideAction(
+                      // caption: 'Delete',
+                      color: GZColors.primary,
+                      icon: Icons.edit,
+                      closeOnTap: false,
+                      onTap: () {
+                        Navigator.pushNamed(context, '/time_line/time_line_diary', arguments: {'date': _diaryList[index]['date']}).then((value) {
+                          setState(() {});
+                        });
+                      },
+                    ),
+                  ],
+                );
+              },
+              childCount: _diaryList.length,
+            ),
           ),
         ],
       ),
@@ -200,6 +196,113 @@ class _TimeLineState extends State<TimeLine> {
     );
   }
 
+  void _editDiaryInfo(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true, // 全屏幕展示
+      builder: (BuildContext context) {
+        return FractionallySizedBox(
+          heightFactor: 0.9,
+          child: Container(
+            margin: EdgeInsets.all(10),
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14)),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                GestureDetector(
+                  onTap: () {},
+                  child: ListTile(
+                    leading: Icon(Icons.edit),
+                    title: Text('在日记本中显示'),
+                    trailing: Icon(Icons.keyboard_arrow_right),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {},
+                  child: ListTile(
+                    leading: Icon(Icons.tag_faces),
+                    title: Text('编辑贴纸'),
+                    trailing: Icon(Icons.keyboard_arrow_right),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {},
+                  child: ListTile(
+                    leading: Transform.rotate(
+                      angle: 10.0,
+                      child: Icon(Icons.label),
+                    ),
+                    title: Text('编辑标签'),
+                    trailing: Icon(Icons.keyboard_arrow_right),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {},
+                  child: ListTile(
+                    leading: Transform.rotate(
+                      angle: 0.0,
+                      child: Icon(Icons.upgrade),
+                    ),
+                    title: Text('导出'),
+                    trailing: Icon(Icons.keyboard_arrow_right),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {},
+                  child: ListTile(
+                    leading: Icon(Icons.copy),
+                    title: Text('拷贝'),
+                    trailing: Icon(Icons.keyboard_arrow_right),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {},
+                  child: ListTile(
+                    leading: Icon(Icons.add_to_photos),
+                    title: Text('拷贝到...'),
+                    trailing: Icon(Icons.keyboard_arrow_right),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {},
+                  child: ListTile(
+                    leading: Icon(Icons.move_to_inbox),
+                    title: Text('拷贝到...'),
+                    trailing: Icon(Icons.keyboard_arrow_right),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () async {
+                    Navigator.of(context).pop(true);
+                    bool delete = await showDeleteConfirmDialog();
+                    if (delete == null) {
+                      print("取消删除");
+                    } else {
+                      // print("已确认删除");
+                      diarySql.delete('id', selId).then((value) {
+                        diarySql.rawQuery('SELECT * from diary group by date', null).then((value) {
+                          _diaryList = value;
+                          setState(() {});
+                        });
+                      });
+                    }
+                  },
+                  child: ListTile(
+                    leading: Icon(Icons.delete),
+                    title: Text('删除'),
+                    trailing: Icon(Icons.keyboard_arrow_right),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Widget _title() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -219,6 +322,38 @@ class _TimeLineState extends State<TimeLine> {
           style: TextStyle(color: Colors.black12),
         )
       ],
+    );
+  }
+
+// 弹出对话框
+  Future<bool> showDeleteConfirmDialog() {
+    return showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Center(child: Text("您真的要删除吗？")),
+          content: Text("此操作无法撤销"),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                "取消",
+                style: TextStyle(color: GZColors.primary),
+              ),
+              onPressed: () => Navigator.of(context).pop(), // 关闭对话框
+            ),
+            TextButton(
+              child: Text(
+                "删除",
+                style: TextStyle(color: Colors.red),
+              ),
+              onPressed: () {
+                //关闭对话框并返回true
+                Navigator.of(context).pop(true);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

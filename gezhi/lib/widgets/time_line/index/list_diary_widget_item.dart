@@ -27,13 +27,13 @@ class ListDiaryWidgetItem extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    '28',
+                    date.split('-').last,
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text('8月')
+                  Text('${date.split('-')[1]}月')
                 ],
               ),
             ),

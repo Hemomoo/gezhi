@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gezhi/style/style.dart';
 import 'calendar_notification.dart';
+import 'package:gezhi/utils/num_padding.dart';
 
 class DayNumber extends StatefulWidget {
   const DayNumber({
@@ -89,7 +90,7 @@ class _DayNumberState extends State<DayNumber> {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "${widget.year}-${widget.month}-${widget.day}",
+                      "${widget.year}-${numPadding(widget.month)}-${numPadding(widget.day)}",
                       style: TextStyle(fontSize: 16),
                     ),
                   ),
@@ -101,7 +102,11 @@ class _DayNumberState extends State<DayNumber> {
                       Padding(
                         padding: const EdgeInsets.all(10),
                         child: GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.pushNamed(context, '/time_line/time_line_diary', arguments: {
+                              'date': "${widget.year}-${numPadding(widget.month)}-${numPadding(widget.day)}",
+                            });
+                          },
                           child: Row(
                             children: [
                               Icon(Icons.book),
@@ -128,7 +133,7 @@ class _DayNumberState extends State<DayNumber> {
                               Padding(
                                 padding: EdgeInsets.only(left: 20),
                                 child: Text(
-                                  '日记本',
+                                  '在本日',
                                   style: TextStyle(fontSize: 16),
                                 ),
                               )

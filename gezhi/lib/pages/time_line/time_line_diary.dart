@@ -9,7 +9,7 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:gezhi/widgets/common/common.dart';
 import 'package:gezhi/widgets/time_line/label_widget.dart';
 import 'package:gezhi/widgets/time_line/paster.dart';
-
+import 'package:gezhi/sqlite/sql_common.dart';
 //字体图标
 import 'package:gezhi/fonts/font.dart';
 
@@ -24,6 +24,8 @@ class TimeLineDiary extends StatefulWidget {
 class _TimeLineDiaryState extends State<TimeLineDiary> {
   final Map<String, dynamic> arguments;
   _TimeLineDiaryState(this.arguments);
+
+  final SqlUtil diarySql = SqlUtil.setTable('diary');
 
   final List<Map<String, dynamic>> _itemList = [
     {
@@ -59,17 +61,26 @@ class _TimeLineDiaryState extends State<TimeLineDiary> {
   ];
 
   PageController _pageController = PageController();
-  List<String> weekList = ['一', '二', '三', '四', '五', '六', '日'];
 
   bool _isGrid = true;
   bool _isListing = false;
   int day; // 日期
   int weekday; // 星期几
+  int lastMonthDay; // 这个月最后几天
+  int month; // 月份
+  int year; // 年
+  int oldPage = 0; // 页面，用来控制前滑动 后滑动
+  List<Map<String, dynamic>> todayDiaryList = [];
+  List<String> weekList = ['一', '二', '三', '四', '五', '六', '日'];
 
   @override
   void initState() {
+    month = int.parse(arguments['date'].split('-')[1]);
+    year = int.parse(arguments['date'].split('-').first);
     day = int.parse(widget.arguments['date'].split('-').last);
-    weekday = int.parse(weekList[DateTime.parse(widget.arguments['date']).weekday - 1]);
+    weekday = DateTime.parse(widget.arguments['date']).weekday;
+    lastMonthDay = DateTime(year, month + 1, 0).day; // 这个月的最后一天
+    setState(() {});
     super.initState();
   }
 
@@ -166,11 +177,24 @@ class _TimeLineDiaryState extends State<TimeLineDiary> {
         ),
         body: PageView.builder(
           controller: _pageController,
+          reverse: true,
           onPageChanged: (page) {
-            print(page);
-            day = day + 1;
-            weekday = weekday +1;
-
+            if (oldPage > page) {
+              weekday = weekday + 1 > 7 ? 1 : weekday + 1;
+              if (day + 1 > lastMonthDay) {
+                month = month + 1;
+                year = month > 12 ? year + 1 : year;
+              }
+              day = day + 1 > lastMonthDay ? 1 : day + 1;
+            } else {
+              weekday = weekday - 1 < 1 ? 1 : weekday - 1;
+              if (day - 1 <= 0) {
+                month = month - 1;
+                year = month < 1 ? year - 1 : year;
+              }
+              day = day - 1 < 1 ? lastMonthDay : day - 1;
+            }
+            oldPage = page;
             setState(() {});
           },
           itemBuilder: (BuildContext context, index) {
@@ -195,11 +219,11 @@ class _TimeLineDiaryState extends State<TimeLineDiary> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '星期${}',
+                                  '星期${weekList[weekday - 1]}',
                                   style: TextStyle(color: Colors.black38, fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  widget.arguments['date'],
+                                  '$year-${month > 10 ? month : '0$month'}-${day > 10 ? day : '0$day'}',
                                   style: TextStyle(color: Colors.black38, fontWeight: FontWeight.bold),
                                 ),
                               ],
@@ -245,7 +269,14 @@ class _TimeLineDiaryState extends State<TimeLineDiary> {
                     ],
                   ),
                 ),
-                _isGrid ? GridItem(widget.arguments['date']) : ListingItem()
+                NotificationListener<CustomNotification>(
+                  onNotification: (notification) {
+                    print(notification.msg);
+                    setState(() {}); //收到子Widget通知，更新msg
+                    return true;
+                  },
+                  child: _isGrid ? GridItem('$year-${month > 10 ? month : '0$month'}-${day > 10 ? day : '0$day'}', key: UniqueKey()) : ListingItem(),
+                )
               ],
             );
           },

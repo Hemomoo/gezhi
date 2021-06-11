@@ -25,11 +25,12 @@ class _RevisedDiaryState extends State<RevisedDiary> {
 
   final SqlUtil hintSql = SqlUtil.setTable('tips');
   final SqlUtil diarySql = SqlUtil.setTable('diary');
-  PageController _pageController = PageController();
+  PageController _pageController;
 
   List<Map<String, dynamic>> _contList = [];
   List<TextEditingController> _textEditingControllerList = [];
   String dateTit;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   // TextEditingController _diaryController = TextEditingController();
 
@@ -73,24 +74,35 @@ class _RevisedDiaryState extends State<RevisedDiary> {
 
   @override
   void initState() {
-    (() async {
-      // 查询前7条数据
-      _contList = await hintSql.limitQuery('tips', 7);
-      //循环变量生成文本controller
-      for (int i = 0; i < _contList.length; i++) {
-        _textEditingControllerList.add(TextEditingController());
-      }
-      setState(() {});
-    })();
+    final int index = widget.arguments['index'];
 
-    List<String> dateList = widget.arguments['date'].split('-');
-    dateTit = '${dateList[0]}年${dateList[1]}月${dateList[2]}日';
+    // 查询前7条数据
+    hintSql.limitQuery('tips', 7).then((value) {
+      //循环变量生成文本controller
+      _contList = value;
+      diarySql.query(conditions: {"tip": "${value[index]['tip']}", "date": "${widget.arguments['date']}"}).then((value) {
+        for (int i = 0; i < _contList.length; i++) {
+          if (widget.arguments['index'] == i && value.length != 0) {
+            _textEditingControllerList.add(TextEditingController(text: value[0]['diaryInfo']));
+          } else {
+            _textEditingControllerList.add(TextEditingController());
+          }
+        }
+        setState(() {});
+      });
+    });
+
+    _pageController = PageController(initialPage: widget.arguments['index']);
+
+    // List<String> dateList = widget.arguments['date'].split('-');
+    // dateTit = '${dateList.first}年${dateList[1]}月${dateList.last}日';
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -104,7 +116,7 @@ class _RevisedDiaryState extends State<RevisedDiary> {
           },
         ),
         title: Text(
-          dateTit,
+          widget.arguments['date'],
           style: TextStyle(color: Colors.black),
         ),
         actionsIconTheme: IconThemeData(color: Colors.black),
@@ -121,40 +133,51 @@ class _RevisedDiaryState extends State<RevisedDiary> {
         child: Container(
           child: Stack(
             children: [
-              PageView.builder(
-                  onPageChanged: (page) {
-                    setState(() {
-                      _page = page;
-                    });
-                  },
-                  controller: _pageController,
-                  itemCount: _contList.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                        width: double.infinity,
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  _contList[index]['tip'],
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
+              _textEditingControllerList.length != 0
+                  ? PageView.builder(
+                      onPageChanged: (page) {
+                        setState(() {
+                          _page = page;
+                          diarySql.query(conditions: {"tip": "${_contList[page]['tip']}", "date": "${widget.arguments['date']}"}).then((value) {
+                            if (value.length != 0) {
+                              _textEditingControllerList[page].text = value[0]['diaryInfo'];
+                            }
+                          });
+                        });
+                      },
+                      controller: _pageController,
+                      itemCount: _contList.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                            width: double.infinity,
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      _contList[index]['tip'],
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                            Expanded(
-                              child: TextField(
-                                controller: _textEditingControllerList[0],
-                              ),
-                            ),
-                          ],
-                        ));
-                  }),
+                                Expanded(
+                                  child: TextField(
+                                    controller: _textEditingControllerList[index],
+                                    keyboardType: TextInputType.multiline,
+                                    maxLines: 30,
+                                    // expands: true,
+                                    decoration: InputDecoration(),
+                                  ),
+                                ),
+                              ],
+                            ));
+                      })
+                  : Container(),
               Positioned(
                 bottom: focus ? 60.0 : 0.0,
                 right: 0,
@@ -180,10 +203,23 @@ class _RevisedDiaryState extends State<RevisedDiary> {
                               ),
                             ),
                             onTap: () {
-                              // _saveDocument(context);
-                              diarySql
-                                  .insert({'tip': _contList[_page]['tip'], 'date': '2021-5-21', 'diaryInfo': _textEditingControllerList[_page].text});
-                              Navigator.pop(context);
+                              diarySql.query(conditions: {"tip": "${_contList[_page]['tip']}", "date": "${widget.arguments['date']}"}).then((value) {
+                                if (value.length == 0) {
+                                  diarySql.insert({
+                                    'tip': _contList[_page]['tip'],
+                                    'date': widget.arguments['date'],
+                                    'diaryInfo': _textEditingControllerList[_page].text
+                                  }).then((value) {
+                                    Navigator.pop(context, '日记填写完成');
+                                  });
+                                } else {
+                                  diarySql
+                                      .update({'diaryInfo': _textEditingControllerList[_page].text}, 'tip', _contList[_page]['tip']).then((value) {
+                                    print(value);
+                                    Navigator.pop(context, '日记填写完成');
+                                  });
+                                }
+                              });
                             },
                           ),
                         ),

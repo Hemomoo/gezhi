@@ -8,6 +8,7 @@ import 'package:gezhi/widgets/calendar/calendar_item.dart';
 import 'package:gezhi/widgets/calendar/calendar_list/calendar_list.dart';
 
 import 'package:gezhi/widgets/calendar/calendar_list/utils/chang_year.dart';
+import 'package:gezhi/sqlite/sql_common.dart';
 
 class Calendar extends StatefulWidget {
   @override
@@ -18,6 +19,8 @@ class _CalendarState extends State<Calendar> {
   EventBus eventBus = EventBus(); // 注册eventBus
   String _year = '';
   double initialScrollOffset; // 默认滚动距离
+  final SqlUtil diarySql = SqlUtil.setTable('diary');
+  List<dynamic> diaryDateList;
 
   @override
   void initState() {
@@ -36,6 +39,13 @@ class _CalendarState extends State<Calendar> {
     // print(year);
     int month = DateTime.now().month;
     initialScrollOffset = (month * 240).toDouble();
+
+    // 获取所有写过日记的日期
+    // SELECT * FROM 表名 ORDER BY RANDOM() LIMIT 1
+    diarySql.rawQuery('SELECT date FROM diary', null).then((value) {
+      diaryDateList = value.map((e) => e['date']).toSet().toList();
+      setState(() {});
+    });
 
     super.initState();
   }

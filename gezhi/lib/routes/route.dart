@@ -67,7 +67,8 @@ var onGenerateRoute = (RouteSettings settings) {
   var pageBuilder = routes[settings.name];
   print(settings);
   print('跳转到那个页面${routes[settings.name]}');
-  print('携带的参数${routes[settings.arguments]}');
+  print('携带的参数>>>>>${settings}');
+  // print('携带的参数${routes[settings.arguments]}');
   if (pageBuilder != null) {
     if (settings.arguments != null) {
       // 创建路由页面并携带参数

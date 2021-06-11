@@ -28,6 +28,16 @@ class SqlUtil extends BaseModel {
     return await this.querys(tableName);
   }
 
+  //查询数据 传入Sql语句和参数
+  Future<List> rawQuery(String sql, List arguments) async {
+    return await this.db.rawQuery(sql, arguments);
+  }
+
+  //查询前面几条数据
+  Future<List> limitQuery(String sql, int limit) async {
+    return await this.db.query(sql, limit: limit);
+  }
+
   //插入数据 传入Sql语句和参数 返回插入数据的id
   Future<int> rawInsert(String sql, List arguments) async {
     return await this.db.rawInsert(sql, arguments);
@@ -86,7 +96,6 @@ class SqlUtil extends BaseModel {
   //修改一条或多条数据 多个条件
   Future<int> updates(Map<String, dynamic> params, Map<String, dynamic> conditions, String ao) async {
     String stringConditions = '';
-
     int index = 0;
     if (ao == '') ao = 'and';
     conditions.forEach((key, value) {
@@ -106,17 +115,6 @@ class SqlUtil extends BaseModel {
       index++;
     });
     return await this.db.update(tableName, params, where: stringConditions);
-  }
-
-  //查询数据 传入Sql语句和参数
-  Future<List> rawQuery(String sql, List arguments) async {
-    return await this.db.rawQuery(sql, arguments);
-  }
-
-  //查询前面几条数据
-
-  Future<List> limitQuery(String sql, int limit) async {
-    return await this.db.query(sql, limit: limit);
   }
 
   //通过条件查询，可以将表名作为参数传进来，作为公共方法，返回的是一个集合
@@ -146,4 +144,9 @@ class SqlUtil extends BaseModel {
     print("this is string condition for sql > $stringConditions");
     return await this.querys(tableName, where: stringConditions);
   }
+
+  //  先判断有没有然后再判断是更新还是新增
+  // Future<List> exist(String whereKey, String val1, String val2) {
+  //   return this.db.query(tableName, columns: [whereKey], where: '$whereKey=?', whereArgs: [val1, val2]);
+  // }
 }

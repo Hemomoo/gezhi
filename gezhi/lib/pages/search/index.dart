@@ -5,6 +5,7 @@ import 'package:gezhi/widgets/search/img_box.dart';
 import 'package:gezhi/widgets/search/headline.dart';
 import 'package:gezhi/widgets/search/tags.dart';
 import 'package:gezhi/widgets/search/year.dart';
+import 'package:gezhi/widgets/search/index/grid.dart';
 
 class Search extends StatelessWidget {
   @override
@@ -29,18 +30,7 @@ class Search extends StatelessWidget {
           padding: EdgeInsets.all(10),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SearchBar(),
-              Statistics(),
-              _sizeBox(),
-              ImgBox(),
-              _sizeBox(),
-              Heading(),
-              _sizeBox(),
-              Tags(),
-              _sizeBox(),
-              Year()
-            ],
+            children: [SearchBar(), RecordGrid(), Statistics(), _sizeBox(), ImgBox(), _sizeBox(), Heading(), _sizeBox(), Tags(), _sizeBox(), Year()],
           ),
         ),
       ),
