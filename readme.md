@@ -4,6 +4,8 @@
 
 ## QuickStart
 
+## pc
+使用了ts elctor vue3.0 vite 来开发的桌面端应用
 <!-- add docs here for user -->
 
 see [egg docs][egg] for more detail.
