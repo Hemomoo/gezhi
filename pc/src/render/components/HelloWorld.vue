@@ -2,7 +2,7 @@
   <h1>{{ msg }}</h1>
 
   <p>
-    Recommended IDE setup:
+    Recommended IDE setup:kfafak
     <a href="https://code.visualstudio.com/" target="_blank">VSCode</a>
     +
     <a
@@ -24,7 +24,7 @@
       Vite Docs
     </a>
     |
-    <a href="https://v3.vuejs.org/" target="_blank">Vue 3 Docs</a>
+    <a href="https://v3.vuejs.org/" target="_blank">Vue 3 D国际花都ocs</a>
   </p>
 
   <button type="button" @click="count++">count is: {{ count }}</button>

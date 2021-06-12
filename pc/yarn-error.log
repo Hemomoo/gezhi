@@ -1,0 +1,72 @@
+Arguments: 
+  /usr/local/Cellar/node/15.3.0/bin/node /usr/local/Cellar/yarn/1.22.10/libexec/bin/yarn.js init
+
+PATH: 
+  /Users/lazcy5/node_modules/rollup/dist/bin:/usr/local/sbin:/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Users/lazcy5/node_modules/rollup/dist/bin:/usr/local/sbin
+
+Yarn version: 
+  1.22.10
+
+Node version: 
+  15.3.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: canceled
+      at Interface.<anonymous> (/usr/local/Cellar/yarn/1.22.10/libexec/lib/cli.js:137009:13)
+      at Interface.emit (node:events:376:20)
+      at Interface._ttyWrite (node:readline:880:16)
+      at ReadStream.onkeypress (node:readline:213:10)
+      at ReadStream.emit (node:events:376:20)
+      at emitKeys (node:internal/readline/utils:345:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (node:readline:1149:36)
+      at ReadStream.emit (node:events:376:20)
+      at addChunk (node:internal/streams/readable:304:12)
+
+npm manifest: 
+  {
+    "version": "0.0.0",
+    "scripts": {
+      "dev": "vite",
+      "dev:all": "concurrently -n=vue,ele -c=green,blue \"npm run dev:vue\" \"npm run dev:ele\"",
+      "dev:vue": "vite",
+      "build": "vue-tsc --noEmit && vite build",
+      "serve": "vite preview",
+      "dev:ele": "node script/build.js --env=development --watch"
+    },
+    "dependencies": {
+      "vue": "^3.0.5"
+    },
+    "devDependencies": {
+      "@rollup/plugin-alias": "^3.1.1",
+      "@rollup/plugin-commonjs": "^15.0.0",
+      "@rollup/plugin-json": "^4.1.0",
+      "@rollup/plugin-node-resolve": "^9.0.0",
+      "@vitejs/plugin-vue": "^1.2.3",
+      "@vue/compiler-sfc": "^3.0.5",
+      "chalk": "^4.1.0",
+      "concurrently": "^5.3.0",
+      "dotenv": "^8.2.0",
+      "electron": "^13.1.2",
+      "electron-builder": "^22.11.7",
+      "electron-connect": "^0.6.3",
+      "electron-is-dev": "^1.2.0",
+      "electron-store": "^6.0.0",
+      "minimist": "^1.2.5",
+      "ora": "^5.0.0",
+      "rollup-plugin-esbuild": "^4.5.0",
+      "typescript": "^4.3.2",
+      "vite": "^2.3.7",
+      "vue-tsc": "^0.0.24",
+      "wait-on": "^5.2.0"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

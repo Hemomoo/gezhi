@@ -2,19 +2,37 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
+    "dev:all": "concurrently -n=vue,ele -c=green,blue \"npm run dev:vue\" \"npm run dev:ele\"",
+    "dev:vue": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "serve": "vite preview",
-    "dev:electron": "npx electron"
+    "dev:ele":  "npx electron  src/main"
   },
   "dependencies": {
     "vue": "^3.0.5"
   },
   "devDependencies": {
+    "@rollup/plugin-alias": "^3.1.1",
+    "@rollup/plugin-commonjs": "^15.0.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^9.0.0",
     "@vitejs/plugin-vue": "^1.2.3",
     "@vue/compiler-sfc": "^3.0.5",
+    "chalk": "^4.1.0",
+    "concurrently": "^5.3.0",
+    "dotenv": "^8.2.0",
     "electron": "^13.1.2",
+    "electron-builder": "^22.11.7",
+    "electron-connect": "^0.6.3",
+    "electron-is-dev": "^1.2.0",
+    "electron-store": "^6.0.0",
+    "minimist": "^1.2.5",
+    "ora": "^5.0.0",
+    "rollup-plugin-esbuild": "^4.5.0",
     "typescript": "^4.3.2",
     "vite": "^2.3.7",
-    "vue-tsc": "^0.0.24"
+    "vue-tsc": "^0.0.24",
+    "wait-on": "^5.2.0",
+    "vitejs-plugin-electron": "^0.1.0"
   }
 }
