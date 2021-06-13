@@ -5,7 +5,6 @@ login
 </template>
 
 <script>
-import { } from '@'
  export default {
    name:'Login',
    data () {
