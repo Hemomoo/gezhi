@@ -1,7 +1,5 @@
 
-
-
-const { app, BrowserWindow:any } = require('electron')
+const { app, BrowserWindow } = require('electron')
 
 let win = null
 

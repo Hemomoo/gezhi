@@ -3,13 +3,13 @@
   "scripts": {
     "dev": "vite",
     "dev:all": "concurrently -n=vue,ele -c=green,blue \"npm run dev:vue\" \"npm run dev:ele\"",
-    "dev:vue": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "serve": "vite preview",
     "dev:ele": "npx electron  src/main/index.ts"
   },
   "dependencies": {
-    "vue": "^3.0.5"
+    "vue": "^3.0.5",
+    "vue-router": "^4.0.8"
   },
   "devDependencies": {
     "@rollup/plugin-alias": "^3.1.1",
@@ -27,12 +27,13 @@
     "electron-is-dev": "^1.2.0",
     "electron-store": "^6.0.0",
     "minimist": "^1.2.5",
+    "naive-ui": "^2.11.8",
     "ora": "^5.0.0",
     "rollup-plugin-esbuild": "^4.5.0",
     "typescript": "^4.3.2",
     "vite": "^2.3.7",
+    "vitejs-plugin-electron": "^0.1.0",
     "vue-tsc": "^0.0.24",
-    "wait-on": "^5.2.0",
-    "vitejs-plugin-electron": "^0.1.0"
+    "wait-on": "^5.2.0"
   }
 }
