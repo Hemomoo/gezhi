@@ -6,7 +6,7 @@
     "dev:vue": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "serve": "vite preview",
-    "dev:ele":  "npx electron  src/main"
+    "dev:ele": "npx electron  src/main/index.ts"
   },
   "dependencies": {
     "vue": "^3.0.5"
