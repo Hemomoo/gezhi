@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 import Layout from '../layout/index.vue';
 
 const routes = [
+  // 今天
   {
     path: '/',
     component: Layout,
@@ -12,8 +13,9 @@ const routes = [
       component: () => import('../../render/views/today/index.vue')
     }],
   },
+  // 标题
   {
-    path: '/',
+    path: '/tit',
     component: Layout,
     redirect: '/tit',
     children: [{
@@ -21,6 +23,18 @@ const routes = [
       name: 'tit',
       component: () => import('../../render/views/tit/index.vue')
     }]
+  },
+  // 资源库
+  // 时间线
+  {
+    path: '/time-line',
+    component: Layout,
+    redirect: '/time-line',
+    children: [{
+      path: '/time-line',
+      name: 'time-line',
+      component: () => import('../../render/views/time-line/index.vue')
+    }],
   }
 ]
 

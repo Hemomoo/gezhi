@@ -28,6 +28,7 @@
 <script>
 import { NAvatar } from "naive-ui";
 import { ref } from "vue";
+
 export default {
   name: "Sidebar",
   data() {
@@ -49,7 +50,7 @@ export default {
         icon: "",
         id: 2,
         tit: "时间线",
-        link:'today'
+        link:'time-line'
       },
       {
         icon: "",

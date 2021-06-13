@@ -1,10 +1,11 @@
 <template>
  <div>
-
+login
  </div>
 </template>
 
 <script>
+import { } from '@'
  export default {
    name:'Login',
    data () {
