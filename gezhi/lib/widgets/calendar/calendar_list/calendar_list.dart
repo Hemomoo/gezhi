@@ -12,19 +12,18 @@ class CalendarList extends StatefulWidget {
   final DateTime selectedEndDate;
   final Function onSelectFinish;
   final EventBus eventBus;
-  final double initialScrollOffset; // 默认滚动距离
 
   CalendarList(
       {@required this.firstDate,
       @required this.lastDate,
-      @required this.initialScrollOffset,
       this.onSelectFinish,
       this.selectedStartDate,
       this.selectedEndDate,
       this.eventBus})
       : assert(firstDate != null),
         assert(lastDate != null),
-        assert(!firstDate.isAfter(lastDate), 'lastDate must be on or after firstDate');
+        assert(!firstDate.isAfter(lastDate),
+            'lastDate must be on or after firstDate');
 
   @override
   _CalendarListState createState() => _CalendarListState();
@@ -40,10 +39,8 @@ class _CalendarListState extends State<CalendarList> {
   int monthEnd;
   int count;
   int initCount;
-  double initialScrollOffset;
-  double oldOffset;
 
-  ScrollController _controller;
+  ScrollController _controller = ScrollController();
 
   @override
   void initState() {
@@ -57,23 +54,17 @@ class _CalendarListState extends State<CalendarList> {
     yearEnd = widget.lastDate.year;
     monthEnd = widget.lastDate.month;
     count = monthEnd - monthStart + (yearEnd - yearStart) * 12 + 1;
-    initCount = DateTime.now().month - monthStart + (DateTime.now().year - yearStart) * 12 + 1;
+    initCount = DateTime.now().month -
+        monthStart +
+        (DateTime.now().year - yearStart) * 12 +
+        1;
 
     // 延时1s执行返回
     Future.delayed(Duration(seconds: 0), () {
       // print('延时1s执行');
     });
 
-    _controller = ScrollController(initialScrollOffset: widget.initialScrollOffset);
-
     _controller.addListener(() {
-      // if (_controller.offset == 100) {
-      //   Future.delayed(Duration(microseconds: 1)).then((value) {
-      //     monthStart = monthStart - 1;
-      //     setState(() {});
-      //   });
-      // }
-
       // print(_controller.offset); //打印滚动位置
     });
   }
@@ -115,7 +106,7 @@ class _CalendarListState extends State<CalendarList> {
       child: CustomScrollView(
         controller: _controller,
         cacheExtent: 10,
-        semanticChildCount: 100,
+        semanticChildCount:100,
         slivers: <Widget>[
           SliverList(
             delegate: SliverChildBuilderDelegate(
@@ -148,7 +139,7 @@ class _CalendarListState extends State<CalendarList> {
       padding: 0,
       dateTimeStart: selectStartTime,
       dateTimeEnd: selectEndTime,
-      todayColor: Color(0XFF00acc1),
+      todayColor: Colors.deepOrange,
       eventBus: eventBus,
       onSelectDayRang: (dateTime) => onSelectDayChanged(dateTime),
     );

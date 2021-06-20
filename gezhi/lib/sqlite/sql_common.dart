@@ -28,16 +28,6 @@ class SqlUtil extends BaseModel {
     return await this.querys(tableName);
   }
 
-  //查询数据 传入Sql语句和参数
-  Future<List> rawQuery(String sql, List arguments) async {
-    return await this.db.rawQuery(sql, arguments);
-  }
-
-  //查询前面几条数据
-  Future<List> limitQuery(String sql, int limit) async {
-    return await this.db.query(sql, limit: limit);
-  }
-
   //插入数据 传入Sql语句和参数 返回插入数据的id
   Future<int> rawInsert(String sql, List arguments) async {
     return await this.db.rawInsert(sql, arguments);
@@ -55,7 +45,7 @@ class SqlUtil extends BaseModel {
 
   //删除一条或多条数据 单个条件
   Future<int> delete(String key, dynamic value) async {
-    return await this.db.delete(tableName, where: '$key = ?', whereArgs: [value]);
+    return await this.db.delete(tableName, where:'$key = ?', whereArgs:[value]);
   }
 
   //删除一条或多条数据 多个条件
@@ -66,7 +56,7 @@ class SqlUtil extends BaseModel {
     if (ao == '') ao = 'and';
     conditions.forEach((key, value) {
       if (value == null) {
-        return;
+        return ;
       }
       if (value.runtimeType == String) {
         stringConditions = '$stringConditions $key = "$value"';
@@ -75,12 +65,12 @@ class SqlUtil extends BaseModel {
         stringConditions = '$stringConditions $key = $value';
       }
 
-      if (index >= 0 && index < conditions.length - 1) {
+      if (index >= 0 && index < conditions.length -1) {
         stringConditions = '$stringConditions $ao';
       }
       index++;
     });
-    return await this.db.delete(tableName, where: stringConditions);
+    return await this.db.delete(tableName, where:stringConditions);
   }
 
   //修改数据 传入Sql语句和参数
@@ -90,17 +80,18 @@ class SqlUtil extends BaseModel {
 
   //修改一条或多条数据 单个条件
   Future<int> update(Map<String, dynamic> params, String key, dynamic value) async {
-    return await this.db.update(tableName, params, where: '$key = ?', whereArgs: [value]);
+    return await this.db.update(tableName, params, where:'$key = ?', whereArgs:[value]);
   }
 
   //修改一条或多条数据 多个条件
   Future<int> updates(Map<String, dynamic> params, Map<String, dynamic> conditions, String ao) async {
     String stringConditions = '';
+
     int index = 0;
     if (ao == '') ao = 'and';
     conditions.forEach((key, value) {
       if (value == null) {
-        return;
+        return ;
       }
       if (value.runtimeType == String) {
         stringConditions = '$stringConditions $key = "$value"';
@@ -109,12 +100,17 @@ class SqlUtil extends BaseModel {
         stringConditions = '$stringConditions $key = $value';
       }
 
-      if (index >= 0 && index < conditions.length - 1) {
+      if (index >= 0 && index < conditions.length -1) {
         stringConditions = '$stringConditions $ao';
       }
       index++;
     });
-    return await this.db.update(tableName, params, where: stringConditions);
+    return await this.db.update(tableName, params, where:stringConditions);
+  }
+
+  //查询数据 传入Sql语句和参数
+  Future<List> rawQuery(String sql, List arguments) async {
+    return await this.db.rawQuery(sql, arguments);
   }
 
   //通过条件查询，可以将表名作为参数传进来，作为公共方法，返回的是一个集合
@@ -124,10 +120,11 @@ class SqlUtil extends BaseModel {
       return this.get();
     }
     String stringConditions = '';
+
     int index = 0;
     conditions.forEach((key, value) {
       if (value == null) {
-        return;
+        return ;
       }
       if (value.runtimeType == String) {
         stringConditions = '$stringConditions $key = "$value"';
@@ -136,7 +133,7 @@ class SqlUtil extends BaseModel {
         stringConditions = '$stringConditions $key = $value';
       }
 
-      if (index >= 0 && index < conditions.length - 1) {
+      if (index >= 0 && index < conditions.length -1) {
         stringConditions = '$stringConditions and';
       }
       index++;
@@ -144,9 +141,4 @@ class SqlUtil extends BaseModel {
     print("this is string condition for sql > $stringConditions");
     return await this.querys(tableName, where: stringConditions);
   }
-
-  //  先判断有没有然后再判断是更新还是新增
-  // Future<List> exist(String whereKey, String val1, String val2) {
-  //   return this.db.query(tableName, columns: [whereKey], where: '$whereKey=?', whereArgs: [val1, val2]);
-  // }
 }

@@ -1,32 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gezhi/style/style.dart';
 import 'package:gezhi/widgets/time_line/listing_item.dart';
 import 'package:gezhi/widgets/time_line/grid_item.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:gezhi/widgets/common/common.dart';
-import 'package:gezhi/widgets/time_line/label_widget.dart';
-import 'package:gezhi/widgets/time_line/paster.dart';
-import 'package:gezhi/sqlite/sql_common.dart';
+
 //字体图标
 import 'package:gezhi/fonts/font.dart';
 
 class TimeLineDiary extends StatefulWidget {
-  final Map<String, dynamic> arguments;
-  TimeLineDiary({this.arguments});
-
   @override
-  _TimeLineDiaryState createState() => _TimeLineDiaryState(arguments);
+  _TimeLineDiaryState createState() => _TimeLineDiaryState();
 }
 
 class _TimeLineDiaryState extends State<TimeLineDiary> {
-  final Map<String, dynamic> arguments;
-  _TimeLineDiaryState(this.arguments);
-
-  final SqlUtil diarySql = SqlUtil.setTable('diary');
-
   final List<Map<String, dynamic>> _itemList = [
     {
       'icon': Icons.arrow_upward,
@@ -60,39 +47,17 @@ class _TimeLineDiaryState extends State<TimeLineDiary> {
     }
   ];
 
-  PageController _pageController = PageController();
-
   bool _isGrid = true;
   bool _isListing = false;
-  int day; // 日期
-  int weekday; // 星期几
-  int lastMonthDay; // 这个月最后几天
-  int month; // 月份
-  int year; // 年
-  int oldPage = 0; // 页面，用来控制前滑动 后滑动
-  List<Map<String, dynamic>> todayDiaryList = [];
-  List<String> weekList = ['一', '二', '三', '四', '五', '六', '日'];
-
-  @override
-  void initState() {
-    month = int.parse(arguments['date'].split('-')[1]);
-    year = int.parse(arguments['date'].split('-').first);
-    day = int.parse(widget.arguments['date'].split('-').last);
-    weekday = DateTime.parse(widget.arguments['date']).weekday;
-    lastMonthDay = DateTime(year, month + 1, 0).day; // 这个月的最后一天
-    setState(() {});
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () {
+      onWillPop: (){
         Navigator.of(context).pop('返回'); // 传过去的值
         return Future.value(true); // true 跳转 false 不跳转
       },
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           // automaticallyImplyLeading: false,
           iconTheme: IconThemeData(color: Colors.black),
@@ -175,111 +140,74 @@ class _TimeLineDiaryState extends State<TimeLineDiary> {
             )
           ],
         ),
-        body: PageView.builder(
-          controller: _pageController,
-          reverse: true,
-          onPageChanged: (page) {
-            if (oldPage > page) {
-              weekday = weekday + 1 > 7 ? 1 : weekday + 1;
-              if (day + 1 > lastMonthDay) {
-                month = month + 1;
-                year = month > 12 ? year + 1 : year;
-              }
-              day = day + 1 > lastMonthDay ? 1 : day + 1;
-            } else {
-              weekday = weekday - 1 < 1 ? 1 : weekday - 1;
-              if (day - 1 <= 0) {
-                month = month - 1;
-                year = month < 1 ? year - 1 : year;
-              }
-              day = day - 1 < 1 ? lastMonthDay : day - 1;
-            }
-            oldPage = page;
-            setState(() {});
-          },
-          itemBuilder: (BuildContext context, index) {
-            return Column(
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10),
-                        child: Row(
+        body: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      children: [
+                        Text(
+                          '26',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              day.toString(),
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
+                              '星期三',
+                              style: TextStyle(color: Colors.black38, fontWeight: FontWeight.bold),
                             ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '星期${weekList[weekday - 1]}',
-                                  style: TextStyle(color: Colors.black38, fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  '$year-${month > 10 ? month : '0$month'}-${day > 10 ? day : '0$day'}',
-                                  style: TextStyle(color: Colors.black38, fontWeight: FontWeight.bold),
-                                ),
-                              ],
+                            Text(
+                              '2020年8月',
+                              style: TextStyle(color: Colors.black38, fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10),
-                        child: _isGrid
-                            ? GestureDetector(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    _stickersLabels();
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        IconFont.icon_taiyang,
-                                        size: 26,
-                                        color: Colors.black38,
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 6, right: 10),
-                                        child: Icon(IconFont.icon_smile, size: 20, color: Colors.black38),
-                                      ),
-                                      Icon(IconFont.icon_tag, size: 16, color: Colors.black38),
-                                    ],
-                                  ),
-                                ),
-                                onTap: () {},
-                              )
-                            : Row(
-                                children: [
-                                  Icon(
-                                    Icons.book,
-                                    color: Colors.black12,
-                                  ),
-                                  Text(('日记本'))
-                                ],
-                              ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                NotificationListener<CustomNotification>(
-                  onNotification: (notification) {
-                    print(notification.msg);
-                    setState(() {}); //收到子Widget通知，更新msg
-                    return true;
-                  },
-                  child: _isGrid ? GridItem('$year-${month > 10 ? month : '0$month'}-${day > 10 ? day : '0$day'}', key: UniqueKey()) : ListingItem(),
-                )
-              ],
-            );
-          },
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    child: _isGrid
+                        ? GestureDetector(
+                            child: Row(
+                              children: [
+                                Icon(
+                                  IconFont.icon_taiyang,
+                                  size: 26,
+                                  color: Colors.black38,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 6, right: 10),
+                                  child: Icon(IconFont.icon_smile, size: 20, color: Colors.black38),
+                                ),
+                                Icon(IconFont.icon_tag, size: 16, color: Colors.black38),
+                              ],
+                            ),
+                            onTap: () {},
+                          )
+                        : Row(
+                            children: [
+                              Icon(
+                                Icons.book,
+                                color: Colors.black12,
+                              ),
+                              Text(('日记本'))
+                            ],
+                          ),
+                  ),
+                ],
+              ),
+            ),
+            _isGrid ? GridItem() : ListingItem()
+          ],
         ),
       ),
     );
@@ -293,11 +221,9 @@ class _TimeLineDiaryState extends State<TimeLineDiary> {
       context: context,
       builder: (BuildContext context) {
         return Container(
+          margin: EdgeInsets.all(10),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(14),
-              topLeft: Radius.circular(14),
-            ),
+            borderRadius: BorderRadius.circular(14),
             color: Colors.white,
           ),
           child: ListView.separated(
@@ -332,156 +258,6 @@ class _TimeLineDiaryState extends State<TimeLineDiary> {
         );
       },
     );
-  }
-
-  //贴纸和标签
-  void _stickersLabels() {
-    int _currentIndex = 0;
-    Color _color = Colors.black;
-    PageController _pageController = PageController(initialPage: 0);
-    showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        backgroundColor: Colors.transparent,
-        builder: (BuildContext context) {
-          return StatefulBuilder(
-            builder: (context, state) {
-              return Container(
-                  height: MediaQuery.of(context).size.height * 0.9,
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(14),
-                      topLeft: Radius.circular(14),
-                    ),
-                    color: Colors.white,
-                  ),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(top: 8.0),
-                        child: CommonWidget.line(),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  _currentIndex = 0;
-                                  _pageController.animateToPage(0, duration: Duration(milliseconds: 400), curve: Curves.easeInOut);
-                                  state(() {});
-                                },
-                                child: Container(
-                                  width: 48,
-                                  height: 48.0,
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    '贴纸',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: _currentIndex == 0 ? Colors.black : Colors.black54,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  _currentIndex = 1;
-                                  _pageController.animateToPage(1, duration: Duration(milliseconds: 400), curve: Curves.easeInOut);
-                                  state(() {});
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.only(left: 10),
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    '标签',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: _currentIndex == 1 ? Colors.black : Colors.black54,
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                          _currentIndex == 1
-                              ? AnimatedContainer(
-                                  duration: Duration(seconds: 1),
-                                  child: PopupMenuButton(
-                                    padding: EdgeInsets.all(0),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadiusDirectional.circular(8),
-                                    ),
-                                    onSelected: (value) {},
-                                    icon: Icon(
-                                      Icons.more_horiz,
-                                      color: _color,
-                                    ),
-                                    itemBuilder: (context) {
-                                      return <PopupMenuEntry<String>>[
-                                        PopupMenuItem<String>(
-                                          value: '新建标签',
-                                          child: Row(
-                                            children: <Widget>[
-                                              Icon(Icons.library_add, color: GZColors.primary),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Text('新建标签'),
-                                            ],
-                                          ),
-                                        ),
-                                        PopupMenuItem<String>(
-                                          value: '管理标签',
-                                          child: Row(
-                                            children: <Widget>[
-                                              Icon(Icons.create, color: GZColors.primary),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Text('管理标签'),
-                                            ],
-                                          ),
-                                        ),
-                                      ];
-                                    },
-                                  ),
-                                )
-                              : Container(
-                                  child: Icon(
-                                    Icons.more_horiz,
-                                    color: Colors.transparent,
-                                  ),
-                                )
-                        ],
-                      ),
-                      Expanded(
-                        child: PageView.builder(
-                          itemCount: 2,
-                          onPageChanged: (int index) {
-                            _color = index == 0 ? Colors.transparent : Colors.black;
-                            _currentIndex = index;
-                            FocusScope.of(context).requestFocus(FocusNode()); // 关闭键盘
-                            state(() {});
-                          },
-                          // DrivenScrollActivity
-                          controller: _pageController,
-                          itemBuilder: (context, index) {
-                            if (index == 0) {
-                              return Paster();
-                            } else {
-                              return LabelWidget();
-                            }
-                          },
-                        ),
-                      )
-                    ],
-                  ));
-            },
-          );
-        });
   }
 
   // 导出

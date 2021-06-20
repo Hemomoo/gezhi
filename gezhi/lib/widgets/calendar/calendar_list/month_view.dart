@@ -54,7 +54,6 @@ class _MonthViewState extends State<MonthView> {
         );
       }).toList();
     }
-
     return Column(
       children: _weekWidgetList(),
     );
@@ -76,15 +75,23 @@ class _MonthViewState extends State<MonthView> {
       final bool isToday = dateIsToday(moment);
 
       bool isDefaultSelected = false;
-      if (widget.dateTimeStart == null && widget.dateTimeEnd == null && selectedDate == null) {
+      if (widget.dateTimeStart == null &&
+          widget.dateTimeEnd == null &&
+          selectedDate == null) {
         isDefaultSelected = false;
       }
-      if (widget.dateTimeStart == selectedDate && widget.dateTimeEnd == null && selectedDate?.day == day && day > 0) {
+      if (widget.dateTimeStart == selectedDate &&
+          widget.dateTimeEnd == null &&
+          selectedDate?.day == day &&
+          day > 0) {
         isDefaultSelected = true;
       }
       if (widget.dateTimeStart != null && widget.dateTimeEnd != null) {
-        isDefaultSelected = (moment.isAtSameMomentAs(widget.dateTimeStart) || moment.isAtSameMomentAs(widget.dateTimeEnd)) ||
-                moment.isAfter(widget.dateTimeStart) && moment.isBefore(widget.dateTimeEnd) && day > 0
+        isDefaultSelected = (moment.isAtSameMomentAs(widget.dateTimeStart) ||
+                    moment.isAtSameMomentAs(widget.dateTimeEnd)) ||
+                moment.isAfter(widget.dateTimeStart) &&
+                    moment.isBefore(widget.dateTimeEnd) &&
+                    day > 0
             ? true
             : false;
       }
@@ -93,15 +100,14 @@ class _MonthViewState extends State<MonthView> {
         DayNumber(
           size: widget.itemWidth,
           day: day,
-          month: widget.month,
-          year: widget.year,
           isToday: isToday,
           isDefaultSelected: isDefaultSelected,
           todayColor: widget.todayColor,
         ),
       );
 
-      if ((day - 1 + firstWeekdayOfMonth) % DateTime.daysPerWeek == 0 || day == daysInMonth) {
+      if ((day - 1 + firstWeekdayOfMonth) % DateTime.daysPerWeek == 0 ||
+          day == daysInMonth) {
         dayRows.add(
           Row(
             children: List<DayNumber>.from(dayRowChildren),
@@ -109,6 +115,8 @@ class _MonthViewState extends State<MonthView> {
         );
         dayRowChildren.clear();
       }
+
+
     }
 
     return Column(

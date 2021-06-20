@@ -4,10 +4,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:gezhi/style/style.dart';
-import 'package:gezhi/sqlite/sql_common.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
-// import 'package:quill_delta/quill_delta.dart';
+import 'package:quill_delta/quill_delta.dart';
 // import 'package:zefyr/zefyr.dart';
 
 class RevisedDiary extends StatefulWidget {
@@ -20,21 +19,21 @@ class RevisedDiary extends StatefulWidget {
 
 class _RevisedDiaryState extends State<RevisedDiary> {
   bool focus = false;
-  FocusNode _commentFocus = FocusNode();
+  // FocusNode _commentFocus = FocusNode();
   int _page = 0;
 
-  final SqlUtil hintSql = SqlUtil.setTable('tips');
-  final SqlUtil diarySql = SqlUtil.setTable('diary');
-  PageController _pageController;
+  PageController _pageController = PageController();
 
-  List<Map<String, dynamic>> _contList = [];
-  List<TextEditingController> _textEditingControllerList = [];
-  String dateTit;
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  // TextEditingController _diaryController = TextEditingController();
-
-  // ZefyrController _zefyrController;
+  // final List<Map<String, dynamic>> _contList = [
+  //   {'tit': '你好1', 'cont': '你好啊'},
+  //   {'tit': '你好2', 'cont': '你好啊'},
+  //   {'tit': '你好3', 'cont': '你好啊'},
+  //   {'tit': '你好4', 'cont': '你好啊'},
+  //   {'tit': '你好5', 'cont': '你好啊'},
+  //   {'tit': '你好6', 'cont': '你好啊'},
+  // ];
+  //
+  // // ZefyrController _zefyrController;
   // FocusNode _focusNode;
   // ZefyrController _controller;
 
@@ -64,6 +63,7 @@ class _RevisedDiaryState extends State<RevisedDiary> {
   //   });
   // }
 
+
   // NotusDocument _loadDocument() {
   //   // For simplicity we hardcode a simple document with one line of text
   //   // saying "Zefyr Quick Start".
@@ -72,37 +72,38 @@ class _RevisedDiaryState extends State<RevisedDiary> {
   //   return NotusDocument.fromDelta(delta);
   // }
 
+
   @override
   void initState() {
-    final int index = widget.arguments['index'];
+    // final document = _loadDocument();
+    // _controller = ZefyrController(document);
+    // _focusNode = FocusNode();
 
-    // 查询前7条数据
-    hintSql.limitQuery('tips', 7).then((value) {
-      //循环变量生成文本controller
-      _contList = value;
-      diarySql.query(conditions: {"tip": "${value[index]['tip']}", "date": "${widget.arguments['date']}"}).then((value) {
-        for (int i = 0; i < _contList.length; i++) {
-          if (widget.arguments['index'] == i && value.length != 0) {
-            _textEditingControllerList.add(TextEditingController(text: value[0]['diaryInfo']));
-          } else {
-            _textEditingControllerList.add(TextEditingController());
-          }
-        }
-        setState(() {});
-      });
-    });
-
-    _pageController = PageController(initialPage: widget.arguments['index']);
-
-    // List<String> dateList = widget.arguments['date'].split('-');
-    // dateTit = '${dateList.first}年${dateList[1]}月${dateList.last}日';
+    // _zefyrFocusNode.addListener(() {
+    //   // 获取焦点失去焦点
+    //   setState(() {
+    //     focus = _zefyrFocusNode.hasFocus;
+    //   });
+    // });
+    // // 监听键盘
+    // KeyboardVisibility.onChange.listen((bool visible) {
+    //   print('121');
+    //   setState(() {
+    //     focus = visible;
+    //   });
+    // });
+    // //初始化zefyr
+    // _loadDocument().then((document) {
+    //   setState(() {
+    //     _zefyrController = ZefyrController(document);
+    //   });
+    // });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -116,7 +117,7 @@ class _RevisedDiaryState extends State<RevisedDiary> {
           },
         ),
         title: Text(
-          widget.arguments['date'],
+          widget.arguments['tit'],
           style: TextStyle(color: Colors.black),
         ),
         actionsIconTheme: IconThemeData(color: Colors.black),
@@ -132,104 +133,86 @@ class _RevisedDiaryState extends State<RevisedDiary> {
       body: Container(
         child: Container(
           child: Stack(
-            children: [
-              _textEditingControllerList.length != 0
-                  ? PageView.builder(
-                      onPageChanged: (page) {
-                        setState(() {
-                          _page = page;
-                          diarySql.query(conditions: {"tip": "${_contList[page]['tip']}", "date": "${widget.arguments['date']}"}).then((value) {
-                            if (value.length != 0) {
-                              _textEditingControllerList[page].text = value[0]['diaryInfo'];
-                            }
-                          });
-                        });
-                      },
-                      controller: _pageController,
-                      itemCount: _contList.length,
-                      itemBuilder: (context, index) {
-                        return Container(
-                            width: double.infinity,
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      _contList[index]['tip'],
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: TextField(
-                                    controller: _textEditingControllerList[index],
-                                    keyboardType: TextInputType.multiline,
-                                    maxLines: 30,
-                                    // expands: true,
-                                    decoration: InputDecoration(),
-                                  ),
-                                ),
-                              ],
-                            ));
-                      })
-                  : Container(),
-              Positioned(
-                bottom: focus ? 60.0 : 0.0,
-                right: 0,
-                child: Container(
-                  // padding: EdgeInsets.symmetric(horizontal: 10),
-                  width: MediaQuery.of(context).size.width,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(right: 10, bottom: 10),
-                        child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: GestureDetector(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4),
-                                color: GZColors.primary,
-                              ),
-                              padding: EdgeInsets.fromLTRB(14, 8, 14, 8),
-                              child: Text(
-                                '完成',
-                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
-                              ),
-                            ),
-                            onTap: () {
-                              diarySql.query(conditions: {"tip": "${_contList[_page]['tip']}", "date": "${widget.arguments['date']}"}).then((value) {
-                                if (value.length == 0) {
-                                  diarySql.insert({
-                                    'tip': _contList[_page]['tip'],
-                                    'date': widget.arguments['date'],
-                                    'diaryInfo': _textEditingControllerList[_page].text
-                                  }).then((value) {
-                                    Navigator.pop(context, '日记填写完成');
-                                  });
-                                } else {
-                                  diarySql
-                                      .update({'diaryInfo': _textEditingControllerList[_page].text}, 'tip', _contList[_page]['tip']).then((value) {
-                                    print(value);
-                                    Navigator.pop(context, '日记填写完成');
-                                  });
-                                }
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-                      focus ? Container() : _bottomWidget()
-                    ],
-                  ),
-                ),
-              )
-            ],
+            // children: [
+            //   PageView.builder(
+            //       onPageChanged: (page) {
+            //         setState(() {
+            //           _page = page;
+            //         });
+            //       },
+            //       controller: _pageController,
+            //       itemCount: _contList.length,
+            //       itemBuilder: (context, index) {
+            //         return Container(
+            //             width: double.infinity,
+            //             child: Column(
+            //               children: [
+            //                 Padding(
+            //                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            //                   child: Align(
+            //                     alignment: Alignment.centerLeft,
+            //                     child: Text(
+            //                       _contList[index]['tit'],
+            //                       style: TextStyle(
+            //                         fontSize: 20,
+            //                         fontWeight: FontWeight.bold,
+            //                       ),
+            //                     ),
+            //                   ),
+            //                 ),
+            //                 Expanded(
+            //                   child: (_controller == null)
+            //                       ? Center(child: CircularProgressIndicator())
+            //                       :
+            //                           ZefyrEditor(
+            //                             padding: EdgeInsets.symmetric(
+            //                               horizontal: 20,
+            //                             ),
+            //                             controller: _controller,
+            //                             focusNode: _focusNode,
+            //                             autofocus: false,
+            //                         ),
+            //                 ),
+            //               ],
+            //             ));
+            //       }),
+            //   Positioned(
+            //     bottom: focus ? 60.0 : 0.0,
+            //     right: 0,
+            //     child: Container(
+            //       // padding: EdgeInsets.symmetric(horizontal: 10),
+            //       width: MediaQuery.of(context).size.width,
+            //       child: Column(
+            //         children: [
+            //           Padding(
+            //             padding: EdgeInsets.only(right: 10, bottom: 10),
+            //             child: Align(
+            //               alignment: Alignment.bottomRight,
+            //               child: GestureDetector(
+            //                 child: Container(
+            //                   decoration: BoxDecoration(
+            //                     borderRadius: BorderRadius.circular(4),
+            //                     color: GZColors.primary,
+            //                   ),
+            //                   padding: EdgeInsets.fromLTRB(14, 8, 14, 8),
+            //                   child: Text(
+            //                     '完成',
+            //                     style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+            //                   ),
+            //                 ),
+            //                 onTap: () {
+            //                   // _saveDocument(context);
+            //                   Navigator.pop(context);
+            //                 },
+            //               ),
+            //             ),
+            //           ),
+            //           focus ? Container() : _bottomWidget()
+            //         ],
+            //       ),
+            //     ),
+            //   )
+            // ],
           ),
         ),
       ),

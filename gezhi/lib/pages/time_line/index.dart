@@ -5,13 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:gezhi/style/style.dart';
 import 'package:gezhi/widgets/common/common.dart';
-import 'package:gezhi/widgets/time_line/index/list_diary_widget_item.dart';
-import 'package:gezhi/widgets/time_line/index/sort_sel_list.dart';
-import 'package:gezhi/widgets/time_line/index/date_line_delegate.dart';
-import 'package:gezhi/sqlite/sql_common.dart';
-import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
-
-import 'package:gezhi/model/time_line/diary.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class TimeLine extends StatefulWidget {
@@ -20,33 +13,36 @@ class TimeLine extends StatefulWidget {
 }
 
 class _TimeLineState extends State<TimeLine> {
+  static List<Map> sortList = [
+    {'name': '日记本', 'sel': '全部'},
+    {'name': '类型', 'sel': '全部'},
+    {'name': '贴纸', 'sel': '全部'},
+    {'name': '标签', 'sel': '全部'},
+    {'name': '年份', 'sel': '全部'},
+  ];
+
+
+
   bool isTit = false;
   ScrollController _controller = new ScrollController();
-  final SqlUtil diarySql = SqlUtil.setTable('diary');
-  List<Map<String, dynamic>> _diaryList = [];
+
   int listLength = 10;
-  int selId;
 
   @override
   void initState() {
+    super.initState();
     //监听滚动事件，打印滚动位置
     _controller.addListener(() {
       if (_controller.offset < 50 && isTit) {
-        isTit = false;
+        setState(() {
+          isTit = false;
+        });
       } else if (_controller.offset >= 50 && isTit == false) {
-        isTit = true;
+        setState(() {
+          isTit = true;
+        });
       }
-      setState(() {});
     });
-
-    (() async {
-      //获取所有数据
-      // _diaryList = await diarySql.rawQuery('delete from diary where diary.rowid not in (select MAX(diary.rowid) from diary group by date)', null);
-      _diaryList = await diarySql.rawQuery('SELECT * from diary group by date', null);
-      setState(() {});
-    })();
-
-    super.initState();
   }
 
   @override
@@ -62,7 +58,7 @@ class _TimeLineState extends State<TimeLine> {
       appBar: AppBar(
         title: Center(
           child: Text(
-            '${isTit ? '时间线' : ''}',
+            ' ${isTit ? '时间线' : ''}',
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
@@ -76,83 +72,82 @@ class _TimeLineState extends State<TimeLine> {
             // action button
             icon: new Icon(Icons.filter_list),
             onPressed: () {
-              _editDiary(context);
+              _editDiary1(context);
             },
           ),
         ],
       ),
-      body: CustomScrollView(
-        controller: _controller,
-        slivers: <Widget>[
-          SliverAppBar(
-            // expandedHeight: 80,
-            elevation: 0,
-            leading: Container(
-              color: Colors.transparent,
+      body: CustomScrollView(controller: _controller, slivers: <Widget>[
+        SliverAppBar(
+          // expandedHeight: 80,
+          elevation: 0,
+          leading: Container(
+            color: Colors.transparent,
+          ),
+          backgroundColor: Colors.transparent,
+          flexibleSpace: Padding(
+            padding: EdgeInsets.only(
+              left: 10,
             ),
-            backgroundColor: Colors.transparent,
-            flexibleSpace: Padding(
-              padding: EdgeInsets.only(
-                left: 10,
+            child: Text(
+              '时间线',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
               ),
-              child: Text(
-                '时间线',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
+            ),
+          ),
+        ),
+        SliverPersistentHeader(
+          delegate: MyDelegate(),
+          pinned: true,
+        ),
+        SliverFixedExtentList(
+          itemExtent: 100,
+          delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              return Dismissible(
+                key: UniqueKey(),  // 不能使用index做key,因为删除后index做的key会重复
+                background: Container(
+                  // color: Colors.red,
+                  alignment: Alignment.centerRight,
+                  child:Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                   children: [
+                     Container(
+                       height: 100,
+                       width: 100,
+                       color: Colors.black26,
+                       child: Icon(Icons.more_horiz,color: Colors.white,),
+                     ),
+                     Container(
+                       height: 100,
+                       width: 100,
+                       color: GZColors.primary,
+                         child: Icon(Icons.edit,color: Colors.white,),
+                     ),
+                   ],
+                  )
+                  // child: Text('删除',style:TextStyle(color: Colors.white)),
                 ),
-              ),
-            ),
+                onDismissed: (direction) {
+                  listLength--;
+                  setState(() {});
+                  // 返回的值是一个future
+                  Navigator.pushNamed(context, '/time_line/time_line_diary');
+                },
+                child: _listWidgetItem(),
+              );
+            },
+            childCount: listLength, //50个列表项
           ),
-          SliverPersistentHeader(
-            delegate: DateLineDelegate(),
-            pinned: true,
-          ),
-          SliverFixedExtentList(
-            key: UniqueKey(),
-            itemExtent: 100,
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return Slidable(
-                  actionPane: SlidableScrollActionPane(), //滑出选项的面板 动画
-                  actionExtentRatio: 0.16,
-                  child: ListDiaryWidgetItem(_diaryList[index], _diaryList[index]['date'], key: UniqueKey()),
-                  secondaryActions: <Widget>[
-                    //右侧按钮列表
-                    IconSlideAction(
-                      // caption: 'More',
-                      color: Colors.black26,
-                      icon: Icons.more_horiz,
-                      closeOnTap: false,
-                      onTap: () {
-                        selId = _diaryList[index]['id'];
-                        _editDiaryInfo(context);
-                      },
-                    ),
-                    IconSlideAction(
-                      // caption: 'Delete',
-                      color: GZColors.primary,
-                      icon: Icons.edit,
-                      closeOnTap: false,
-                      onTap: () {
-                        Navigator.pushNamed(context, '/time_line/time_line_diary', arguments: {'date': _diaryList[index]['date']}).then((value) {
-                          setState(() {});
-                        });
-                      },
-                    ),
-                  ],
-                );
-              },
-              childCount: _diaryList.length,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ]),
     );
   }
 
-  void _editDiary(BuildContext context) {
+  void _editDiary1(BuildContext context) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -163,7 +158,7 @@ class _TimeLineState extends State<TimeLine> {
           child: Container(
             margin: EdgeInsets.all(10),
             padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14)),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(14))),
             child: Stack(
               children: [
                 Column(
@@ -171,7 +166,7 @@ class _TimeLineState extends State<TimeLine> {
                     CommonWidget.line(),
                     Padding(padding: EdgeInsets.only(top: 10)),
                     _title(),
-                    Expanded(child: SortList()),
+                    Expanded(child: _sortWidget()),
                   ],
                 ),
                 Positioned(
@@ -184,117 +179,10 @@ class _TimeLineState extends State<TimeLine> {
                         textAlign: TextAlign.center,
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                       ),
-                      onTap: () => {Navigator.of(context).pop()},
+                      onTap: () => {print('121')},
                     ),
                   ),
                 )
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  void _editDiaryInfo(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true, // 全屏幕展示
-      builder: (BuildContext context) {
-        return FractionallySizedBox(
-          heightFactor: 0.9,
-          child: Container(
-            margin: EdgeInsets.all(10),
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14)),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: ListTile(
-                    leading: Icon(Icons.edit),
-                    title: Text('在日记本中显示'),
-                    trailing: Icon(Icons.keyboard_arrow_right),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {},
-                  child: ListTile(
-                    leading: Icon(Icons.tag_faces),
-                    title: Text('编辑贴纸'),
-                    trailing: Icon(Icons.keyboard_arrow_right),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {},
-                  child: ListTile(
-                    leading: Transform.rotate(
-                      angle: 10.0,
-                      child: Icon(Icons.label),
-                    ),
-                    title: Text('编辑标签'),
-                    trailing: Icon(Icons.keyboard_arrow_right),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {},
-                  child: ListTile(
-                    leading: Transform.rotate(
-                      angle: 0.0,
-                      child: Icon(Icons.upgrade),
-                    ),
-                    title: Text('导出'),
-                    trailing: Icon(Icons.keyboard_arrow_right),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {},
-                  child: ListTile(
-                    leading: Icon(Icons.copy),
-                    title: Text('拷贝'),
-                    trailing: Icon(Icons.keyboard_arrow_right),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {},
-                  child: ListTile(
-                    leading: Icon(Icons.add_to_photos),
-                    title: Text('拷贝到...'),
-                    trailing: Icon(Icons.keyboard_arrow_right),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {},
-                  child: ListTile(
-                    leading: Icon(Icons.move_to_inbox),
-                    title: Text('拷贝到...'),
-                    trailing: Icon(Icons.keyboard_arrow_right),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () async {
-                    Navigator.of(context).pop(true);
-                    bool delete = await showDeleteConfirmDialog();
-                    if (delete == null) {
-                      print("取消删除");
-                    } else {
-                      // print("已确认删除");
-                      diarySql.delete('id', selId).then((value) {
-                        diarySql.rawQuery('SELECT * from diary group by date', null).then((value) {
-                          _diaryList = value;
-                          setState(() {});
-                        });
-                      });
-                    }
-                  },
-                  child: ListTile(
-                    leading: Icon(Icons.delete),
-                    title: Text('删除'),
-                    trailing: Icon(Icons.keyboard_arrow_right),
-                  ),
-                ),
               ],
             ),
           ),
@@ -325,35 +213,129 @@ class _TimeLineState extends State<TimeLine> {
     );
   }
 
-// 弹出对话框
-  Future<bool> showDeleteConfirmDialog() {
-    return showDialog<bool>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Center(child: Text("您真的要删除吗？")),
-          content: Text("此操作无法撤销"),
-          actions: <Widget>[
-            TextButton(
-              child: Text(
-                "取消",
-                style: TextStyle(color: GZColors.primary),
+  Widget _sortWidget() {
+    return Container(
+      child: ListView.separated(
+        itemBuilder: (BuildContext context, int index) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                sortList[index]['name'],
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
-              onPressed: () => Navigator.of(context).pop(), // 关闭对话框
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    sortList[index]['sel'],
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: GZColors.primary),
+                  ),
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: BoxConstraints(), // 取消约束
+                    icon: Icon(Icons.keyboard_arrow_right),
+                    onPressed: () {
+                      print('121');
+                    },
+                  )
+                ],
+              ),
+            ],
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return CommonWidget.divider;
+        },
+        itemCount: sortList.length,
+      ),
+    );
+  }
+
+
+  //  列表widget
+  Widget _listWidgetItem (){
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(width: 1, color: Colors.black12)),
+      ),
+      margin: EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(vertical: 10),
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        child: Row(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(right: 20),
+              child: Column(
+                children: [
+                  Text(
+                    '28',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text('8月')
+                ],
+              ),
             ),
-            TextButton(
-              child: Text(
-                "删除",
-                style: TextStyle(color: Colors.red),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 10),
+                    child: Text(
+                      '大张伟，娱乐圈的救护车，综艺节目共享嘉宾，擅长各种救场',
+                      maxLines: 2,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                  Text(
+                    '日记本',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(color: Colors.black26),
+                  )
+                ],
               ),
-              onPressed: () {
-                //关闭对话框并返回true
-                Navigator.of(context).pop(true);
-              },
             ),
           ],
-        );
-      },
+        ),
+        onTap: () {
+          Navigator.pushNamed(context, '/time_line/time_line_diary');
+        },
+      ),
     );
+  }
+
+}
+
+class MyDelegate extends SliverPersistentHeaderDelegate {
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      height: 48,
+      padding: EdgeInsets.only(left: 15, right: 15),
+      color: Colors.white,
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          '2020',
+          style: TextStyle(color: Colors.black38, fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => 30;
+
+  @override
+  double get minExtent => 30;
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
+    return true;
   }
 }

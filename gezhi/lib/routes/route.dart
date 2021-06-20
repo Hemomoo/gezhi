@@ -24,7 +24,6 @@ import 'package:gezhi/pages/time_line/revised_diary.dart';
 import 'package:gezhi/pages/me/batch_export.dart';
 import 'package:gezhi/pages/me/storage.dart';
 import 'package:gezhi/pages/me/website.dart';
-import 'package:gezhi/pages/time_line/revised_diary.dart';
 
 //搜索
 import 'package:gezhi/pages/search/img_list.dart';
@@ -52,8 +51,10 @@ final routes = {
   '/me/edit_model_library': (BuildContext context, {arguments}) => EditModelLibrary(), // 修改模板
 
   /* 时间线 */
-  '/time_line/time_line_diary': (BuildContext context, {arguments}) => TimeLineDiary(arguments: arguments),
-  '/time_line/revised_diary': (BuildContext context, {arguments}) => RevisedDiary(arguments: arguments),
+  '/time_line/time_line_diary': (BuildContext context, {arguments}) => TimeLineDiary(),
+  '/time_line/revised_diary': (BuildContext context, {arguments}) => RevisedDiary(
+        arguments: arguments,
+      ),
 
   //搜索
   '/search/img_list': (BuildContext context, {arguments}) => ImgList(),
@@ -65,10 +66,6 @@ final routes = {
 var onGenerateRoute = (RouteSettings settings) {
   // 获取声明的路由页面函数
   var pageBuilder = routes[settings.name];
-  print(settings);
-  print('跳转到那个页面${routes[settings.name]}');
-  print('携带的参数>>>>>${settings}');
-  // print('携带的参数${routes[settings.arguments]}');
   if (pageBuilder != null) {
     if (settings.arguments != null) {
       // 创建路由页面并携带参数
@@ -77,5 +74,5 @@ var onGenerateRoute = (RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => pageBuilder(context));
     }
   }
-  return MaterialPageRoute(builder: (context) => IndexPage({'currentIndex': 0}));
+  return MaterialPageRoute(builder: (context) => IndexPage({'currentIndex':0}));
 };

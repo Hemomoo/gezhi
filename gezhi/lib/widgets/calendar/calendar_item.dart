@@ -54,17 +54,19 @@ class CalendarItem extends StatelessWidget {
                   );
                 }),
           ),
+
         ],
       ),
     );
   }
 
-  void show(context) {
-    // showDatePicker(
-    //   context: context,
-    //   initialDate: DateTime(2020),
-    //   firstDate: DateTime(1998),
-    //   lastDate: DateTime(2029),
-    // );
+  void show(context){
+    showDatePicker(
+      context: context,
+      initialDate: DateTime(2020),
+      firstDate: DateTime(1998),
+      lastDate: DateTime(2029),
+    );
   }
+
 }
