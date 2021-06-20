@@ -3,8 +3,8 @@
       <div class="grid-box">
         <template v-for="(item, index) in 9">
           <div class="grid-box-item">
-            <p class="tit tac">tit{{ itemn }}</p>
-            <p class="diary">tit{{ itemn }}</p>
+            <p class="tit tac">tit{{ item }}</p>
+            <p class="diary">tit{{ item }}</p>
           </div>
         </template>
       </div>

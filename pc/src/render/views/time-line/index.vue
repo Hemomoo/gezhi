@@ -13,16 +13,7 @@
 
       <div class="tit-list">
         <template v-for="(item, index) in 100" :key="index">
-          <div
-            :class="[
-              'tit-item',
-              'f',
-              'fjb',
-              'pointer',
-              { active: +item === +mouseItemId },
-            ]"
-            @mouseover="mouseOver(item)"
-          >
+          <div :class="['tit-item', 'f', 'fjb', 'pointer', { active: +item === +mouseItemId }]" @mouseover="mouseOver(item)">
             <p>测试数据{{ item }}</p>
             <p>{{ index }}</p>
           </div>
@@ -30,18 +21,10 @@
       </div>
     </div>
     <div class="right">
-      <swiper
-        :slides-per-view="3"
-        :space-between="50"
-         navigation
-        :scrollbar="{ draggable: true }"
-        @swiper="onSwiper"
-        @slideChange="onSlideChange"
-      >
-      <template v-for="(item,index) in 10" :key="index">
-         <swiper-slide ><Grid></Grid></swiper-slide>
-      </template>
-       
+      <swiper   :mousewheel='mousewheel' @swiper="onSwiper" @slideChange="onSlideChange">
+        <template v-for="(item, index) in 10" :key="index">
+          <swiper-slide><Grid></Grid></swiper-slide>
+        </template>
       </swiper>
     </div>
   </div>
@@ -51,13 +34,23 @@
 import { SearchOutline } from "@vicons/ionicons5";
 import Grid from "./components/Grid.vue";
 import { ref } from "vue";
+import "swiper/swiper.scss";
 import { Swiper, SwiperSlide } from "swiper/vue";
-// import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
-import 'swiper/swiper.scss';
+import SwiperCore, { Mousewheel,Controller, A11y,Autoplay } from "swiper";
+SwiperCore.use([Mousewheel]);
+
+
+
 export default {
   name: "",
   data() {
-    return {};
+    return {
+       mousewheel: {
+         mousewheel: true,
+         thresholdTime:600,
+       },
+     
+    };
   },
   components: {
     SearchOutline,
@@ -71,32 +64,30 @@ export default {
       mouseItemId.value = id;
     };
 
-    const  onSwiper=(swiper) =>{
-        console.log(swiper);
-      };
-     const onSlideChange =()=> {
-        console.log('slide change');
-      };
-
+    const onSwiper = (swiper) => {
+      console.log(swiper);
+    };
+    const onSlideChange = () => {
+      console.log("slide change");
+    };
 
     return {
       mouseItemId,
       mouseOver,
       onSwiper,
-      onSlideChange
+      onSlideChange,
     };
   },
 };
 </script>
 
 <style>
-.swiper-slide{
+.swiper-slide {
   width: 100% !important;
 }
 </style>
 
 <style lang="scss" scpoed>
-
 .time-line {
   .left {
     width: 240px;
@@ -118,6 +109,7 @@ export default {
       height: calc(100vh - 74px);
       overflow: scroll;
       padding: 0 10px;
+      width: 240px;
       .tit-item {
         height: 40px;
         line-height: 40px;
