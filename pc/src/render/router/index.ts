@@ -35,7 +35,7 @@ const routes = [
       name: 'time-line',
       component: () => import('../../render/views/time-line/index.vue')
     }],
-  }, 
+  },
   {
     path: '/diary',
     component: Layout,
@@ -43,11 +43,11 @@ const routes = [
     children: [{
       path: '/diary',
       name: 'diary',
-      component: () => import('../../render/views/diary/index.vue')
-    },{
-      path:"/edit-diary",
-      name:'edit-diary',
-      component:()=> import("@/views/views/diary/edit-diary.vue")
+      component: () => import('@/views/diary/index.vue')
+    }, {
+      path: "/edit-diary",
+      name: 'edit-diary',
+      component: () => import("@/views/diary/edit-diary.vue")
     }],
   }
 ]

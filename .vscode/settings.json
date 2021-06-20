@@ -1,6 +1,4 @@
 {
-    "path-intellisense.mappings": {
-        "@": "${workspaceRoot}/src"
-    },
+    "path-intellisense.mappings": {       "@": "${workspaceRoot}/src"    },
     "vetur.validation.template": false
 }

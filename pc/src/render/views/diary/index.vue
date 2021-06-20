@@ -1,7 +1,9 @@
 <template>
   <div class="diary">
-    <template v-for="(item, index) in 10" :key="index">
-      <div class="diary-item" :to="">{{ item }}</div>
+    <template v-for="(item, index) in diaryList" :key="index">
+        <router-link class="diary-item" to="/edit-diary" tag="div">
+          <div >{{ item }}</div>
+        </router-link>
     </template>
   </div>
 </template>
@@ -45,17 +47,17 @@ export default {
         id: "23",
         content: "內容1",
       },
-       {
+      {
         tit: "tit1",
         id: "23",
         content: "內容1",
       },
-       {
+      {
         tit: "tit1",
         id: "23",
         content: "內容1",
       },
-       {
+      {
         tit: "tit1",
         id: "23",
         content: "內容1",
