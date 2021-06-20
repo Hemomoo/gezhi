@@ -21,9 +21,11 @@
       </div>
     </div>
     <div class="right">
-      <swiper   :mousewheel='mousewheel' @swiper="onSwiper" @slideChange="onSlideChange">
-        <template v-for="(item, index) in 10" :key="index">
-          <swiper-slide><Grid></Grid></swiper-slide>
+      <swiper :mousewheel='mousewheel' @swiper="onSwiper" @slideChangeTransitionEnd="onSlideChange">
+        <template v-for="(item, index) in 200" :key="index">
+          <swiper-slide>
+            <Grid></Grid>
+          </swiper-slide>
         </template>
       </swiper>
     </div>
@@ -46,7 +48,7 @@ export default {
   data() {
     return {
        mousewheel: {
-         mousewheel: true,
+         mousewheel: true, // 是不是可以鼠标滑动
          thresholdTime:600,
        },
      
@@ -67,8 +69,10 @@ export default {
     const onSwiper = (swiper) => {
       console.log(swiper);
     };
-    const onSlideChange = () => {
-      console.log("slide change");
+    const onSlideChange = (swiper:Swiper) => {
+      mouseItemId.value = swiper.activeIndex+1
+      console.log('swiper.activeIndex: ', swiper.activeIndex);
+      console.log('swiper: ', swiper);
     };
 
     return {
@@ -124,6 +128,7 @@ export default {
   .right {
     flex: 1;
     height: 100vh;
+    width: calc(100vw - 480px);
   }
 }
 </style>
