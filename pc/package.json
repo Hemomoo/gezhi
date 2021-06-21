@@ -8,6 +8,7 @@
     "dev:ele": "npx electron  src/main/index.ts"
   },
   "dependencies": {
+    "moment": "^2.29.1",
     "sass": "^1.34.1",
     "vue": "^3.0.5",
     "vue-router": "^4.0.8"

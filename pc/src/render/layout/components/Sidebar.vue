@@ -98,7 +98,8 @@ export default {
 
 <style lange ='scss' scpoed>
 .sidebar {
-  width: 20vw;
+  box-sizing: border-box;
+  width: 240px;
   height: 100vh;
   padding: 0 20px;
   background: rgb(238, 238, 238);

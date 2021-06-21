@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="right">
-      <swiper :mousewheel='mousewheel' @swiper="onSwiper" @slideChangeTransitionEnd="onSlideChange">
+      <swiper :mousewheel="mousewheel" @swiper="onSwiper" @slideChangeTransitionEnd="onSlideChange">
         <template v-for="(item, index) in 200" :key="index">
           <swiper-slide>
             <Grid></Grid>
@@ -38,20 +38,17 @@ import Grid from "./components/Grid.vue";
 import { ref } from "vue";
 import "swiper/swiper.scss";
 import { Swiper, SwiperSlide } from "swiper/vue";
-import SwiperCore, { Mousewheel,Controller, A11y,Autoplay } from "swiper";
+import SwiperCore, { Mousewheel, Controller, A11y, Autoplay } from "swiper";
 SwiperCore.use([Mousewheel]);
-
-
 
 export default {
   name: "",
   data() {
     return {
-       mousewheel: {
-         mousewheel: true, // 是不是可以鼠标滑动
-         thresholdTime:600,
-       },
-     
+      mousewheel: {
+        mousewheel: true, // 是不是可以鼠标滑动
+        thresholdTime: 600,
+      },
     };
   },
   components: {
@@ -69,10 +66,10 @@ export default {
     const onSwiper = (swiper) => {
       console.log(swiper);
     };
-    const onSlideChange = (swiper:Swiper) => {
-      mouseItemId.value = swiper.activeIndex+1
-      console.log('swiper.activeIndex: ', swiper.activeIndex);
-      console.log('swiper: ', swiper);
+    const onSlideChange = (swiper: Swiper) => {
+      mouseItemId.value = swiper.activeIndex + 1;
+      console.log("swiper.activeIndex: ", swiper.activeIndex);
+      console.log("swiper: ", swiper);
     };
 
     return {
@@ -95,8 +92,10 @@ export default {
 .time-line {
   .left {
     width: 240px;
+    box-sizing: border-box;
     height: 100vh;
     position: relative;
+    box-sizing: border-box;
     &::after {
       position: absolute;
       top: -40px;
@@ -106,14 +105,13 @@ export default {
       width: 1px;
       background: gray;
     }
-  }
-  .left {
     .tit-list {
       box-sizing: border-box;
       height: calc(100vh - 74px);
       overflow: scroll;
       padding: 0 10px;
       width: 240px;
+      box-sizing: border-box;
       .tit-item {
         height: 40px;
         line-height: 40px;
