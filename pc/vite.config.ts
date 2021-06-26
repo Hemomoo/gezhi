@@ -16,6 +16,9 @@ export default defineConfig({
       "@": resolve("src/render"),
     },
   },
+  optimizeDeps: {
+    include: ['@kangc/v-md-editor/lib/theme/vuepress.js'],
+  },
   css: {
     // css预处理器
     preprocessorOptions: {
