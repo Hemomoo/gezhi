@@ -13,15 +13,15 @@ const routes = [
       component: () => import('../../render/views/today/index.vue')
     }],
   },
-  // 标题
+  // 日历
   {
-    path: '/tit',
+    path: '/calendar',
     component: Layout,
-    redirect: '/tit',
+    redirect: '/calendar',
     children: [{
-      path: '/tit',
-      name: 'tit',
-      component: () => import('../../render/views/tit/index.vue')
+      path: '/calendar',
+      name: 'calendar',
+      component: () => import('@/views/calendar/index.vue')
     }]
   },
   // 资源库

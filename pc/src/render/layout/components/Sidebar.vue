@@ -61,13 +61,7 @@ export default {
         icon: "",
         id: 3,
         tit: "日历",
-        link: "today",
-      },
-      {
-        icon: "",
-        id: 4,
-        tit: "标题",
-        link: "tit",
+        link: "calendar",
       },
       {
         icon: "",
