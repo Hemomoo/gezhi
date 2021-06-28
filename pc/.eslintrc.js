@@ -9,8 +9,8 @@ module.exports = {
     browser: true
   },
   extends: [
-    'plugin:vue/essential',
-    '@vue/standard'
+    // 'plugin:vue/essential',
+    // '@vue/standard'
   ],
   parserOptions: {
     sourceType: 'module',
