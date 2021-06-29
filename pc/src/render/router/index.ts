@@ -10,18 +10,18 @@ const routes = [
     children: [{
       path: '/today',
       name: 'today',
-      component: () => import('../../render/views/today/index.vue')
+      component: () => import('@/views/today/index.vue')
     }],
   },
   // 标题
   {
-    path: '/tit',
+    path: '/calendar',
     component: Layout,
-    redirect: '/tit',
+    redirect: '/calendar',
     children: [{
-      path: '/tit',
-      name: 'tit',
-      component: () => import('../../render/views/tit/index.vue')
+      path: '/calendar',
+      name: 'calendar',
+      component: () => import('@/views/calendar/index.vue')
     }]
   },
   // 资源库
@@ -33,7 +33,7 @@ const routes = [
     children: [{
       path: '/time-line',
       name: 'time-line',
-      component: () => import('../../render/views/time-line/index.vue')
+      component: () => import('@/views/time-line/index.vue')
     }],
   },
   {

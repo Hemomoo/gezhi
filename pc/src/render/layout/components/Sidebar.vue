@@ -61,7 +61,7 @@ export default {
         icon: "",
         id: 3,
         tit: "日历",
-        link: "today",
+        link: "calendar",
       },
       {
         icon: "",
