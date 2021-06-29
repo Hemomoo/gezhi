@@ -91,12 +91,12 @@ export default {
     }
   },
   methods: {
-    scrollToDate(date) {
-      const month = date.getMonth()
-      const year = date.getFullYear()
+    scrollToDate(date:Date) {
+      const month:number = date.getMonth()
+      const year:number = date.getFullYear()
       this.scrollToMonth(year, month)
     },
-    scrollToMonth(year: String, month: String) {
+    scrollToMonth(year: number, month: number) {
       const headerHeight = this.headerHeight
       const offset = this.$el.querySelector(`.month[data-month="${month}"][data-year="${year}"]`).offsetTop
       this.$el.querySelector('.calendar-container').scrollTop = offset - headerHeight
