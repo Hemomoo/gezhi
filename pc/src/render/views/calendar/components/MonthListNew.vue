@@ -39,7 +39,7 @@ export default defineComponent ({
       required: true
     },
     firstDay: {
-      type: Number,
+      type: Number as PropType<number>,
       required: true
     },
     onSelect: {

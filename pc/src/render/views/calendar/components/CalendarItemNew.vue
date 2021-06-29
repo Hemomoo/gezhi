@@ -18,8 +18,7 @@
 
 <script lang="ts">
 import MonthList from './MonthListNew.vue'
-import { reactive, toRefs,ref, defineComponent, PropType, computed } from "vue"
-import { months } from '_moment@2.29.1@moment'
+import { reactive, toRefs, ref, defineComponent, PropType, computed } from "vue"
 //定义ts数据类型
 interface dataProps {
 
@@ -47,7 +46,7 @@ export default defineComponent({
         },
         firstDay: {
             type: Number as PropType<number>,
-            default: 1// Monday
+            default: 1
         },
         onSelect: {
             type: Function as PropType<() => void>,
@@ -61,6 +60,8 @@ export default defineComponent({
     //这里存放数据
     setup(props) {
         const data = reactive({})
+        const currentYear = ref<number>(new Date().getFullYear())
+    
 
         function scrollToDate(date: Date) {
             const month: number = date.getMonth()
@@ -68,55 +69,61 @@ export default defineComponent({
             scrollToMonth(year, month)
         }
 
+
         function scrollToMonth(year: number, month: number) {
-            const headerHeight = this.headerHeight
+            const headerHeight = headerHeight.value
             const offset = this.$el.querySelector(`.month[data-month="${month}"][data-year="${year}"]`).offsetTop
             this.$el.querySelector('.calendar-container').scrollTop = offset - headerHeight
         }
 
 
-        function handleScroll() {
-            const headerHeight = headerHeight.value
-            const scrollTop = this.$el.querySelector('.calendar-container').scrollTop
-            const years = this.$el.querySelectorAll('.year')
-            for (let i = 0; i < years.length; i++) {
-                const year = years[i]
-                if (scrollTop <= year.offsetTop - (headerHeight - 10)) {
-                    if (i !== 0) { this.currentYear = Number(year.innerHTML) - 1 }
-                    return
-                }
-            }
-            this.currentYear = this.max.getFullYear()
-        }
+        // function handleScroll() {
+        //     const headerHeight = headerHeight.value
+        //     const scrollTop = this.$el.querySelector('.calendar-container').scrollTop
+        //     const years = this.$el.querySelectorAll('.year')
+        //     for (let i = 0; i < years.length; i++) {
+        //         const year = years[i]
+        //         if (scrollTop <= year.offsetTop - (headerHeight - 10)) {
+        //             if (i !== 0) { this.currentYear = Number(year.innerHTML) - 1 }
+        //             return
+        //         }
+        //     }
+        //     currentYear = props.max.getFullYear()
+        // }
 
-        const calendarContainer = ref<HTMLElement|null>(null);    
+        const calendarContainer = ref<HTMLElement | null>(null);
         // 计算属性
         const headerHeight = computed(() => {
             return calendarContainer.value?.getBoundingClientRect().height
         })
 
-        const months = computed(() => {
-            let month: number = props.min.getMonth()
-            let year: number = props.min.getFullYear()
-            let currentDate = props.min
-            let displayedMonths = []
-            while (currentDate.getTime() < props.max.getTime()) {
-                displayedMonths.push({ year: year, month: month })
-                month += 1
-                if (month >= 12) {
-                    year += 1
-                    month -= 12
-                }
-                currentDate = new Date(year, month)
-            }
-            console.log(displayedMonths);
-            return displayedMonths
-        })
+        // const months = computed(() => {
+        //     let month: number = props.min.getMonth()
+        //     let year: number = props.min.getFullYear()
+        //     let currentDate = props.min
+        //     let displayedMonths = []
+        //     while (currentDate.getTime() < props.max.getTime()) {
+        //         displayedMonths.push({ year: year, month: month })
+        //         month += 1
+        //         if (month >= 12) {
+        //             year += 1
+        //             month -= 12
+        //         }
+        //         currentDate = new Date(year, month)
+        //     }
+        //     console.log(displayedMonths);
+        //     return displayedMonths
+        // })
 
         return {
             data,
-            handleScroll,
-            
+            // handleScroll,
+            headerHeight,
+            // months,
+            currentYear,
+            scrollToDate,
+
+
         }
     }
 })
