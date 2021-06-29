@@ -4,7 +4,7 @@
   </section>
 </template>
 
-<script>
+<script lang='ts'>
 export default {
   name: "Main",
   data() {
@@ -17,6 +17,5 @@ export default {
 <style lange ='scss' scpoed>
 .main {
   width: 80vw;
- 
 }
 </style>

@@ -1,54 +1,34 @@
 <template>
- <Calendar :events="events"></Calendar>
+  <div class="">
+    <CalendarItem></CalendarItem>
+  </div>
 </template>
 
-<script>
-import Calendar from '@/views/calendar/components/Calendar-slider.vue'
- export default {
-   name:'',
-   data () {
-     return {
-            events: [
-                {
-                    date: '2018-11-22',
-                    number: 100
-                },
-                {
-                    date: '2018-11-25',
-                    number: 2
-                }
-            ]
-        }
-   },
-   components: {
-     Calendar
-   },
-   methods: {
-        monthChangedHandle (currentMonth) {
-            setTimeout(()=>{
-                this.events = [
-                    {
-                        date: '2018-12-22',
-                        number: 2
-                    },
-                    {
-                        date: '2020-12-26',
-                        number: 2
-                    }
-                ]
-            }, 100)
-        },
+<script lang="ts">
+//这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
+//例如：import 《组件名称》 from '《组件路径》';
+import CalendarItem from '../calendar/components/CalendarItem.vue'
+import {reactive,toRefs,defineComponent} from "vue"
+//定义ts数据类型
+ interface dataProps{
 
-        dateClickHandle (date) {
-            console.log(date);
-        }
-
-
-    }
  }
+
+export default defineComponent({
+  name:"Calendar",
+//import引入的组件需要注入到对象中才能使用
+  components: {
+    CalendarItem
+  },
+//这里存放数据
+  setup() {
+   const data = reactive({})
+    return {
+      data
+    }
+  }
+}) 
 </script>
 
-<style lange ='scss' scpoed>
-
- 
+<style lang="scss" scoped>
 </style>

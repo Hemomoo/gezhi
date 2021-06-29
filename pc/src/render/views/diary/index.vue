@@ -15,22 +15,33 @@
 </template>
 
 <script lang="ts">
-//这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
-//例如：import 《组件名称》 from '《组件路径》';
-import { reactive, toRefs } from "vue";
+import { reactive, toRefs, ref,defineComponent} from "vue";
 import  moment  from "moment";
-import { Today } from '@vicons/ionicons5';
 //定义ts数据类型
 interface dataProps {}
-export default {
+
+
+interface Day {
+  tit:string,
+  id:string,
+  content:string
+}
+
+// reactiveDate 接口
+interface ReactiveData {
+
+}
+
+
+export default defineComponent ({
   name: "Diary",
   //import引入的组件需要注入到对象中才能使用
   components: {},
   //这里存放数据
   setup() {
     const data = reactive({});
-    const today = moment().format('YYYY-MM-DD'); 
-    const diaryList = [
+    const today:string = moment().format('YYYY-MM-DD'); 
+    const diaryList:Array<Day> = [
       {
         tit: "tit1",
         id: "23",
@@ -78,7 +89,7 @@ export default {
       today
     };
   },
-};
+}) 
 </script>
 
 <style lang="scss" scoped>
@@ -94,13 +105,6 @@ export default {
     &:hover {
       background: gray;
     }
-    &:nth-child(5):hover {
-      // background: white;
-    }
   }
 }
-
-// .diary-item:hover {
-//   background: gray;
-// }
 </style>

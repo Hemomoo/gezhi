@@ -1,11 +1,11 @@
 <template>
-  <div class="f ">
+  <div class="f">
     <Sidebar></Sidebar>
     <Main></Main>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Main from "./components/Main.vue";
 import Sidebar from "./components/Sidebar.vue";
 export default {

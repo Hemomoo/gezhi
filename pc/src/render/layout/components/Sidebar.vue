@@ -19,10 +19,10 @@
         </template>
         <div></div>
         <p>日记本</p>
-        <router-link to="/diary" >
+        <router-link to="/diary">
           <div @click="selNav(100)" :class="['pointer', { active: 100 === +activeId }]">
             <!-- <i>{{ item.icon }}</i> -->
-            <p>日记本</p> 
+            <p>日记本</p>
           </div>
         </router-link>
       </nav>
@@ -30,11 +30,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { NAvatar } from "naive-ui";
-import { ref } from "vue";
+import { ref,defineComponent  } from "vue";
 
-export default {
+export default defineComponent( {
   name: "Sidebar",
   data() {
     return {};
@@ -65,12 +65,6 @@ export default {
       },
       {
         icon: "",
-        id: 4,
-        tit: "标题",
-        link: "tit",
-      },
-      {
-        icon: "",
         id: 5,
         tit: "附近",
         link: "today",
@@ -83,7 +77,7 @@ export default {
       },
     ];
 
-    const selNav = (id) => {
+    const selNav = (id:number) => {
       activeId.value = id;
     };
 
@@ -93,7 +87,7 @@ export default {
       selNav,
     };
   },
-};
+})
 </script>
 
 <style lange ='scss' scpoed>
