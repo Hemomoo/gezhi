@@ -15,9 +15,10 @@
     </div>
   </div>
 </template>
-
 <script lang="ts">
-import MonthList from './monthList.vue'
+import MonthList from './monthListNew.vue'
+
+
 export default {
   name: "CalendarItem",
   components: {
@@ -45,6 +46,7 @@ export default {
         }
         currentDate = new Date(year, month)
       }
+      console.log(displayedMonths);
       return displayedMonths
     },
     headerHeight() {
@@ -68,13 +70,13 @@ export default {
     min: {
       type: Date,
       default: function(): Date {
-        return new Date(1980, 0, 1)
+        return new Date(2010, 0, 1)
       }
     },
     max: {
       type: Date,
       default: function(): Date {
-        return new Date(2050, 11, 31)
+        return new Date(2020, 11, 31)
       }
     },
     firstDay: {

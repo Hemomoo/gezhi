@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { reactive, toRefs, defineComponent} from "vue";
+import { reactive, toRefs, ref,defineComponent} from "vue";
 import  moment  from "moment";
 //定义ts数据类型
 interface dataProps {}
