@@ -72,6 +72,7 @@ export default defineComponent({
             scrollToMonth(year, month)
         }
 
+
         function scrollToMonth(year: number, month: number) {
             const headerHeight: any = data.headerHeight
             const offset = monthList.querySelector(`.month[data-month="${month}"][data-year="${year}"]`).offsetTop

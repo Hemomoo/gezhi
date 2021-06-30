@@ -10,7 +10,7 @@ const routes = [
     children: [{
       path: '/today',
       name: 'today',
-      component: () => import('../../render/views/today/index.vue')
+      component: () => import('@/views/today/index.vue')
     }],
   },
   // 日历
@@ -33,7 +33,7 @@ const routes = [
     children: [{
       path: '/time-line',
       name: 'time-line',
-      component: () => import('../../render/views/time-line/index.vue')
+      component: () => import('@/views/time-line/index.vue')
     }],
   },
   {

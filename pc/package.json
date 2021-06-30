@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@kangc/v-md-editor": "^2.3.5",
+    "element-plus": "^1.0.2-beta.53",
     "mavon-editor": "^2.9.1",
     "moment": "^2.29.1",
     "sass": "^1.34.1",

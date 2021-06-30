@@ -8,6 +8,8 @@ import VMdEditor from '@kangc/v-md-editor';
 import '@kangc/v-md-editor/lib/style/base-editor.css';
 import githubTheme from '@kangc/v-md-editor/lib/theme/github.js';
 import '@kangc/v-md-editor/lib/theme/style/github.css';
+import 'element-plus/lib/theme-chalk/index.css';
+import ElementPlus from 'element-plus';
 
 
 import hljs from 'highlight.js';
@@ -17,5 +19,5 @@ VMdEditor.use(githubTheme, {
 });
 
 
-export const app = createApp(App).use(router).use(naive).use(VMdEditor).mount('#app')
+export const app = createApp(App).use(router).use(naive).use(VMdEditor).use(ElementPlus).mount('#app')
 
