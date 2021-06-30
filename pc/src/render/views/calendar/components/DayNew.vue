@@ -20,7 +20,7 @@ export default defineComponent({
     props: {
         day: {
             type: Date as PropType<Date>,
-            required: true
+            required: true,
         },
         onSelect: {
             type: Function as PropType<(day: any) => void>,

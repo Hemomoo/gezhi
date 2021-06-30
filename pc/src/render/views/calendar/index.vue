@@ -7,7 +7,7 @@
 <script lang="ts">
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import CalendarItem from '../calendar/components/CalendarItem.vue'
+import CalendarItem from '../calendar/components/CalendarItemNew.vue'
 import {reactive,toRefs,defineComponent} from "vue"
 //定义ts数据类型
  interface dataProps{
