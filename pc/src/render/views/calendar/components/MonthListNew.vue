@@ -6,8 +6,6 @@
         :month="month.month"
         :year="month.year"
         :firstDay="firstDay"
-        :onSelect="onSelect"
-        :onDeselect="onDeselect"
         :selectedDates="selectedDates"
       ></Month>
     </template>
@@ -42,16 +40,9 @@ export default defineComponent ({
       type: Number as PropType<number>,
       required: true
     },
-    onSelect: {
-      type: Function as PropType<()=>void>,
-      required: true
-    },
-    onDeselect: {
-      type: Function as PropType<()=>void>,
-      required: true
-    },
+   
     selectedDates: {
-      type: Array,
+      type: Array as PropType<any[]>,
       required: true
     }
   },

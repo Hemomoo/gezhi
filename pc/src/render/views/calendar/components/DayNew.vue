@@ -22,14 +22,6 @@ export default defineComponent({
             type: Date as PropType<Date>,
             required: true,
         },
-        onSelect: {
-            type: Function as PropType<(day: any) => void>,
-            required: true
-        },
-        onDeselect: {
-            type: Function as PropType<(day: any) => void>,
-            required: true
-        },
         isSelected: {
             type: Boolean as PropType<boolean>,
             required: true
@@ -42,7 +34,7 @@ export default defineComponent({
 
         function handleClick(day: any) {
             selected.value = !selected.value
-            if (selected.value) { props.onSelect(day) } else { props.onDeselect(day) }
+           
         }
         
         // 计算属性会自动计算类型
