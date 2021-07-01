@@ -1,7 +1,8 @@
-$baseColor: #30bbff;
-$black: #333333;
-$gray: #656565;
-$eee: #eeeeee;
+
+
+:root{
+  --baseColor: #65c0cb;
+}
 
 body {
   height: 100%;
@@ -181,7 +182,7 @@ input[type="number"] {
 }
 
 .fjb {
-  
+  justify-content: space-between;
 }
 
 .fas {
@@ -401,19 +402,8 @@ input[type="number"] {
   font-weight: bold;
 }
 
-// 文字颜色
-.fred{
-  color: red;
-}
-
-.fgray {
-  color: $gray;
-}
-.fyellow {
-  color: $baseColor;
-}
-.fbase{
-  color:$baseColor ;
+.base-color{
+  color: var(--baseColor);
 }
 
 .c000{

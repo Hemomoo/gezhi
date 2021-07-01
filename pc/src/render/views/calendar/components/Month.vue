@@ -7,12 +7,7 @@
             </template>
         </div>
         <div class="week" v-for="week in weeks">
-            <Day
-                v-for="day in week"
-                :day="day"
-                :key="day.getTime()"
-                :isSelected="isSelected(day)"
-            />
+            <Day v-for="day in week" :day="day" :key="day.getTime()" :isSelected="isSelected(day)"  :isShowDay="isShowDay(day)" />
         </div>
     </div>
 </template>
@@ -108,16 +103,23 @@ export default defineComponent({
             return monthWeeks
         })
 
-        function isSelected(date: any) {
+        function isSelected(date: any):boolean {
             const isoDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
             return props.selectedDates.indexOf(isoDate) !== -1
+        }
+
+        // 是不是可以显示点击
+        function isShowDay(day:Date):boolean{
+            const month:number = day.getMonth()
+            return !(month === props.month) 
         }
 
         return {
             data,
             weekdays,
             weeks,
-            isSelected
+            isSelected,
+            isShowDay
         }
     }
 })
@@ -125,16 +127,16 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .week {
-  width: 100%;
+    width: 100%;
 }
 
 .month {
-  .month-name {
-    font-weight: bold;
-    margin-left: 20px;
-    padding-top: 15px;
-    margin-bottom: 5px;
-  }
+    .month-name {
+        font-weight: bold;
+        margin-left: 20px;
+        padding-top: 15px;
+        margin-bottom: 5px;
+    }
 }
 
 .week-days {
@@ -142,9 +144,9 @@ export default defineComponent({
     margin-bottom: 5px;
 
     .week-day {
-      display: inline-block;
-      width: 14.28571%;
-      text-align: center;
+        display: inline-block;
+        width: 14.28571%;
+        text-align: center;
     }
-  }
+}
 </style>

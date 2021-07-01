@@ -23,9 +23,7 @@ export default{
   components: {Main},
 //这里存放数据
   setup() {
-   const data = reactive({
-
-   })
+   const data = reactive({})
     return {
       data
     }

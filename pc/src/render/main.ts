@@ -10,10 +10,10 @@ import githubTheme from '@kangc/v-md-editor/lib/theme/github.js';
 import '@kangc/v-md-editor/lib/theme/style/github.css';
 import 'element-plus/lib/theme-chalk/index.css';
 import ElementPlus from 'element-plus';
+import {store,key } from '../render/store/index'
 
 
 
 
 
-
-export const app = createApp(App).use(router).use(naive).use(VMdEditor).use(ElementPlus).mount('#app')
+export const app = createApp(App).use(router).use(naive).use(VMdEditor).use(ElementPlus).use(store, key).mount('#app')

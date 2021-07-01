@@ -1,6 +1,6 @@
 <template>
     <div class="vue-infinite-calendar">
-        <div class="calendar-header">
+        <div class="calendar-header f fjb fac">
             <a href="javascript:void(0)" class="today-button" @click="scrollToDate(new Date())">今日</a>
             <div class="current-year">{{ currentYear }}</div>
         </div>
@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import MonthList from './MonthList.vue'
-import { reactive, toRefs, ref, defineComponent, PropType, computed } from "vue"
+import { reactive, toRefs, ref, defineComponent, PropType, computed,onMounted } from "vue"
 //定义ts数据类型
 interface dataProps {
 
@@ -54,6 +54,9 @@ export default defineComponent({
         const data = reactive({
            
         })
+         
+
+        
 
 
         function scrollToDate(date: Date):void {
@@ -61,6 +64,12 @@ export default defineComponent({
             const year: number = date.getFullYear()
             scrollToMonth(year, month)
         }
+
+        // 组件挂载后触发的钩子函数
+        onMounted(()=>{
+            //進入的時候就調用一次 
+            scrollToDate(new Date())
+        })    
 
 
         function scrollToMonth(year: number, month: number):void {

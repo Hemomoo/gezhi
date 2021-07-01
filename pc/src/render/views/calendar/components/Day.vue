@@ -1,8 +1,13 @@
 <template>
-    <n-popselect v-model:value="dayVal" :options="options" trigger="click">
+    <n-popselect
+        v-model:value="dayVal"
+        @update:value="change"
+        :options="options"
+        trigger="click"
+        placement="bottom"
+    >
         <div
-            :class="{ day: true, 'is-today': isToday, 'is-selected': selected }"
-            @click="handleClick(day)"
+            :class="{ day: true, 'base-color': isToday, 'is-selected': selected, 'disabled': isShowDay }"
         >{{ day.getDate() }}</div>
     </n-popselect>
 </template>
@@ -10,7 +15,9 @@
 <script lang="ts">
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import { reactive, toRefs, ref, defineComponent, PropType, computed } from "vue"
+import { reactive, toRefs, ref, defineComponent, PropType, computed, onMounted, watch } from "vue"
+
+import { useRouter, useRoute, LocationQueryValue } from 'vue-router'
 //定义ts数据类型
 interface dataProps {
 
@@ -27,18 +34,21 @@ export default defineComponent({
         isSelected: {
             type: Boolean as PropType<boolean>,
             required: true
+        },
+        isShowDay: {
+            type: Boolean as PropType<boolean>,
+            required: true
         }
     },
     //这里存放数据
     setup(props) {
-
         let dayVal = ref<string>('')
         const data = reactive({})
         let selected = ref<boolean>(false)
-        function handleClick(day: any) {
-           
-
-        }
+        //   路由管理器，用来管理所有的路由
+        const router = useRouter()
+        // route 当前路由
+        const route = useRoute()
 
         // 计算属性会自动计算类型
         const isToday = computed(() => {
@@ -49,11 +59,27 @@ export default defineComponent({
                 day.getDate() === today.getDate()
         })
 
+        // 挂载
+        onMounted(() => {
+        })
+
+        // 监听
+        // watch(dayVal, (count, prevCount) => {
+        //     console.log('prevCount: ', prevCount);
+        //     console.log('count: ', count);
+        // })
+
+
+        function change() {
+            const day: any = props.day
+            router.push({ path: "/edit-diary", params: { day } })
+        }
+
         return {
             data,
             selected,
-            handleClick,
             isToday,
+            change,
             dayVal, // 选择的option
             options: [
                 {
@@ -80,10 +106,16 @@ export default defineComponent({
     width: 14.28571%;
 }
 
+.disabled {
+    pointer-events: none;
+    cursor: default;
+    color: #000;
+    opacity: 0.6;
+}
+
 .day.is-today {
     background-color: blanchedalmond;
 }
-
 
 .day.is-selected:hover {
     background-color: lightskyblue;
