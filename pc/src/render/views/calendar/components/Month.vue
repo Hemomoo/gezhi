@@ -12,15 +12,13 @@
                 :day="day"
                 :key="day.getTime()"
                 :isSelected="isSelected(day)"
-                :onSelect="onSelect"
-                :onDeselect="onDeselect"
             />
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import Day from './DayNew.vue'
+import Day from './Day.vue'
 import { reactive, toRefs, defineComponent, computed, PropType, ComputedRef } from "vue"
 //定义ts数据类型
 interface dataProps {
@@ -42,14 +40,6 @@ export default defineComponent({
         },
         firstDay: {
             type: Number as PropType<number>,
-            required: true
-        },
-        onSelect: {
-            type: Function as PropType<() => void>,
-            required: true
-        },
-        onDeselect: {
-            type: Function as PropType<() => void>,
             required: true
         },
         selectedDates: {

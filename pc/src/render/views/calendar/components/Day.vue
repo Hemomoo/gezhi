@@ -1,8 +1,10 @@
 <template>
-    <div
-        :class="{ day: true, 'is-today': isToday, 'is-selected': selected }"
-        @click="handleClick(day)"
-    >{{ day.getDate() }}</div>
+    <n-popselect v-model:value="dayVal" :options="options" trigger="click">
+        <div
+            :class="{ day: true, 'is-today': isToday, 'is-selected': selected }"
+            @click="handleClick(day)"
+        >{{ day.getDate() }}</div>
+    </n-popselect>
 </template>
 
 <script lang="ts">
@@ -29,18 +31,19 @@ export default defineComponent({
     },
     //这里存放数据
     setup(props) {
+
+        let dayVal = ref<string>('')
         const data = reactive({})
         let selected = ref<boolean>(false)
-
         function handleClick(day: any) {
-            selected.value = !selected.value
            
+
         }
-        
+
         // 计算属性会自动计算类型
         const isToday = computed(() => {
             const today: Date = new Date()
-            const day = props.day
+            const day: Date = props.day
             return day.getFullYear() === today.getFullYear() &&
                 day.getMonth() === today.getMonth() &&
                 day.getDate() === today.getDate()
@@ -50,7 +53,17 @@ export default defineComponent({
             data,
             selected,
             handleClick,
-            isToday
+            isToday,
+            dayVal, // 选择的option
+            options: [
+                {
+                    label: '日记本',
+                    value: 'diary'
+                },
+                {
+                    label: '在本日',
+                    value: 'inToday'
+                }]
         }
     }
 })
@@ -71,9 +84,6 @@ export default defineComponent({
     background-color: blanchedalmond;
 }
 
-.day.is-selected {
-    background-color: lightblue;
-}
 
 .day.is-selected:hover {
     background-color: lightskyblue;

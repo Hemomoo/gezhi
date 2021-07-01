@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import Month from './MonthNew.vue'
+import Month from './Month.vue'
 import {reactive,toRefs,defineComponent,PropType } from "vue"
 //定义ts数据类型
  interface dataProps{

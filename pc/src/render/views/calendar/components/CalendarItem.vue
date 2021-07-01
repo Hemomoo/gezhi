@@ -9,8 +9,6 @@
                 ref="monthList"
                 :months="months"
                 :firstDay="firstDay"
-                :onSelect="onSelect"
-                :onDeselect="onDeselect"
                 :selectedDates="selectedDates"
             />
         </div>
@@ -18,14 +16,14 @@
 </template>
 
 <script lang="ts">
-import MonthList from './MonthListNew.vue'
+import MonthList from './MonthList.vue'
 import { reactive, toRefs, ref, defineComponent, PropType, computed } from "vue"
 //定义ts数据类型
 interface dataProps {
 
 }
 export default defineComponent({
-    name: "",
+    name: "Calendar",
     //import引入的组件需要注入到对象中才能使用
     components: { MonthList },
     props: {
@@ -45,14 +43,6 @@ export default defineComponent({
             type: Date,
             default: new Date(2019, 0, 1)
         },
-        onSelect: {
-            type: Function as PropType<() => void>,
-            required: true
-        },
-        onDeselect: {
-            type: Function as PropType<() => void>,
-            required: true
-        }
     },
     //这里存放数据
     setup(props, context) {
@@ -74,10 +64,8 @@ export default defineComponent({
 
 
         function scrollToMonth(year: number, month: number):void {
-            console.log('month: ', month);
-            console.log('year: ', year);
             const offset:number = (document as any).querySelector(`.month[data-month="${month}"][data-year="${year}"]`).offsetTop
-            // calendarContainer.querySelector.value.scrollTop = offset - 40
+            calendarContainer.value.scrollTop = offset - 40
         }
 
 
@@ -121,11 +109,8 @@ export default defineComponent({
             scrollToDate,
             handleScroll,
             monthList,
-            selectedDates
-
-            // handleScroll,
-
-
+            selectedDates,
+            calendarContainer
         }
     }
 })
