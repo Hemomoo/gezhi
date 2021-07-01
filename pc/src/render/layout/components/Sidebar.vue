@@ -11,7 +11,7 @@
       <nav class="item">
         <template v-for="(item, index) in navList" :key="index">
           <router-link :to="item.link">
-            <div @click="selNav(item.id)" :class="['pointer', { active: +item.id === +activeId }]">
+            <div @click="selNav(item.link)" :class="['pointer', { active: item.link === activeLink }]">
               <i>{{ item.icon }}</i>
               <p>{{ item.tit }}</p>
             </div>
@@ -20,7 +20,7 @@
         <div></div>
         <p>日记本</p>
         <router-link to="/diary">
-          <div @click="selNav(100)" :class="['pointer', { active: 100 === +activeId }]">
+          <div @click="selNav('diary')" :class="['pointer', { active: 'diary' === activeLink }]">
             <!-- <i>{{ item.icon }}</i> -->
             <p>日记本</p>
           </div>
@@ -32,9 +32,12 @@
 
 <script lang="ts">
 import { NAvatar } from "naive-ui";
-import { ref,defineComponent  } from "vue";
+import { ref, defineComponent, computed } from "vue";
+import { useStore } from "vuex";
+import { key } from '@/store/index'
 
-export default defineComponent( {
+
+export default defineComponent({
   name: "Sidebar",
   data() {
     return {};
@@ -43,54 +46,52 @@ export default defineComponent( {
     NAvatar,
   },
   setup() {
-    const activeId = ref(1);
+    // const activeLink = ref<string>('today');
+    const store = useStore(key);
+    const activeLink = computed(() => store.state.slidebarActiveId);
     const navList = [
       {
         icon: "",
-        id: 1,
         tit: "今日",
         link: "today",
       },
       {
         icon: "",
-        id: 2,
         tit: "时间线",
         link: "time-line",
       },
       {
         icon: "",
-        id: 3,
         tit: "日历",
         link: "calendar",
       },
       {
         icon: "",
-        id: 5,
-        tit: "附近",
-        link: "today",
+        tit: "附件",
+        link: "attachment",
       },
       {
         icon: "",
-        id: 6,
         tit: "资源库",
-        link: "today",
+        link: "resouce",
       },
     ];
 
-    const selNav = (id:number) => {
-      activeId.value = id;
+    //
+    const selNav = (link: string) => {
+      store.dispatch("slidebarActiveIdFn", link);
     };
 
     return {
       navList,
-      activeId,
+      activeLink,
       selNav,
     };
   },
-})
+});
 </script>
 
-<style lange ='scss' scpoed>
+<style lange="scss" scpoed>
 .sidebar {
   box-sizing: border-box;
   width: 240px;

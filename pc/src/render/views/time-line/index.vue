@@ -39,9 +39,11 @@ import { ref,reactive, toRefs } from "vue";
 import "swiper/swiper.scss";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import SwiperCore, { Mousewheel, Controller, A11y, Autoplay } from "swiper";
+import { defineComponent } from 'vue'
 SwiperCore.use([Mousewheel]);
 
-export default {
+
+export default defineComponent({
   name: "",
   data() {
     return {
@@ -63,7 +65,7 @@ export default {
       controlledSwiper: null
     })  
     
-    const mouseOver = (id) => {
+    const mouseOver = (id:any) => {
       mouseItemId.value = id;
     };
 
@@ -75,7 +77,7 @@ export default {
       mouseItemId.value = swiper.activeIndex + 1;
     };
 
-    function clickTime(item){
+    function clickTime(item:any){
       data.controlledSwiper.slideTo(item-1)
       console.log(' data.controlledSwiper: ',  data.controlledSwiper);
     }  
@@ -91,7 +93,7 @@ export default {
       ...toRefs(data)  
     };
   },
-};
+})
 </script>
 
 <style>

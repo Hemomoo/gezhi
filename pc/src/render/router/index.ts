@@ -49,6 +49,32 @@ const routes = [
       name: 'edit-diary',
       component: () => import("@/views/diary/edit-diary.vue")
     }],
+  },
+  {
+    path: "/resouce",
+    component: Layout,
+    redirect: '/resource',
+    children: [{
+      path: "/resouce",
+      name: 'resouce',
+      component: () => import('@/views/resource-library/index.vue')
+    }
+
+    ]
+  },
+
+  // 附件
+  {
+    path: '/attachment',
+    component: Layout,
+    redirect: '/attachment',
+    children: [
+      {
+        path: '/attachment',
+        name: 'attachment',
+        component: () => import('@/views/attachment/index.vue')
+      }
+    ]
   }
 ]
 
