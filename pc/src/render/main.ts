@@ -12,12 +12,8 @@ import 'element-plus/lib/theme-chalk/index.css';
 import ElementPlus from 'element-plus';
 
 
-import hljs from 'highlight.js';
 
-VMdEditor.use(githubTheme, {
-  Hljs: hljs,
-});
+
 
 
 export const app = createApp(App).use(router).use(naive).use(VMdEditor).use(ElementPlus).mount('#app')
-
