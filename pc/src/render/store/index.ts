@@ -2,6 +2,7 @@
 import { InjectionKey } from 'vue'
 import { createStore, Store } from 'vuex'
 
+
 // 为 store state 声明类型
 export interface State {
     slidebarActiveId: string

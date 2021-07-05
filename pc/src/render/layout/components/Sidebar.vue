@@ -1,10 +1,10 @@
 <template>
   <div class="sidebar">
     <div class="f">
-      <NAvatar circle></NAvatar>
-      <div>
-        <p>何默</p>
-        <p>会员</p>
+      <NAvatar circle @click="showModal = true" src="https://seaside-station.com/wpbin/wp-content/uploads/mori_08.jpg"></NAvatar>
+      <div class="ml10">
+        <p class="fwb f14">何默</p>
+        <p class="f12">会员</p>
       </div>
     </div>
     <div class="slidbar-list">
@@ -28,14 +28,22 @@
       </nav>
     </div>
   </div>
+  <n-modal v-model:show="showModal"  preset="card" :style="bodyStyle" title="账户">
+    <Modal></Modal>
+  </n-modal>
 </template>
 
 <script lang="ts">
 import { NAvatar } from "naive-ui";
 import { ref, defineComponent, computed } from "vue";
 import { useStore } from "vuex";
-import { key } from '@/store/index'
+import { key } from "@/store/index";
+import Modal from "./Modal.vue";
+import { MdClose } from "@vicons/ionicons4";
 
+interface BodyStyle {
+  width: string;
+}
 
 export default defineComponent({
   name: "Sidebar",
@@ -44,6 +52,8 @@ export default defineComponent({
   },
   components: {
     NAvatar,
+    Modal,
+    MdClose,
   },
   setup() {
     // const activeLink = ref<string>('today');
@@ -86,6 +96,11 @@ export default defineComponent({
       navList,
       activeLink,
       selNav,
+      bodyStyle: {
+        width: "30vw",
+        minWidth:"240px"
+      } as BodyStyle,
+      showModal: ref<boolean>(false),
     };
   },
 });

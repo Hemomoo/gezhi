@@ -13,7 +13,7 @@
 
       <div class="tit-list">
         <template v-for="(item, index) in 100" :key="index">
-          <div :class="['tit-item', 'f', 'fjb', 'pointer', { active: +item === +mouseItemId }]" @mouseover="mouseOver(item)" @click="clickTime(item)">
+          <div :class="['tit-item', 'f', 'fjb', 'pointer', { active: +item === +mouseItemId }]"  @click="clickTime(item)">
             <p>测试数据{{ item }}</p>
             <p>{{ index }}</p>
           </div>
