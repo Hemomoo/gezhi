@@ -2,9 +2,10 @@
 import { InjectionKey } from 'vue'
 import { createStore, Store } from 'vuex'
 
+
 // 为 store state 声明类型
 export interface State {
-    slidebarActiveId: number
+    slidebarActiveId: string
 }
 
 // 定义 injection key
@@ -12,7 +13,7 @@ export const key: InjectionKey<Store<State>> = Symbol()
 
 export const store = createStore<State>({
     state: {
-        slidebarActiveId: 1
+        slidebarActiveId: 'today'
     },
     mutations: {
         SLIDEBAR_ACTIVE_ID(state, activeId) {
@@ -20,7 +21,7 @@ export const store = createStore<State>({
         }
     },
     actions: {
-        slidebarActiveIdFn(context, activeId) {
+        slidebarActiveIdFn(context, activeId:string):void {
             context.commit('SLIDEBAR_ACTIVE_ID', activeId)
         }
     }

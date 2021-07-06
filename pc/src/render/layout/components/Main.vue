@@ -27,8 +27,9 @@ export default {
 };
 </script>
 
-<style lange="scss" scpoed>
+<style lange ='scss' scpoed>
 .main {
-  width: 80vw;
+  width: calc(100vw - 240px);
+  height: 100vh;
 }
 </style>

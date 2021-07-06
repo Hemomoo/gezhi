@@ -18,6 +18,8 @@
 import { reactive, toRefs, ref, defineComponent, PropType, computed, onMounted, watch } from "vue"
 
 import { useRouter, useRoute, LocationQueryValue } from 'vue-router'
+import { useStore } from 'vuex'
+import { key } from '@/store/index'
 //定义ts数据类型
 interface dataProps {
 
@@ -50,6 +52,7 @@ export default defineComponent({
         // route 当前路由
         const route = useRoute()
 
+        const store = useStore(key)
         // 计算属性会自动计算类型
         const isToday = computed(() => {
             const today: Date = new Date()
@@ -72,6 +75,8 @@ export default defineComponent({
 
         function change() {
             const day: any = props.day
+            console.log(store);
+            store.dispatch('slidebarActiveIdFn','diary')
             router.push({ path: "/edit-diary", params: { day } })
         }
 
@@ -81,6 +86,7 @@ export default defineComponent({
             isToday,
             change,
             dayVal, // 选择的option
+
             options: [
                 {
                     label: '日记本',
