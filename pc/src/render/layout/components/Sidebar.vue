@@ -42,7 +42,8 @@ export default defineComponent( {
   components: {
     NAvatar,
   },
-  setup() {
+  setup(content,data) {
+    console.log('data: ',data );
     const activeId = ref(1);
     const navList = [
       {
