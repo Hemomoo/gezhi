@@ -23,6 +23,7 @@
     "@rollup/plugin-commonjs": "^15.0.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
+    "@vicons/antd": "^0.10.0",
     "@vicons/fluent": "^0.8.0",
     "@vicons/ionicons4": "^0.10.0",
     "@vicons/ionicons5": "^0.8.0",

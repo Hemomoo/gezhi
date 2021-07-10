@@ -1,19 +1,25 @@
 <template>
   <div class="time-line f">
     <div class="left">
-      <div class="pl10 pr10 mt40">
+      <div class="fjb f">
+        <p></p>
+        <p class="fwb">时间线</p>
+        <n-icon>
+          <SortFilled></SortFilled>
+        </n-icon>
+      </div>
+      <div class="pl10 pr10 mt40 mb20">
         <n-input placeholder="搜索标题">
           <template #prefix>
             <n-icon>
-              <search-outline />
+              <search-outline></search-outline>
             </n-icon>
           </template>
         </n-input>
       </div>
-
       <div class="tit-list">
         <template v-for="(item, index) in 100" :key="index">
-          <div :class="['tit-item', 'f', 'fjb', 'pointer', { active: +item === +mouseItemId }]"  @click="clickTime(item)">
+          <div :class="['tit-item', 'f', 'fjb', 'pointer', { active: +item === +mouseItemId }]" @click="clickTime(item)">
             <p>测试数据{{ item }}</p>
             <p>{{ index }}</p>
           </div>
@@ -35,13 +41,13 @@
 <script lang="ts">
 import { SearchOutline } from "@vicons/ionicons5";
 import Grid from "./components/Grid.vue";
-import { ref,reactive, toRefs } from "vue";
+import { ref, reactive, toRefs } from "vue";
 import "swiper/swiper.scss";
+import { SortFilled } from "@vicons/fluent";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import SwiperCore, { Mousewheel, Controller, A11y, Autoplay } from "swiper";
-import { defineComponent } from 'vue'
+import { defineComponent } from "vue";
 SwiperCore.use([Mousewheel]);
-
 
 export default defineComponent({
   name: "",
@@ -56,33 +62,31 @@ export default defineComponent({
   components: {
     SearchOutline,
     Grid,
+    SortFilled,
     Swiper,
     SwiperSlide,
   },
   setup() {
     let mouseItemId = ref(1);
     const data = reactive({
-      controlledSwiper: null
-    })  
-    
-    const mouseOver = (id:any) => {
+      controlledSwiper: null,
+    });
+
+    const mouseOver = (id: any) => {
       mouseItemId.value = id;
     };
 
-
-    const onSwiper = (swiper:Swiper) => {
-      data.controlledSwiper = swiper
+    const onSwiper = (swiper: Swiper) => {
+      data.controlledSwiper = swiper;
     };
     const onSlideChange = (swiper: Swiper) => {
       mouseItemId.value = swiper.activeIndex + 1;
     };
 
-    function clickTime(item:any){
-      data.controlledSwiper.slideTo(item-1)
-      console.log(' data.controlledSwiper: ',  data.controlledSwiper);
-    }  
-
-
+    function clickTime(item: any) {
+      data.controlledSwiper.slideTo(item - 1);
+      console.log(" data.controlledSwiper: ", data.controlledSwiper);
+    }
 
     return {
       mouseItemId,
@@ -90,10 +94,10 @@ export default defineComponent({
       onSwiper,
       onSlideChange,
       clickTime,
-      ...toRefs(data)  
+      ...toRefs(data),
     };
   },
-})
+});
 </script>
 
 <style>
