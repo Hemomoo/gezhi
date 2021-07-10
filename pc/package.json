@@ -27,6 +27,7 @@
     "@vicons/fluent": "^0.8.0",
     "@vicons/ionicons4": "^0.10.0",
     "@vicons/ionicons5": "^0.8.0",
+    "@vicons/material": "^0.10.0",
     "@vitejs/plugin-vue": "^1.2.3",
     "@vue/compiler-sfc": "^3.0.5",
     "chalk": "^4.1.0",

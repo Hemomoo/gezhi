@@ -74,8 +74,6 @@ export default defineComponent({
 
 
         function scrollToMonth(year: number, month: number):void {
-            console.log('month: ', month);
-            console.log('year: ', year);
             const offset:number = (document as any).querySelector(`.month[data-month="${month}"][data-year="${year}"]`).offsetTop
             // calendarContainer.querySelector.value.scrollTop = offset - 40
         }

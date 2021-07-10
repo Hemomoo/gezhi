@@ -1,14 +1,26 @@
 <template>
   <div class="time-line f">
-    <div class="left">
-      <div class="fjb f">
+    <div class="left mt20">
+      <div class="head fja f">
         <p></p>
         <p class="fwb">时间线</p>
-        <n-icon>
-          <SortFilled></SortFilled>
-        </n-icon>
+        <n-icon @click="sortShow = true" ref="sortButton"><SortFilled></SortFilled></n-icon>
+        <n-modal
+          v-model:show="sortShow"
+          title="筛选"
+          preset="card"
+          :style="{
+            width: '300px',
+            position: 'fixed',
+            left: `${offsetLeft}px`,
+            top: `${offsetTop}px`,
+          }"
+        >
+           <template #header-extra> 重置 </template>
+          <SortDialog></SortDialog>
+        </n-modal>
       </div>
-      <div class="pl10 pr10 mt40 mb20">
+      <div class="pl10 pr10 mt20 mb20">
         <n-input placeholder="搜索标题">
           <template #prefix>
             <n-icon>
@@ -41,12 +53,12 @@
 <script lang="ts">
 import { SearchOutline } from "@vicons/ionicons5";
 import Grid from "./components/Grid.vue";
-import { ref, reactive, toRefs } from "vue";
+import SortDialog from "./components/SortDialog.vue";
+import { ref, reactive, toRefs, defineComponent, onMounted, nextTick } from "vue";
 import "swiper/swiper.scss";
-import { SortFilled } from "@vicons/fluent";
+import { SortFilled } from "@vicons/material";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import SwiperCore, { Mousewheel, Controller, A11y, Autoplay } from "swiper";
-import { defineComponent } from "vue";
 SwiperCore.use([Mousewheel]);
 
 export default defineComponent({
@@ -65,11 +77,22 @@ export default defineComponent({
     SortFilled,
     Swiper,
     SwiperSlide,
+    SortDialog,
   },
   setup() {
     let mouseItemId = ref(1);
+    let sortButton = ref<any>("sortButton");
+    let offsetLeft = ref<number>(0);
+    let offsetTop = ref<number>(0);
     const data = reactive({
       controlledSwiper: null,
+    });
+
+    onMounted(() => {
+      nextTick(() => {
+        offsetLeft.value = sortButton.value.$el.offsetLeft + 240 - 150;
+        offsetTop.value = sortButton.value.$el.offsetTop + 40;
+      });
     });
 
     const mouseOver = (id: any) => {
@@ -94,6 +117,10 @@ export default defineComponent({
       onSwiper,
       onSlideChange,
       clickTime,
+      sortButton,
+      offsetLeft,
+      offsetTop,
+      sortShow: ref<boolean>(false),
       ...toRefs(data),
     };
   },
@@ -122,6 +149,9 @@ export default defineComponent({
       content: "";
       width: 1px;
       background: gray;
+    }
+    .head {
+      position: relative;
     }
     .tit-list {
       box-sizing: border-box;
