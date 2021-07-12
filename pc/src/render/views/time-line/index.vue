@@ -23,7 +23,6 @@
       <div class="pl10 pr10 mt20 mb20">
         <n-input placeholder="搜索标题">
           <template #prefix>
-<<<<<<< HEAD
             <n-icon> <search-outline /> </n-icon>
           </template>
         </n-input>
@@ -31,16 +30,6 @@
 
       <div class="tit-list" v-infinite-scroll="load" style="overflow: auto">
         <template v-for="(item, index) in titTotal" :key="index">
-=======
-            <n-icon>
-              <search-outline></search-outline>
-            </n-icon>
-          </template>
-        </n-input>
-      </div>
-      <div class="tit-list">
-        <template v-for="(item, index) in 100" :key="index">
->>>>>>> 19d9080dc03cdc15109e8b5834ea7cba97041b97
           <div :class="['tit-item', 'f', 'fjb', 'pointer', { active: +item === +mouseItemId }]" @click="clickTime(item)">
             <p>测试数据{{ item }}</p>
             <p>{{ index }}</p>
@@ -63,7 +52,7 @@
 <script lang="ts">
 import { SearchOutline } from "@vicons/ionicons5";
 import Grid from "./components/Grid.vue";
-import { ref, reactive, toRefs } from "vue";
+import { ref, reactive, toRefs,onMounted,nextTick } from "vue";
 import "swiper/swiper.scss";
 import { SortFilled } from "@vicons/material";
 import { Swiper, SwiperSlide } from "swiper/vue";
@@ -128,18 +117,12 @@ export default defineComponent({
       mouseItemId.value = swiper.activeIndex + 1;
     };
 
-<<<<<<< HEAD
     function load() {
       titTotal.value += 10;
     }
 
     function clickTime(item: any) {
       data.controlledSwiper.slideTo(item - 1);
-=======
-    function clickTime(item: any) {
-      data.controlledSwiper.slideTo(item - 1);
-      console.log(" data.controlledSwiper: ", data.controlledSwiper);
->>>>>>> 19d9080dc03cdc15109e8b5834ea7cba97041b97
     }
 
     return {
@@ -148,15 +131,8 @@ export default defineComponent({
       onSwiper,
       onSlideChange,
       clickTime,
-<<<<<<< HEAD
       titTotal,
       load,
-=======
-      sortButton,
-      offsetLeft,
-      offsetTop,
-      sortShow: ref<boolean>(false),
->>>>>>> 19d9080dc03cdc15109e8b5834ea7cba97041b97
       ...toRefs(data),
     };
   },
