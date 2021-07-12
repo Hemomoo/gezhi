@@ -1,24 +1,15 @@
 <template>
- <div>
-login
- </div>
+  <div>login</div>
 </template>
 
-<script>
- export default {
-   name:'Login',
-   data () {
-     return {
-
-     }
-   },
-   components: {
-
-   }
- }
+<script lang="ts">
+export default {
+  name: "Login",
+  data() {
+    return {};
+  },
+  components: {},
+};
 </script>
 
-<style lange ='scss' scpoed>
-
- 
-</style>
+<style lange="scss" scpoed></style>

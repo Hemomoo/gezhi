@@ -4,16 +4,14 @@
       <div class="pl10 pr10 mt40">
         <n-input placeholder="搜索标题">
           <template #prefix>
-            <n-icon>
-              <search-outline />
-            </n-icon>
+            <n-icon> <search-outline /> </n-icon>
           </template>
         </n-input>
       </div>
 
-      <div class="tit-list">
-        <template v-for="(item, index) in 100" :key="index">
-          <div :class="['tit-item', 'f', 'fjb', 'pointer', { active: +item === +mouseItemId }]"  @click="clickTime(item)">
+      <div class="tit-list" v-infinite-scroll="load" style="overflow: auto">
+        <template v-for="(item, index) in titTotal" :key="index">
+          <div :class="['tit-item', 'f', 'fjb', 'pointer', { active: +item === +mouseItemId }]" @click="clickTime(item)">
             <p>测试数据{{ item }}</p>
             <p>{{ index }}</p>
           </div>
@@ -35,16 +33,23 @@
 <script lang="ts">
 import { SearchOutline } from "@vicons/ionicons5";
 import Grid from "./components/Grid.vue";
-import { ref,reactive, toRefs } from "vue";
+import { ref, reactive, toRefs } from "vue";
 import "swiper/swiper.scss";
 import { Swiper, SwiperSlide } from "swiper/vue";
-import SwiperCore, { Mousewheel, Controller, A11y, Autoplay } from "swiper";
-import { defineComponent } from 'vue'
+import SwiperCore, { Mousewheel } from "swiper";
+import { defineComponent } from "vue";
 SwiperCore.use([Mousewheel]);
 
 
+// data数据的接口
+interface dataType{
+  controlledSwiper:Swiper
+}
+
+
+
 export default defineComponent({
-  name: "",
+  name: "TimeLine",
   data() {
     return {
       mousewheel: {
@@ -60,29 +65,28 @@ export default defineComponent({
     SwiperSlide,
   },
   setup() {
-    let mouseItemId = ref(1);
-    const data = reactive({
-      controlledSwiper: null
-    })  
-    
-    const mouseOver = (id:any) => {
+    let mouseItemId = ref<number>(1);
+    let titTotal = ref<number>(50);
+    const data = reactive<dataType>({ controlledSwiper: null });
+
+    const mouseOver = (id: number) => {
       mouseItemId.value = id;
     };
 
-
-    const onSwiper = (swiper:Swiper) => {
-      data.controlledSwiper = swiper
+    const onSwiper = (swiper: Swiper) => {
+      data.controlledSwiper = swiper;
     };
     const onSlideChange = (swiper: Swiper) => {
       mouseItemId.value = swiper.activeIndex + 1;
     };
 
-    function clickTime(item:any){
-      data.controlledSwiper.slideTo(item-1)
-      console.log(' data.controlledSwiper: ',  data.controlledSwiper);
-    }  
+    function load() {
+      titTotal.value += 10;
+    }
 
-
+    function clickTime(item: any) {
+      data.controlledSwiper.slideTo(item - 1);
+    }
 
     return {
       mouseItemId,
@@ -90,10 +94,12 @@ export default defineComponent({
       onSwiper,
       onSlideChange,
       clickTime,
-      ...toRefs(data)  
+      titTotal,
+      load,
+      ...toRefs(data),
     };
   },
-})
+});
 </script>
 
 <style>

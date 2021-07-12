@@ -1,7 +1,7 @@
 <template>
   <div class="cont">
-    <div class="top tac fwb">附近</div>
-    <div class="content">
+    <div class="top tac fwb">附件</div>
+    <div class="content" v-infinite-scroll="load" style="overflow:auto">
       <div class="item" v-for="(item, index) in imgs">
         <div class="item-img">
           <img :src="item.img" alt="" />
@@ -24,15 +24,19 @@ interface Img {
   date: string;
 }
 
+
+interface dataType{
+  imgs:Img[]
+}
+
+
 export default defineComponent({
   name: "Attachment",
   //import引入的组件需要注入到对象中才能使用
   components: {},
   //这里存放数据
   setup() {
-    const data = reactive({});
-    return {
-      data,
+    const data = reactive<dataType>({
       imgs: [
         {
           img: "https://seaside-station.com/wpbin/wp-content/uploads/mori_12.jpg",
@@ -130,7 +134,16 @@ export default defineComponent({
           img: "https://seaside-station.com/wpbin/wp-content/uploads/mori_12.jpg",
           date: "2021年12月10日",
         },
-      ] as Img[],
+      ] ,
+    });
+
+    function load(){
+      data.imgs = data.imgs.concat(data.imgs)
+    }
+
+    return {
+      load,
+      ...toRefs(data)
     };
   },
 });

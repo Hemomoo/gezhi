@@ -1,5 +1,5 @@
 <template>
-  <div class="month-list">
+  <div class="month-list"  style="overflow:auto">
     <template v-for="month in months">
       <div class="year" v-if="month.month === 0">{{month.year}}</div>
       <Month
@@ -47,8 +47,10 @@ export default defineComponent ({
 //这里存放数据
   setup(props) {
    const data = reactive({})
+
+
     return {
-      data
+      data,
     }
   }
 })
