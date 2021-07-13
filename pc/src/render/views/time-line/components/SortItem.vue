@@ -1,10 +1,10 @@
 <template>
   <div class="sort-item">
-    <div>
+    <div class="f fjb  pointer" >
       <p>{{ title }}</p>
-      <div>
+      <div class="f fac">
         <p>{{ subTitle }}</p>
-        <n-icon ref="sortButton"><SortFilled></SortFilled></n-icon>
+        <n-icon ref="sortButton"><ArrowForwardIosFilled></ArrowForwardIosFilled></n-icon>
       </div>
     </div>
   </div>
@@ -18,7 +18,9 @@ interface dataProps {}
 export default defineComponent({
   name: "SortItem",
   //import引入的组件需要注入到对象中才能使用
-  components: {},
+  components: {
+    ArrowForwardIosFilled,
+  },
   props: {
     title: {
       type: String as PropType<string>,

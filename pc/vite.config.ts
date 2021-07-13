@@ -2,6 +2,7 @@ import path from "path";
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import styleImport from 'vite-plugin-style-import'
+import { viteMockServe } from "vite-plugin-mock";
 function resolve(dir) {
   return path.join(__dirname, dir);
 }
@@ -12,6 +13,14 @@ export default defineConfig({
   base: "./",
   plugins: [
     vue(),
+    // viteMockServe({
+    //   mockPath: "mock",
+    //   injectCode: `
+    //     import { setupProdMockServer } from './src/render/mock';
+    //     setupProdMockServer();
+    //   `,
+    //   logger: true
+    // })
   ],
   resolve: {
     // 忽略后缀名的配置选项, 添加 .vue 选项时要记得原本默认忽略的选项也要手动写入

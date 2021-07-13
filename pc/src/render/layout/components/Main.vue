@@ -16,8 +16,7 @@ export default {
     Transition,
   },
   setup() {
-    function beforeEnter() {
-    }
+    function beforeEnter():void {}
 
     return {
       cachedViews: [],

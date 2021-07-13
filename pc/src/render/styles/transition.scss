@@ -7,3 +7,17 @@
 .fade-leave-to {
   opacity: 0;
 }
+
+.fade-righ-enter-active,
+.fade-righ-leave-active {
+  transition: all 0.5s;
+}
+
+.fade-righ-enter-from {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+.fade-righ-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}

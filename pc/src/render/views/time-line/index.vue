@@ -1,34 +1,35 @@
 <template>
   <div class="time-line f">
-    <div class="left mt20">
-      <div class="head fja f">
-        <p></p>
-        <p class="fwb">时间线</p>
-        <n-icon @click="sortShow = true" ref="sortButton"><SortFilled></SortFilled></n-icon>
-        <n-modal
-          v-model:show="sortShow"
-          title="筛选"
-          preset="card"
-          :style="{
-            width: '300px',
-            position: 'fixed',
-            left: `${offsetLeft}px`,
-            top: `${offsetTop}px`,
-          }"
-        >
-           <template #header-extra> 重置 </template>
-          <SortDialog></SortDialog>
-        </n-modal>
+    <div class="left">
+      <div class="f fdc pt20">
+        <div class="head fja f">
+          <p></p>
+          <p class="fwb">时间线</p>
+          <n-icon @click="sortShow = true" ref="sortButton"><SortFilled></SortFilled></n-icon>
+          <n-modal
+            v-model:show="sortShow"
+            title="筛选"
+            preset="card"
+            :style="{
+              width: '300px',
+              position: 'fixed',
+              left: `${offsetLeft}px`,
+              top: `${offsetTop}px`,
+            }"
+          >
+            <template #header-extra> 重置 </template>
+            <SortDialog></SortDialog>
+          </n-modal>
+        </div>
+        <div class="pl10 pr10 mt20 mb20">
+          <n-input placeholder="搜索标题">
+            <template #prefix>
+              <n-icon> <search-outline /> </n-icon>
+            </template>
+          </n-input>
+        </div>
       </div>
-      <div class="pl10 pr10 mt20 mb20">
-        <n-input placeholder="搜索标题">
-          <template #prefix>
-            <n-icon> <search-outline /> </n-icon>
-          </template>
-        </n-input>
-      </div>
-
-      <div class="tit-list" v-infinite-scroll="load" style="overflow: auto">
+      <div class="tit-list f1" v-infinite-scroll="load" style="overflow: auto">
         <template v-for="(item, index) in titTotal" :key="index">
           <div :class="['tit-item', 'f', 'fjb', 'pointer', { active: +item === +mouseItemId }]" @click="clickTime(item)">
             <p>测试数据{{ item }}</p>
@@ -52,21 +53,28 @@
 <script lang="ts">
 import { SearchOutline } from "@vicons/ionicons5";
 import Grid from "./components/Grid.vue";
-import { ref, reactive, toRefs,onMounted,nextTick } from "vue";
+import { ref, reactive, toRefs, onMounted, nextTick } from "vue";
 import "swiper/swiper.scss";
 import { SortFilled } from "@vicons/material";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import SwiperCore, { Mousewheel } from "swiper";
 import { defineComponent } from "vue";
+import SortDialog from "./components/SortDialog.vue";
+import { timeList } from '@/api/time-line'
+
 SwiperCore.use([Mousewheel]);
 
-
 // data数据的接口
-interface dataType{
-  controlledSwiper:Swiper
+interface dataType {
+  controlledSwiper: Swiper;
 }
 
 
+interface itemInterface{
+    id:string,
+    display_time:string,
+    title:string
+} 
 
 export default defineComponent({
   name: "TimeLine",
@@ -89,17 +97,15 @@ export default defineComponent({
   setup() {
     let mouseItemId = ref<number>(1);
     let titTotal = ref<number>(50);
-    const data = reactive<dataType>({ controlledSwiper: null });
-    const mouseOver = (id: number) => {
-    let mouseItemId = ref(1);
     let sortButton = ref<any>("sortButton");
     let offsetLeft = ref<number>(0);
     let offsetTop = ref<number>(0);
-    const data = reactive({
-      controlledSwiper: null,
-    });
-
+    const data = reactive<dataType>({ controlledSwiper: null });
     onMounted(() => {
+      timeList().then(res=>{
+        console.log('res: ', res);
+      })
+
       nextTick(() => {
         offsetLeft.value = sortButton.value.$el.offsetLeft + 240 - 150;
         offsetTop.value = sortButton.value.$el.offsetTop + 40;
@@ -133,17 +139,15 @@ export default defineComponent({
       clickTime,
       titTotal,
       load,
+      sortButton,
+      offsetLeft,
+      offsetTop,
+      sortShow: ref<boolean>(false),
       ...toRefs(data),
     };
   },
 });
 </script>
-
-<style>
-.swiper-slide {
-  width: 100% !important;
-}
-</style>
 
 <style lang="scss" scpoed>
 .time-line {
@@ -167,7 +171,7 @@ export default defineComponent({
     }
     .tit-list {
       box-sizing: border-box;
-      height: calc(100vh - 74px);
+      height: calc(100vh - 117px);
       overflow: scroll;
       padding: 0 10px;
       width: 240px;

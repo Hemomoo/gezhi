@@ -1,7 +1,7 @@
 {
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --mode development",
     "dev:all": "concurrently -n=vue,ele -c=green,blue \"npm run dev:vue\" \"npm run dev:ele\"",
     "build": "vue-tsc --noEmit && vite build",
     "serve": "vite preview",
@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@kangc/v-md-editor": "^2.3.5",
+    "axios": "^0.21.1",
     "element-plus": "^1.0.2-beta.53",
     "mavon-editor": "^2.9.1",
     "moment": "^2.29.1",
@@ -43,6 +44,7 @@
     "rollup-plugin-esbuild": "^4.5.0",
     "typescript": "^4.3.2",
     "vite": "^2.3.7",
+    "vite-plugin-mock": "^2.9.1",
     "vite-plugin-style-import": "^1.0.1",
     "vitejs-plugin-electron": "^0.1.0",
     "vue-tsc": "^0.0.24",
