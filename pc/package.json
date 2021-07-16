@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@kangc/v-md-editor": "^2.3.5",
+    "@types/mockjs": "^1.0.4",
     "axios": "^0.21.1",
     "element-plus": "^1.0.2-beta.53",
     "mavon-editor": "^2.9.1",

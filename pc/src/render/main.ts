@@ -9,11 +9,11 @@ import '@kangc/v-md-editor/lib/theme/style/github.css';
 import 'element-plus/lib/theme-chalk/index.css';
 import ElementPlus from 'element-plus';
 import { store, key } from '../render/store/index'
-import Mock from './mock' // 刚刚手写的mock.js文件
+import setupProdMockServer from '../render/mock/index'
 
+//  创建mock数据。
+setupProdMockServer()
 
-
-
-export const app = createApp(App).use(router).use(naive).use(ElementPlus).use(store, key).use(Mock).mount('#app')
+export const app = createApp(App).use(router).use(naive).use(ElementPlus).use(store, key).mount('#app')
 
 

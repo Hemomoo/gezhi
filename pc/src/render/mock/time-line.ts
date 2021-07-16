@@ -1,13 +1,10 @@
 import Mock from 'mockjs'
 import { MockMethod } from "vite-plugin-mock";
 const data = Mock.mock({
-  'items|30': [{
+  'items|20': [{
     id: '@id',
-    title: '@sentence(10, 20)',
-    'status|1': ['published', 'draft', 'deleted'],
-    author: 'name',
+    title: '@sentence(2, 4)',
     display_time: '@datetime',
-    pageviews: '@integer(300, 5000)'
   }]
 })
 

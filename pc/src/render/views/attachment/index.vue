@@ -1,7 +1,7 @@
 <template>
   <div class="cont">
     <div class="top tac fwb">附件</div>
-    <div class="content" v-infinite-scroll="load" style="overflow:auto">
+    <div class="content" v-infinite-scroll="load" style="overflow: auto">
       <div class="item" v-for="(item, index) in imgs">
         <div class="item-img">
           <img :src="item.img" alt="" />
@@ -15,20 +15,20 @@
 <script lang="ts">
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import { reactive, toRefs, defineComponent } from "vue";
+import { reactive, toRefs, defineComponent, onMounted } from "vue";
+import { attachmentFn } from "@/api/attachment";
 //定义ts数据类型
-interface dataProps {}
+// interface dataProps {}
 
 interface Img {
   img: string;
   date: string;
+  id: string;
 }
 
-
-interface dataType{
-  imgs:Img[]
+interface dataType {
+  imgs: Img[];
 }
-
 
 export default defineComponent({
   name: "Attachment",
@@ -37,113 +37,24 @@ export default defineComponent({
   //这里存放数据
   setup() {
     const data = reactive<dataType>({
-      imgs: [
-        {
-          img: "https://seaside-station.com/wpbin/wp-content/uploads/mori_12.jpg",
-          date: "2021年12月10日",
-        },
-        {
-          img: "https://seaside-station.com/wpbin/wp-content/uploads/mori_12.jpg",
-          date: "2021年12月10日",
-        },
-        {
-          img: "https://seaside-station.com/wpbin/wp-content/uploads/mori_12.jpg",
-          date: "2021年12月10日",
-        },
-        {
-          img: "https://seaside-station.com/wpbin/wp-content/uploads/mori_12.jpg",
-          date: "2021年12月10日",
-        },
-        {
-          img: "https://seaside-station.com/wpbin/wp-content/uploads/mori_07.jpg",
-          date: "2021年12月10日",
-        },
-        {
-          img: "https://seaside-station.com/wpbin/wp-content/uploads/mori_12.jpg",
-          date: "2021年12月10日",
-        },
-        {
-          img: "https://seaside-station.com/wpbin/wp-content/uploads/mori_08.jpg",
-          date: "2021年12月10日",
-        },
-        {
-          img: "https://seaside-station.com/wpbin/wp-content/uploads/mori_12.jpg",
-          date: "2021年12月10日",
-        },
-        {
-          img: "https://seaside-station.com/wpbin/wp-content/uploads/mori_10.jpg",
-          date: "2021年12月10日",
-        },
-        {
-          img: "https://seaside-station.com/wpbin/wp-content/uploads/mori_12.jpg",
-          date: "2021年12月10日",
-        },
-        {
-          img: "https://seaside-station.com/wpbin/wp-content/uploads/mori_11.jpg",
-          date: "2021年12月10日",
-        },
-        {
-          img: "https://seaside-station.com/wpbin/wp-content/uploads/mori_12.jpg",
-          date: "2021年12月10日",
-        },
-        {
-          img: "https://seaside-station.com/wpbin/wp-content/uploads/mori_12.jpg",
-          date: "2021年12月10日",
-        },
-        {
-          img: "https://seaside-station.com/wpbin/wp-content/uploads/mori_12.jpg",
-          date: "2021年12月10日",
-        },
-        {
-          img: "https://seaside-station.com/wpbin/wp-content/uploads/mori_12.jpg",
-          date: "2021年12月10日",
-        },
-        {
-          img: "https://seaside-station.com/wpbin/wp-content/uploads/mori_12.jpg",
-          date: "2021年12月10日",
-        },
-        {
-          img: "https://seaside-station.com/wpbin/wp-content/uploads/mori_12.jpg",
-          date: "2021年12月10日",
-        },
-        {
-          img: "https://seaside-station.com/wpbin/wp-content/uploads/mori_12.jpg",
-          date: "2021年12月10日",
-        },
-        {
-          img: "https://seaside-station.com/wpbin/wp-content/uploads/mori_12.jpg",
-          date: "2021年12月10日",
-        },
-        {
-          img: "https://seaside-station.com/wpbin/wp-content/uploads/mori_12.jpg",
-          date: "2021年12月10日",
-        },
-        {
-          img: "https://seaside-station.com/wpbin/wp-content/uploads/mori_12.jpg",
-          date: "2021年12月10日",
-        },
-        {
-          img: "https://seaside-station.com/wpbin/wp-content/uploads/mori_12.jpg",
-          date: "2021年12月10日",
-        },
-        {
-          img: "https://seaside-station.com/wpbin/wp-content/uploads/mori_12.jpg",
-          date: "2021年12月10日",
-        },
-        {
-          img: "https://seaside-station.com/wpbin/wp-content/uploads/mori_12.jpg",
-          date: "2021年12月10日",
-        },
-      ] ,
+      imgs: [],
     });
 
-    function load(){
-      data.imgs = data.imgs.concat(data.imgs)
+    onMounted(() => {
+      attachmentFn().then((res: any) => {
+        console.log("res: ", res);
+        data.imgs = res.imgs;
+      });
+    });
+
+    async function load() {
+      const res = await attachmentFn();
+      data.imgs = data.imgs.concat(res.imgs);
     }
 
     return {
       load,
-      ...toRefs(data)
+      ...toRefs(data),
     };
   },
 });

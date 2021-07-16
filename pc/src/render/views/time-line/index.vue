@@ -31,8 +31,8 @@
       </div>
       <div class="tit-list f1" v-infinite-scroll="load" style="overflow: auto">
         <template v-for="(item, index) in titTotal" :key="index">
-          <div :class="['tit-item', 'f', 'fjb', 'pointer', { active: +item === +mouseItemId }]" @click="clickTime(item)">
-            <p>测试数据{{ item }}</p>
+          <div :class="['tit-item', 'f', 'fjb', 'pointer', { active: +item === +mouseItemId }]" @click="clickTime(item, index)">
+            <p>{{ item.title }}</p>
             <p>{{ index }}</p>
           </div>
         </template>
@@ -40,7 +40,7 @@
     </div>
     <div class="right">
       <swiper :mousewheel="mousewheel" @swiper="onSwiper" @slideChangeTransitionEnd="onSlideChange">
-        <template v-for="(item, index) in 200" :key="index">
+        <template v-for="(item, index) in titTotal" :key="index">
           <swiper-slide>
             <Grid></Grid>
           </swiper-slide>
@@ -60,7 +60,7 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import SwiperCore, { Mousewheel } from "swiper";
 import { defineComponent } from "vue";
 import SortDialog from "./components/SortDialog.vue";
-import { timeList } from '@/api/time-line'
+import { timeList } from "@/api/time-line";
 
 SwiperCore.use([Mousewheel]);
 
@@ -69,12 +69,21 @@ interface dataType {
   controlledSwiper: Swiper;
 }
 
+interface itemInterface {
+  id: string;
+  display_time: string;
+  title: string;
+}
 
-interface itemInterface{
-    id:string,
-    display_time:string,
-    title:string
-} 
+
+
+interface titleListInterface {
+  code: number;
+  data: {
+    items: itemInterface[];
+    total: number;
+  };
+}
 
 export default defineComponent({
   name: "TimeLine",
@@ -95,16 +104,18 @@ export default defineComponent({
     SortDialog,
   },
   setup() {
-    let mouseItemId = ref<number>(1);
-    let titTotal = ref<number>(50);
+    let mouseItemId = ref<string>('');
+    let titTotal = ref<itemInterface[]>([]);
     let sortButton = ref<any>("sortButton");
     let offsetLeft = ref<number>(0);
     let offsetTop = ref<number>(0);
     const data = reactive<dataType>({ controlledSwiper: null });
+    // 挂载后
     onMounted(() => {
-      timeList().then(res=>{
-        console.log('res: ', res);
-      })
+      timeList().then((res:any) => {
+        mouseItemId.value = res.items[0].id;
+        titTotal.value = res.items;
+      });
 
       nextTick(() => {
         offsetLeft.value = sortButton.value.$el.offsetLeft + 240 - 150;
@@ -112,7 +123,7 @@ export default defineComponent({
       });
     });
 
-    const mouseOver = (id: any) => {
+    const mouseOver = (id: string) => {
       mouseItemId.value = id;
     };
 
@@ -124,11 +135,14 @@ export default defineComponent({
     };
 
     function load() {
-      titTotal.value += 10;
+      timeList().then((res) => {
+        titTotal.value = titTotal.value.concat(res.items);
+      });
     }
 
-    function clickTime(item: any) {
-      data.controlledSwiper.slideTo(item - 1);
+    function clickTime(item: any, index: number) {
+      mouseItemId.value = item.id;
+      data.controlledSwiper.slideTo(+index - 1);
     }
 
     return {
@@ -177,9 +191,7 @@ export default defineComponent({
       width: 240px;
       box-sizing: border-box;
       .tit-item {
-        height: 40px;
-        line-height: 40px;
-        padding: 0 4px;
+        padding: 6px 4px;
       }
       .active {
         background: rgb(226, 225, 225);
