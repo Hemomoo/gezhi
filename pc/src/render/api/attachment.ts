@@ -1,8 +1,20 @@
 import request from '@/utils/request'
 
+interface Img {
+    img: string;
+    date: string;
+    id: string;
+}
+
+
+interface ResponseInterface {
+    imgs:Img[]
+}
+
+
 export function attachmentFn() {
-    return request({
-      url: `/attachment/list`,
-      method: 'GET',
+    return request<ResponseInterface>({
+        url: `/attachment/list`,
+        method: 'GET',
     })
-  }
+}

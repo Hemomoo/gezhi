@@ -15,9 +15,9 @@ export default [
         response: () => {
             return {
                 code: 200,
+                message: "success",
                 data: {
                     imgs: data.items,
-
                 }
             }
         }

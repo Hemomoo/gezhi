@@ -28,10 +28,7 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
     (response: AxiosResponse):any => {
-        console.log('response.data: ', response.data);
-        const res = response.data
-        console.log(`response响应: ${response.config.url}`, response)
-        return res.data
+        return response.data
     },
     error => {
         return Promise.reject(error)

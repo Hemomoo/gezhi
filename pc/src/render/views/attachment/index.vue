@@ -29,6 +29,9 @@ interface Img {
 interface dataType {
   imgs: Img[];
 }
+interface ResponseInterface {
+  imgs: Img[];
+}
 
 export default defineComponent({
   name: "Attachment",
@@ -41,14 +44,14 @@ export default defineComponent({
     });
 
     onMounted(() => {
-      attachmentFn().then((res: any) => {
-        console.log("res: ", res);
-        data.imgs = res.imgs;
+      attachmentFn().then((res: any): void => {
+        const response: ResponseInterface = res;
+        data.imgs = response.imgs;
       });
     });
 
     async function load() {
-      const res = await attachmentFn();
+      const res:ResponseInterface = await attachmentFn();
       data.imgs = data.imgs.concat(res.imgs);
     }
 
