@@ -51,7 +51,7 @@ export default defineComponent({
     });
 
     async function load() {
-      const res:ResponseInterface = await attachmentFn();
+      const res: ResponseInterface = await attachmentFn();
       data.imgs = data.imgs.concat(res.imgs);
     }
 

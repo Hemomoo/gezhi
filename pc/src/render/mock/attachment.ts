@@ -14,8 +14,8 @@ export default [
         method: 'get',
         response: () => {
             return {
-                code: 200,
-                message: "success",
+                status: 200, // 状态码
+                statusText: "success", // 提示
                 data: {
                     imgs: data.items,
                 }

@@ -15,8 +15,8 @@ export default [
     response: () => {
       const items = data.items
       return {
-        code: 200,
-        message:"success",
+        status: 200,
+        statusText:"success",
         data: {
           total: items.length,
           items: items
