@@ -4,7 +4,6 @@
       <div class="diary-item tac" v-if="index === 4">
         {{ today }}
       </div>
-
       <router-link class="diary-item" to="/edit-diary" tag="div">
         <div class="tac">{{ item.tit }}</div>
         <div class="conten">

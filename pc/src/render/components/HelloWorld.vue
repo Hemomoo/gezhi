@@ -12,7 +12,7 @@ export default defineComponent({
       required: true
     }
   },
-  setup: () => {
+  setup: (props) => {
     const count = ref(0)
     return { count }
   }

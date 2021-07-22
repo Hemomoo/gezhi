@@ -8,7 +8,8 @@
     "dev:ele": "npx electron  src/main/index.ts"
   },
   "dependencies": {
-    "@kangc/v-md-editor": "^2.3.5",
+    "@kangc/v-md-editor": "^2.3.7",
+    "@toast-ui/editor": "^2.5.3",
     "@types/mockjs": "^1.0.4",
     "axios": "^0.21.1",
     "element-plus": "^1.0.2-beta.53",
