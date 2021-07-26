@@ -21,7 +21,7 @@ export const store = createStore<State>({
         }
     },
     actions: {
-        slidebarActiveIdFn(context, activeId:string):void {
+        slidebarActiveIdFn(context, activeId: string): void {
             context.commit('SLIDEBAR_ACTIVE_ID', activeId)
         }
     }

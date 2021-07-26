@@ -1,5 +1,5 @@
 <template>
-  <v-md-editor ref='test' v-model="text" height="100vh"></v-md-editor>
+  <v-md-editor ref="test" v-model="text" height="100vh"></v-md-editor>
 </template>
 
 <script lang="ts">
@@ -12,12 +12,11 @@ export default defineComponent({
   components: {},
   setup(props, context) {
     let text = ref<any>("");
-    let test  
     const data = reactive({});
+    // 监听器
     watch(
       () => text.value,
       (val) => {
-        // console.log('vue',vue);
         console.log("val: ", val);
       }
     );
