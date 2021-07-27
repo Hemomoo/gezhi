@@ -25,9 +25,21 @@ VueMarkdownEditor.use(vuepressTheme, {
 });
 
 
+
+
+
+
+
 //  创建mock数据。
 setupProdMockServer()
 
 export const app = createApp(App).use(router).use(naive).use(ElementPlus).use(store, key).use(VueMarkdownEditor).mount('#app')
+// console.log('createApp(App): ', createApp({
+//     name:"component12121",
+//     data() {
+//         return { count: 4 }
+//     }
+// }).mount('#app'));
+console.log('app', app);
 
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="time-line f">
+  <div class="time-line f" id='1212'>
     <div class="left">
       <div class="f fdc pt20">
         <div class="head fja f">
@@ -75,8 +75,6 @@ interface itemInterface {
   title: string;
 }
 
-
-
 interface titleListInterface {
   code: number;
   data: {
@@ -103,8 +101,17 @@ export default defineComponent({
     SwiperSlide,
     SortDialog,
   },
-  setup() {
-    let mouseItemId = ref<string>('');
+  mounted() {
+    console.log(">>>>>>mounted", this);
+    // console.log(document.getElementById("test"));
+  },
+  methods: {
+    clickTime(item: any, index: number) {
+      console.log(">>>>>>mounted", this);
+    },
+  },
+  setup(props, ctx) {
+    let mouseItemId = ref<string>("");
     let titTotal = ref<itemInterface[]>([]);
     let sortButton = ref<any>("sortButton");
     let offsetLeft = ref<number>(0);
@@ -112,7 +119,7 @@ export default defineComponent({
     const data = reactive<dataType>({ controlledSwiper: null });
     // 挂载后
     onMounted(() => {
-      timeList().then((res:any) => {
+      timeList().then((res: any) => {
         mouseItemId.value = res.items[0].id;
         titTotal.value = res.items;
       });
@@ -140,17 +147,18 @@ export default defineComponent({
       });
     }
 
-    function clickTime(item: any, index: number) {
-      mouseItemId.value = item.id;
-      data.controlledSwiper.slideTo(+index - 1);
-    }
+    // function clickTime(item: any, index: number) {
+    //   console.log(">>>>>>mounted", ctx);
+    //   mouseItemId.value = item.id;
+    //   data.controlledSwiper.slideTo(+index - 1);
+    // }
 
     return {
       mouseItemId,
       mouseOver,
       onSwiper,
       onSlideChange,
-      clickTime,
+      // clickTime,
       titTotal,
       load,
       sortButton,
