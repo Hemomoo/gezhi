@@ -18,7 +18,7 @@
             }"
           >
             <template #header-extra> 重置 </template>
-            <SortDialog></SortDialog>
+            <SortDialog id='test'></SortDialog>
           </n-modal>
         </div>
         <div class="pl10 pr10 mt20 mb20">

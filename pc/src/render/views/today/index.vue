@@ -2,19 +2,23 @@
   <div class="today">
     <div class="hearder" id="test">
       <p class="fwb f26 tal">2021年12月3日</p>
-      <p class="tal" @click="test">今天过得怎么样</p>
-      <p>{{ fullName }}</p>
+      <p class="tal">今天过得怎么样</p>
     </div>
     <section class="content f fjb">
       <div class="left">
         <!-- 日期 -->
         <div class="date">
+          <Paster v-model:value="test">
+            <div>可是看到{{ test }}</div>
+            <template #header>
+              <div>年获得丰厚</div>
+            </template>
+          </Paster>
           <div></div>
           <div></div>
         </div>
       </div>
       <div class="right">
-        <Statistics></Statistics>
         <Statistics></Statistics>
       </div>
     </section>
@@ -23,7 +27,9 @@
 
 <script lang="ts">
 import Statistics from "./components/Statistics.vue";
+import Paster from "./components/Paster.vue";
 import _ from "lodash";
+import { reactive, toRefs, ref, computed, watch, h } from "vue";
 export default {
   name: "Today",
   data() {
@@ -34,25 +40,27 @@ export default {
   },
   components: {
     Statistics,
+    Paster,
+  },
+  provide: {
+    user: "John Doe",
   },
   computed: {},
-  beforeCreate() {
-    // console.log(">>>>>>beforeCreate", this);
-    // console.log(document.getElementById("test"));
+  render(h: any) {
+    return h("div", {
+      onClick: ($event: any) => console.log("clicked", $event.target),
+    });
   },
-  created() {
-    // console.log(">>>>>>created", this);
-    // console.log(document.getElementById("test"));
-    // 用 Lodash 的防抖函数
-    // this.debouncedClick = _.debounce(this.click, 500)
-  },
-  mounted() {
-    console.log(">>>>>>mounted", this);
-    // console.log(document.getElementById("test"));
-  },
-  methods: {},
+  setup() {
+    let test = ref<string>("test");
+    watch(test, (val) => {
+      console.log("val:>>>>> ", val);
+    });
 
-  setup() {},
+    return {
+      test,
+    };
+  },
 };
 </script>
 

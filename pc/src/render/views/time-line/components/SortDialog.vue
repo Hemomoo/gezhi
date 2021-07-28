@@ -1,15 +1,16 @@
 <template>
   <div class="sort-dialog">
+    <div  v-bind="$attrs">测试attrs</div>
     <transition name="fade-righ" @before-enter="beforeEnter" :duration="1000">
       <!-- 二级菜单 -->
       <n-list v-if="secondaryListShow">
         <n-list-item>
-          <template v-for="item in sortArr" :key="index"> 测试 </template>
+          <template v-for="(item,index) in sortArr" :key="index"> 测试 </template>
         </n-list-item>
       </n-list>
       <!-- 一级菜单 -->
       <n-list v-else>
-        <template v-for="item in sortArr" :key="index">
+        <template v-for="(item,index) in sortArr" :key="index">
           <n-list-item @click="navigator">
             <SortItem :title="item.title" :sub-title="item.subTitle"></SortItem>
           </n-list-item>
@@ -35,6 +36,7 @@ export default defineComponent({
   name: "SortDialog",
   //import引入的组件需要注入到对象中才能使用
   components: { SortItem },
+  emits:[], // 抛出事件
   //这里存放数据
   setup() {
     let secondaryListShow = ref<boolean>(false);
