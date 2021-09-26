@@ -30,6 +30,20 @@ export default ({ command }: ConfigEnv): UserConfigExport => {
         },
       },
     },
+    server:{
+      open: '/index.html',  // 自动在浏览器中打开的网址
+      proxy:{
+        '/api': {
+          target: 'http://jsonplaceholder.typicode.com',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, '')
+        },
+      }, // 开发服务器请求后台开发的时候的代理
+    },
+    // 构建的配置
+    build:{
+
+    }
   };
 };
 
