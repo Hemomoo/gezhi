@@ -241,3 +241,7 @@ $ npm run dev:all
 [ele] [2020-08-17T08:57:11.851Z] [electron-connect] [server] server created and listening on 30080  
 [ele]                                                                                              
 ```
+
+# 打包优化
+1. 查看打包时间
+2. 

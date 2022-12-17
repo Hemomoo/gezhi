@@ -54,7 +54,7 @@
 import { SearchOutline } from "@vicons/ionicons5";
 import Grid from "./components/Grid.vue";
 import { ref, reactive, toRefs, onMounted, nextTick } from "vue";
-import "swiper/swiper.scss";
+import 'swiper/css';
 import { SortFilled } from "@vicons/material";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import SwiperCore, { Mousewheel } from "swiper";

@@ -14,7 +14,7 @@ function createWin() {
     },
   })
 
-  win.loadURL('http://localhost:5000/')
+  win.loadURL('http://localhost:3000/')
   // 加载html页面
   // win.loadFile(`file://${join(__dirname, '../render/index.html')}`)
 }
