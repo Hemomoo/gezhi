@@ -1,5 +1,7 @@
 pc/node_modules/
 node/node_modules
+vitePc/node_modules
+vitepc/node_modules
 .DS_Store
 pc/dist
 pc/dist-ssr
