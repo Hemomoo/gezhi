@@ -4,7 +4,7 @@ class LineItem extends StatelessWidget {
   final String tit;
   final Widget widget;
   final Function onTabFn;
-  LineItem({@required this.tit, @required this.widget, @required this.onTabFn});
+  LineItem({required this.tit, required this.widget, required this.onTabFn});
 
   @override
   Widget build(BuildContext context) {

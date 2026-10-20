@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gezhi/style/style.dart';
 
 class LabelWidget extends StatefulWidget {
-  const LabelWidget({Key key}) : super(key: key);
+  const LabelWidget({required Key key}) : super(key: key);
 
   @override
   _LabelWidgetState createState() => _LabelWidgetState();

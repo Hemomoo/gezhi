@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gezhi/utils/weekIndex.dart';
 
@@ -19,7 +18,7 @@ import 'package:gezhi/sqlite/sql_common.dart';
 import 'package:flutter/material.dart';
 
 class PositionItem extends StatefulWidget {
-  PositionItem({this.tit, this.index, Key key}) : super(key: key);
+  PositionItem({required this.tit, required this.index, required Key key}) : super(key: key);  
   final String tit;
   final int index;
   @override
@@ -32,7 +31,7 @@ class _PositionItemState extends State<PositionItem> {
   final int index;
   bool isDel = false;
 
-  _PositionItemState({this.tit, this.index});
+  _PositionItemState({required this.tit, required this.index});
 
 
   @override
@@ -86,7 +85,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  double screenWidth;
+  late double screenWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -429,20 +428,20 @@ class _HomeState extends State<Home> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Text(
-                element["weekday"],
+                element["weekday"]!,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    color: day == int.parse(element["day"])
+                    color: day == int.parse(element["day"]!)
                         ? GZColors.primary
                         : Colors.black),
               ),
               Padding(
                 padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: Text(
-                  element["day"],
+                  element["day"]!,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      color: day == int.parse(element["day"])
+                      color: day == int.parse(element["day"]!)
                           ? GZColors.primary
                           : Colors.black),
                 ),
@@ -458,9 +457,9 @@ class _HomeState extends State<Home> {
   // 添加小部件
   void _addWidget(BuildContext context) {
     List<Widget> _positionItemList = [
-      PositionItem(tit: '日程', key: ValueKey(1)),
-      PositionItem(tit: '名言', key: ValueKey(2)),
-      PositionItem(tit: '回忆', key: ValueKey(3))
+      PositionItem(tit: '日程', index: 0, key: ValueKey(1)),
+      PositionItem(tit: '名言', index: 1, key: ValueKey(2)),
+      PositionItem(tit: '回忆', index: 2, key: ValueKey(3))
     ];
 
     List<Widget> _removePositionItemList = [Text('ll')];

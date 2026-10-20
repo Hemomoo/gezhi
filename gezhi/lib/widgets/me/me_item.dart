@@ -5,7 +5,7 @@ class MeItem extends StatelessWidget {
   final IconData icon;
   final String url;
   final bool isRefresh;
-  MeItem({@required this.title, @required this.icon, this.url, this.isRefresh});
+  MeItem({required this.title, required this.icon, required this.url, required this.isRefresh});
 
   @override
   Widget build(BuildContext context) {

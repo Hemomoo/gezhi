@@ -1,11 +1,10 @@
 // 首页列表的item widget
 import 'package:flutter/material.dart';
-import 'package:gezhi/model/time_line/diary.dart';
 
 class ListDiaryWidgetItem extends StatelessWidget {
   final Map<String, dynamic> diary;
   final String date;
-  const ListDiaryWidgetItem(this.diary, this.date, {Key key}) : super(key: key);
+  const ListDiaryWidgetItem(this.diary, this.date, {required Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

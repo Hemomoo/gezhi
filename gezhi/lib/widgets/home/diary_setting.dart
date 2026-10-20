@@ -6,7 +6,7 @@ import 'package:toast/toast.dart';
 import 'package:gezhi/pages/index.dart';
 
 class DiarySetting extends StatefulWidget {
-  const DiarySetting({Key key}) : super(key: key);
+  const DiarySetting({required Key key}) : super(key: key);
 
   @override
   _DiarySettingState createState() => _DiarySettingState();
@@ -45,7 +45,7 @@ class _DiarySettingState extends State<DiarySetting> {
                   if (val == 'copy') {
                     Clipboard.setData(ClipboardData(text: val)).then(
                           (value) => {
-                        Toast.show("复制成功", context),
+                        Toast.show("复制成功", textStyle: context),
                       },
                     );
                   } else {

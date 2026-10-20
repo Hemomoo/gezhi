@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gezhi/style/style.dart';
 
 class RecordGrid extends StatefulWidget {
-  const RecordGrid({Key key}) : super(key: key);
+  const RecordGrid({required Key key}) : super(key: key);
 
   @override
   _RecordGridState createState() => _RecordGridState();

@@ -8,7 +8,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  List<String> imageList;
+  late List<String> imageList;
   int _currentIndex = 0;
 
   @override

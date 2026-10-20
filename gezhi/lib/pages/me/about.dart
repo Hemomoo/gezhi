@@ -9,7 +9,7 @@ class About extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        leading: MeAppbar(),
+        leading: MeAppbar(url: '',),
         actions: [
           GestureDetector(
             child: Padding(
@@ -60,7 +60,7 @@ class About extends StatelessWidget {
     );
   }
 
-  Widget _aboutItem({@required String tit, Widget trailing, Function fn}) {
+  Widget _aboutItem({required String tit, required Widget trailing, required Function fn}) {
     return ListTile(
       title: Text(tit, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
       trailing: (trailing is Text) ? trailing : Icon(Icons.arrow_forward_ios, size: 18),

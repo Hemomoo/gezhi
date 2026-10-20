@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 class Paster extends StatefulWidget {
-  const Paster({Key key}) : super(key: key);
+  const Paster({required Key key}) : super(key: key);
 
   @override
   _PasterState createState() => _PasterState();

@@ -4,7 +4,7 @@ import 'package:gezhi/widgets/common/common.dart';
 import 'package:gezhi/style/style.dart';
 
 class SortList extends StatefulWidget {
-  const SortList({Key key}) : super(key: key);
+  const SortList({required Key key}) : super(key: key);
 
   @override
   _SortListState createState() => _SortListState();

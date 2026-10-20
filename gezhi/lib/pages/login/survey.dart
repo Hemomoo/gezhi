@@ -53,7 +53,7 @@ class _SurveyState extends State<Survey> {
                     ),
                   ),
                 ),
-                SelctedWidget(callBack: (value) => onChanged(value)),
+                SelctedWidget(callBack: (value) => onChanged(value), key: const Key('selected_widget')),
               ],
             ),
             Positioned(
@@ -90,7 +90,7 @@ class _SurveyState extends State<Survey> {
 }
 
 class SelctedWidget extends StatefulWidget {
-  SelctedWidget({Key key, this.callBack}) : super(key: key);
+  SelctedWidget({required Key key, this.callBack}) : super(key: key);
   final callBack;
   @override
   _SelctedWidgetState createState() => _SelctedWidgetState();

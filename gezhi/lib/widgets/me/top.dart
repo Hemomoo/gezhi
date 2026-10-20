@@ -8,14 +8,14 @@ class Top extends StatefulWidget {
 }
 
 class _TopState extends State<Top> {
-  String avatar;
-  SharedPreferences prefs;
+  late String avatar;
+  late SharedPreferences prefs;
 
   @override
   void initState() {
     Future.delayed(Duration(seconds: 0), () async {
       prefs = await SharedPreferences.getInstance();
-      avatar = prefs.getString('avatar');
+      avatar = prefs.getString('avatar')!;
       setState(() {});
     });
 
