@@ -229,7 +229,7 @@ class Account extends StatelessWidget {
                 ListTile(
                   title: Text('拍照', style: _textStyle),
                   onTap: () {
-                    picker.getImage(source: ImageSource.camera);
+                    picker.pickImage(source: ImageSource.camera);
                   },
                 ),
                 ListTile(
@@ -238,7 +238,7 @@ class Account extends StatelessWidget {
                     style: _textStyle,
                   ),
                   onTap: () {
-                    picker.getImage(source: ImageSource.gallery);
+                    picker.pickImage(source: ImageSource.gallery);
                   },
                 ),
               ],

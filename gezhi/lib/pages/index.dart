@@ -43,7 +43,7 @@ class _IndexPageState extends State<IndexPage> {
   List<Widget> tabBodies = [Home(), TimeLine(), Calendar(), Search(), Me()];
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, width: 750, height: 1334);
+    ScreenUtil.init(context, designSize: const Size(750, 1334));
     return Scaffold(
       body: tabBodies[currentIndex],
       bottomNavigationBar: BottomNavigationBar(

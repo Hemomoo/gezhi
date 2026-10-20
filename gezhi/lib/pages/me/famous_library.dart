@@ -216,8 +216,9 @@ class _FamousLibraryState extends State<FamousLibrary> {
                 title: Text('拷贝文本'),
                 onTap: () {
                   Clipboard.setData(ClipboardData(text: tit)).then(
-                    (value) => {
-                      Toast.show("复制成功", context),
+                    (value) {
+                      ToastContext().init(context);
+                      Toast.show("复制成功");
                     },
                   );
                 },

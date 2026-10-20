@@ -312,6 +312,11 @@ class _BatchExportState extends State<BatchExport> {
 
 //  授权webView
   void _authEvernotr() {
+    final WebViewController controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setUserAgent(
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.146 Safari/537.36')
+      ..loadRequest(Uri.parse('https://griddiaryapp.com/zh/'));
     showModalBottomSheet(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       context: context,
@@ -320,11 +325,7 @@ class _BatchExportState extends State<BatchExport> {
       elevation: 120, // 高度
       builder: (BuildContext context) {
         return Container(
-          child: WebView(
-            initialUrl: 'https://griddiaryapp.com/zh/',
-            userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.146 Safari/537.36',
-            javascriptMode: JavascriptMode.unrestricted, // 允许使用js,可以用页面上的事件
-          ),
+          child: WebViewWidget(controller: controller),
         );
       },
     );

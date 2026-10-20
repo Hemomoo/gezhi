@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:gezhi/config.dart';
 
 BaseOptions options =
-    BaseOptions(baseUrl: Config.gezhi_url, connectTimeout: 5000, receiveTimeout: 3000, contentType: 'application/x-www-form-urlencoded');
+    BaseOptions(baseUrl: Config.gezhi_url, connectTimeout: Duration(milliseconds: 5000), receiveTimeout: Duration(milliseconds: 3000), contentType: 'application/x-www-form-urlencoded');
 
 Future request(
   String url, {

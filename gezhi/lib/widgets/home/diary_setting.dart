@@ -44,8 +44,9 @@ class _DiarySettingState extends State<DiarySetting> {
                 onSelected: (val) {
                   if (val == 'copy') {
                     Clipboard.setData(ClipboardData(text: val as String)).then(
-                          (value) => {
-                        Toast.show("复制成功", context),
+                      (value) {
+                        ToastContext().init(context);
+                        Toast.show("复制成功");
                       },
                     );
                   } else {
