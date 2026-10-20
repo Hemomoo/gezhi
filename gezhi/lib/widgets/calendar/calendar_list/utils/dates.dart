@@ -10,8 +10,8 @@ int getDaysInMonth(int year, int month) {
 }
 
 String getMonthName(int month, {required List<String> monthNames}) {
-  final List<String> names = monthNames ??
-      <String>[
+  final List<String> names = monthNames.isEmpty
+      ? <String>[
         '一月',
         '二月',
         '三月',
@@ -24,7 +24,8 @@ String getMonthName(int month, {required List<String> monthNames}) {
         '十月',
         '十一月',
         '十二月',
-      ];
+      ]
+      : monthNames;
   return names[month - 1];
 }
 

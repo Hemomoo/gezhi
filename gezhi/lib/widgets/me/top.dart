@@ -8,19 +8,17 @@ class Top extends StatefulWidget {
 }
 
 class _TopState extends State<Top> {
-  late String avatar;
+  String avatar = '';
   late SharedPreferences prefs;
 
   @override
   void initState() {
+    super.initState();
     Future.delayed(Duration(seconds: 0), () async {
       prefs = await SharedPreferences.getInstance();
-      avatar = prefs.getString('avatar')!;
-      setState(() {});
+      avatar = prefs.getString('avatar') ?? '';
+      if (mounted) setState(() {});
     });
-
-    // TODO: implement initState
-    super.initState();
   }
 
   @override
@@ -47,7 +45,17 @@ class _TopState extends State<Top> {
             ],
           ),
           ClipOval(
-            child: Image.file(
+            child: avatar.isEmpty
+                ? Container(
+                    width: 50,
+                    height: 50,
+                    color: Colors.black12,
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.white38,
+                    ),
+                  )
+                : Image.file(
                     File(avatar),
                     width: 50,
                     height: 50,
