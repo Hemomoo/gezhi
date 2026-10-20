@@ -55,12 +55,8 @@ dependencies:
 #  侧边滑动删除
   flutter_slidable: ^2.0.0
 
-  zefyr: ^1.0.0-dev.2.0
-
-#  zefyr:
-#    git:
-#      url: https://github.com/memspace/zefyr.git
-#      path: packages/zefyr
+#  富文本编辑器
+  fleather: ^1.8.0
 
 
 
