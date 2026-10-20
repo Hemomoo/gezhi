@@ -62,7 +62,7 @@ class DiaryList extends StatelessWidget {
               color: Colors.white,
               borderRadius: BorderRadius.only(topLeft: Radius.circular(14), topRight: Radius.circular(14)),
             ),
-            child: DiarySetting(),
+            child: DiarySetting(key: UniqueKey()),
           ),
         );
       },

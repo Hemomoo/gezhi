@@ -6,7 +6,7 @@ import 'package:gezhi/style/style.dart';
 import 'package:gezhi/utils/num_padding.dart';
 
 class WeekList extends StatefulWidget {
-  const WeekList({Key key}) : super(key: key);
+  const WeekList({required Key key}) : super(key: key);
 
   @override
   _WeekListState createState() => _WeekListState();
@@ -23,7 +23,7 @@ class _WeekListState extends State<WeekList> {
   List<dynamic> writeDay = [];
   List<String> weekList = ['一', '二', '三', '四', '五', '六', '日'];
   List<Map<String, String>> dateList = [];
-  String writeMonth = DateTime.now().month < 10 ? '0${DateTime.now().month.toString()}' : DateTime.now().month;
+  Object writeMonth = DateTime.now().month < 10 ? '0${DateTime.now().month.toString()}' : DateTime.now().month;
   String year = new DateTime.now().year.toString();
   @override
   void initState() {
@@ -77,7 +77,7 @@ class _WeekListState extends State<WeekList> {
     // dateList.insert(0, dateList.removeLast());
 
     List<String> dayList = dateList.map((e) {
-      String val = year + '-' + writeMonth + '-' + numPadding(e['day']);
+      String val = year + '-' + writeMonth.toString() + '-' + numPadding(e['day']);
       return '"' + val + '"';
     }).toList();
 
@@ -123,14 +123,14 @@ class _WeekListState extends State<WeekList> {
             GestureDetector(
               child: writeDay.indexOf(element['day']) != -1
                   ? Text(
-                      element["weekday"],
+                      element["weekday"]!,
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: day == int.parse(element["day"]) ? GZColors.primary : Colors.black),
+                      style: TextStyle(color: day == int.parse(element["day"]!) ? GZColors.primary : Colors.black),
                     )
                   : Text(
-                      element["weekday"],
+                      element["weekday"]!,
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: day == int.parse(element["day"]) ? GZColors.primary : Colors.black),
+                      style: TextStyle(color: day == int.parse(element["day"]!) ? GZColors.primary : Colors.black),
                     ),
               onTap: () {
                 _dayBottomSheet('$year-$writeMonth-${element['day']}');
@@ -151,14 +151,14 @@ class _WeekListState extends State<WeekList> {
                 // padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: writeDay.indexOf(element['day']) != -1
                     ? Text(
-                        element["day"],
+                        element["day"]!,
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Colors.white),
                       )
                     : Text(
-                        element["day"],
+                        element["day"]!,
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: day == int.parse(element["day"]) ? GZColors.primary : Colors.black),
+                        style: TextStyle(color: day == int.parse(element["day"]!) ? GZColors.primary : Colors.black),
                       ),
               ),
             )

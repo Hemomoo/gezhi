@@ -7,8 +7,8 @@ class TestAnimation extends StatefulWidget {
 
 class _TestAnimationState extends State<TestAnimation>
     with SingleTickerProviderStateMixin {
-  AnimationController _animationController;
-  Animation _animation;
+  late AnimationController _animationController;
+  late Animation _animation;
 
   @override
   void initState() {

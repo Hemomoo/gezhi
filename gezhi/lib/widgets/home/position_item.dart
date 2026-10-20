@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 
 class PositionItem extends StatefulWidget {
-  PositionItem({this.tit});
+  PositionItem({required this.tit});
   final String tit;
 
   @override
@@ -11,7 +11,7 @@ class PositionItem extends StatefulWidget {
 
 class _PositionItemState extends State<PositionItem> {
   final String tit;
-  _PositionItemState({this.tit});
+  _PositionItemState({required this.tit});
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -9,7 +9,7 @@ int getDaysInMonth(int year, int month) {
       : DateTime(year + 1, 1, 0).day;
 }
 
-String getMonthName(int month, {List<String> monthNames}) {
+String getMonthName(int month, {required List<String> monthNames}) {
   final List<String> names = monthNames ??
       <String>[
         '一月',

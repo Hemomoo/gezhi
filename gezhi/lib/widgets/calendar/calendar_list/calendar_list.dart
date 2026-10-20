@@ -14,15 +14,13 @@ class CalendarList extends StatefulWidget {
   final EventBus eventBus;
 
   CalendarList(
-      {@required this.firstDate,
-      @required this.lastDate,
-      this.onSelectFinish,
-      this.selectedStartDate,
-      this.selectedEndDate,
-      this.eventBus})
-      : assert(firstDate != null),
-        assert(lastDate != null),
-        assert(!firstDate.isAfter(lastDate),
+      {required this.firstDate,
+      required this.lastDate,
+      required this.onSelectFinish,
+      required this.selectedStartDate,
+      required this.selectedEndDate,
+      required this.eventBus})
+      : assert(!firstDate.isAfter(lastDate),
             'lastDate must be on or after firstDate');
 
   @override
@@ -31,14 +29,14 @@ class CalendarList extends StatefulWidget {
 
 class _CalendarListState extends State<CalendarList> {
   final double HORIZONTAL_PADDING = 25.0;
-  DateTime selectStartTime;
-  DateTime selectEndTime;
-  int yearStart;
-  int monthStart;
-  int yearEnd;
-  int monthEnd;
-  int count;
-  int initCount;
+  late DateTime selectStartTime;
+  late DateTime selectEndTime;
+  late int yearStart;
+  late int monthStart;
+  late int yearEnd;
+  late int monthEnd;
+  late int count;
+  late int initCount;
 
   ScrollController _controller = ScrollController();
 

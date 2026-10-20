@@ -43,7 +43,7 @@ class _DiarySettingState extends State<DiarySetting> {
                 padding: EdgeInsets.all(0.0),
                 onSelected: (val) {
                   if (val == 'copy') {
-                    Clipboard.setData(ClipboardData(text: val)).then(
+                    Clipboard.setData(ClipboardData(text: val as String)).then(
                           (value) => {
                         Toast.show("复制成功", textStyle: context),
                       },

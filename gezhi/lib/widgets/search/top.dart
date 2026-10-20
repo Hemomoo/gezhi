@@ -5,7 +5,9 @@ class Top extends StatelessWidget {
   final String title;
   final int num;
   final String url;
-  Top({@required this.title, @required this.num, this.url = ''});
+  Top({required this.title, required this.num, this.url = ''});
+
+
 
   @override
   Widget build(BuildContext context) {

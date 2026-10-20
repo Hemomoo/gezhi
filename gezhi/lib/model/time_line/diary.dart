@@ -1,7 +1,7 @@
 class Diary {
-  String tip;
-  String date;
-  String diaryInfo;
+  late String tip;
+  late String date;
+  late String diaryInfo;
 
   Diary({required this.tip, required this.date, required this.diaryInfo});
 
