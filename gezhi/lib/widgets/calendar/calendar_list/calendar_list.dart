@@ -29,8 +29,8 @@ class CalendarList extends StatefulWidget {
 
 class _CalendarListState extends State<CalendarList> {
   final double HORIZONTAL_PADDING = 25.0;
-  late DateTime selectStartTime;
-  late DateTime selectEndTime;
+  DateTime? selectStartTime;
+  DateTime? selectEndTime;
   late int yearStart;
   late int monthStart;
   late int yearEnd;
@@ -82,8 +82,8 @@ class _CalendarListState extends State<CalendarList> {
         return;
       }
       // 如果用户反选，则交换开始和结束日期
-      if (selectStartTime?.isAfter(selectEndTime)) {
-        DateTime temp = selectStartTime;
+      if (selectStartTime!.isAfter(selectEndTime!)) {
+        DateTime? temp = selectStartTime;
         selectStartTime = selectEndTime;
         selectEndTime = temp;
       }

@@ -11,7 +11,7 @@ import 'package:quill_delta/quill_delta.dart';
 
 class RevisedDiary extends StatefulWidget {
   final Map arguments;
-  RevisedDiary({Key? key, this.arguments});
+  RevisedDiary({Key? key, this.arguments = const {}});
 
   @override
   _RevisedDiaryState createState() => _RevisedDiaryState();

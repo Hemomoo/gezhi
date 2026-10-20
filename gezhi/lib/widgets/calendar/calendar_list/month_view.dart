@@ -86,12 +86,12 @@ class _MonthViewState extends State<MonthView> {
           day > 0) {
         isDefaultSelected = true;
       }
-      if (widget.dateTimeStart != null && widget.dateTimeEnd != null) {
-        isDefaultSelected = (moment.isAtSameMomentAs(widget.dateTimeStart) ||
-                    moment.isAtSameMomentAs(widget.dateTimeEnd)) ||
-                moment.isAfter(widget.dateTimeStart) &&
-                    moment.isBefore(widget.dateTimeEnd) &&
-                    day > 0
+      final DateTime? start = widget.dateTimeStart;
+      final DateTime? end = widget.dateTimeEnd;
+      if (start != null && end != null) {
+        isDefaultSelected = (moment.isAtSameMomentAs(start) ||
+                    moment.isAtSameMomentAs(end)) ||
+                moment.isAfter(start) && moment.isBefore(end) && day > 0
             ? true
             : false;
       }
