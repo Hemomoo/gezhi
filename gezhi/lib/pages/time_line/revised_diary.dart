@@ -1,12 +1,6 @@
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:gezhi/style/style.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
-import 'package:quill_delta/quill_delta.dart';
 // import 'package:zefyr/zefyr.dart';
 
 class RevisedDiary extends StatefulWidget {

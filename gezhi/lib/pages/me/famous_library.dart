@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gezhi/fonts/font.dart';
 import 'package:gezhi/style/style.dart';

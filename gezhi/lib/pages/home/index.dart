@@ -10,12 +10,9 @@ import 'package:gezhi/widgets/home/diary_list.dart';
 import 'package:gezhi/widgets/common/common.dart';
 import 'package:gezhi/widgets/home/add_diary_list.dart';
 
-import 'package:draggable_flutter_list/draggable_flutter_list.dart';
-import 'package:gezhi/widgets/home/small_widget.dart';
 import 'package:gezhi/sqlite/sql_common.dart';
 // import 'package:zefyr/zefyr.dart';
 
-import 'package:flutter/material.dart';
 
 class PositionItem extends StatefulWidget {
   PositionItem({required this.tit, required this.index, required Key key}) : super(key: key);  

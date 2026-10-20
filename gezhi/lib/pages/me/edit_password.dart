@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gezhi/style/style.dart';
 import 'package:gezhi/widgets/me/appbar.dart';

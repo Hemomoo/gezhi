@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:gezhi/pages/error/404.dart';
 import 'package:gezhi/pages/index.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import 'package:gezhi/pages/login/login.dart';s
 
 import 'package:gezhi/sqlite/init_databasee.dart';
 
 // 路由
 import 'package:gezhi/routes/route.dart';
-import 'package:gezhi/style/style.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // 使用了async/ await 异步的解决办法

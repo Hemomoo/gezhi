@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
 import 'package:gezhi/style/style.dart';
 import 'package:gezhi/widgets/time_line/listing_item.dart';
 import 'package:gezhi/widgets/time_line/grid_item.dart';

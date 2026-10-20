@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gezhi/config.dart';
 
 // page
 import 'package:gezhi/pages/index.dart';

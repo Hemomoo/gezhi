@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gezhi/widgets/me/appbar.dart';
 import 'package:gezhi/widgets/me/line_item.dart';

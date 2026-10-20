@@ -1,6 +1,5 @@
 import 'package:event_bus/event_bus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'calendar_notification.dart';
 import 'weekday_row.dart';
 import 'day_number.dart';

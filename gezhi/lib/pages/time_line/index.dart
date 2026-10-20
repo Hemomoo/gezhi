@@ -1,11 +1,7 @@
-import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:gezhi/style/style.dart';
 import 'package:gezhi/widgets/common/common.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 class TimeLine extends StatefulWidget {
   @override

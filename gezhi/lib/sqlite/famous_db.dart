@@ -18,9 +18,7 @@ class Tip {
       columnSentence: sentence,
       columnAuthor: author,
     };
-    if (id != null) {
-      map[columnId] = id;
-    }
+    map[columnId] = id;
     return map;
   }
 
@@ -68,7 +66,7 @@ class TipSqlite {
       columnSentence,
       columnAuthor,
     ]);
-    if (maps == null || maps.length == 0) {
+    if (maps.length == 0) {
       return [];
     }
 

@@ -47,14 +47,7 @@ class _TopState extends State<Top> {
             ],
           ),
           ClipOval(
-            child: avatar == null
-                ? Image.network(
-                    'https://img.cc0.cn/pixabay/201910282316374919.jpg/content',
-                    width: 50,
-                    height: 50,
-                    fit: BoxFit.cover,
-                  )
-                : Image.file(
+            child: Image.file(
                     File(avatar),
                     width: 50,
                     height: 50,

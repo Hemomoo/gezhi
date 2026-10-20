@@ -30,7 +30,7 @@ class _WeekNumberState extends State<WeekNumber> {
       alignment: Alignment.center,
 
       child: Text(
-        widget.day is String?widget.day:widget.day.toString(),
+        widget.day,
         textAlign: TextAlign.center,
         style: TextStyle(
           color:Colors.black,

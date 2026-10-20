@@ -1,7 +1,4 @@
-import 'package:draggable_flutter_list/draggable_list_item.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:event_bus/event_bus.dart';
 
 import 'package:gezhi/widgets/calendar/calendar_item.dart';
