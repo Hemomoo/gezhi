@@ -39,17 +39,13 @@ fvm install 3.3.10
 fvm use 3.3.10
 ```
 
-> **必须使用 Flutter 3.3.10（Dart 2.18.6）**。项目的 SDK 约束为 `>=2.17.4 <3.0.0`，部分长期未维护的依赖无法在 Dart 3 下编译，升级 Flutter 会导致大量 API 变更。
-
-### 空安全说明
-
-`flutter_swiper`、`left_scroll_actions`、`toast` 等依赖尚未适配空安全，因此**所有运行与构建命令都必须追加 `--no-sound-null-safety`**，否则会在编译期报错。
+> **必须使用 Flutter 3.3.10（Dart 2.18.6）**。项目的 SDK 约束为 `>=2.17.4 <3.0.0`，部分依赖的旧版本无法在 Dart 3 下编译，升级 Flutter 会导致大量 API 变更。
 
 ## 运行
 
 ```bash
 fvm flutter pub get
-fvm flutter run -d <device-id> --no-sound-null-safety
+fvm flutter run -d <device-id>
 ```
 
 查看可用设备：
@@ -62,11 +58,12 @@ fvm flutter devices
 
 ```bash
 # debug
-fvm flutter build apk --debug --no-sound-null-safety
+fvm flutter build apk --debug
 
 # release
-fvm flutter build apk --release --no-sound-null-safety
+fvm flutter build apk --release
 ```
+
 
 ## Android 构建配置
 
