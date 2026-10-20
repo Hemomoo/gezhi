@@ -42,7 +42,8 @@ class Statistics extends StatelessWidget {
             ),
             Padding(padding: EdgeInsets.only(top: 20)),
             Container(
-              height: ScreenUtil().setHeight(240),
+              height: ScreenUtil().setHeight(240.0).toDouble(),
+              padding: EdgeInsets.all(14),
               child: GridView.count(
                 crossAxisCount: 3,
                 childAspectRatio: 2,

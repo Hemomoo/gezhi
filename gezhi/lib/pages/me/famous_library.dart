@@ -72,13 +72,13 @@ class _FamousLibraryState extends State<FamousLibrary> {
           )
         ],
       ),
-      body: FutureBuilder(
+      body: FutureBuilder<List<Map<String, dynamic>>>(
         future: (() async {
           return await tipSqlite.get();
         })(),
         builder: (BuildContext context, snap) {
           if (snap.hasData) {
-            famousList =  List.from(snap.data) ;
+            famousList = List.from(snap.data!);
             return Column(
               children: [
                 Container(

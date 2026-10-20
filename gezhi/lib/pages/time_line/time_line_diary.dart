@@ -263,10 +263,14 @@ class _TimeLineDiaryState extends State<TimeLineDiary> {
   // 导出
   void _exportMode() {
     showModalBottomSheet(
+      context: context,
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(14),
       ),
+      builder: (BuildContext context) {
+        return Container();
+      },
     );
   }
 }
