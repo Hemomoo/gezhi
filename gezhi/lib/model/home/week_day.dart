@@ -1,6 +1,6 @@
 class WeekDayModel {
-  String week;
-  int day;
+  late String week;
+  late int day;
 
   WeekDayModel({required this.week, required this.day});
 

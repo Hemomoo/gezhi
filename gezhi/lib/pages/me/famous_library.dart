@@ -18,7 +18,7 @@ class FamousLibrary extends StatefulWidget {
 
 class _FamousLibraryState extends State<FamousLibrary> {
   final SqlUtil tipSqlite = SqlUtil.setTable('famous');
-  List famousList;
+  late List famousList;
 
   @override
   void initState() {

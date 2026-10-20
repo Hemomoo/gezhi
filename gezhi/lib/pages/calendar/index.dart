@@ -72,6 +72,8 @@ class _CalendarState extends State<Calendar> {
               eventBus: eventBus,
               firstDate: DateTime(2000, 1),
               lastDate: DateTime(2100, 8),
+              selectedStartDate: DateTime.now(),
+              selectedEndDate: DateTime.now(),
               onSelectFinish: (selectStartTime, selectEndTime) {
                 List<DateTime> result = <DateTime>[];
                 result.add(selectStartTime);

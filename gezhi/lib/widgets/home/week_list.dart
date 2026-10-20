@@ -84,7 +84,7 @@ class _WeekListState extends State<WeekList> {
     final SqlUtil sqlite = SqlUtil.setTable('diary');
     String sqlString = dayList.join(",");
     print(sqlString);
-    sqlite.rawQuery('SELECT date FROM diary WHERE date IN (' + sqlString + ')', null).then((value) {
+    sqlite.rawQuery('SELECT date FROM diary WHERE date IN (' + sqlString + ')', []).then((value) {
       print(value);
       value.forEach((element) {
         writeDay.add(element['date'].split('-').last);

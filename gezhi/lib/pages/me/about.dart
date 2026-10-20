@@ -60,12 +60,14 @@ class About extends StatelessWidget {
     );
   }
 
-  Widget _aboutItem({required String tit, required Widget trailing, required Function fn}) {
+  Widget _aboutItem({required String tit, Widget? trailing, Function? fn}) {
     return ListTile(
       title: Text(tit, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-      trailing: (trailing is Text) ? trailing : Icon(Icons.arrow_forward_ios, size: 18),
+      trailing: (trailing != null && trailing is Text) ? trailing : Icon(Icons.arrow_forward_ios, size: 18),
       onTap: () {
-        fn();
+        if (fn != null) {
+          fn();
+        }
       },
     );
   }

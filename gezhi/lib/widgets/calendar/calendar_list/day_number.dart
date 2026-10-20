@@ -4,10 +4,10 @@ import 'calendar_notification.dart';
 
 class DayNumber extends StatefulWidget {
   const DayNumber({
-    @required this.size,
-    @required this.day,
-    @required this.isDefaultSelected,
-    this.isToday,
+    required this.size,
+    required this.day,
+    required this.isDefaultSelected,
+    this.isToday = false,
     this.todayColor = Colors.blue,
   });
 
@@ -23,7 +23,7 @@ class DayNumber extends StatefulWidget {
 
 class _DayNumberState extends State<DayNumber> {
   final double itemMargin = 5.0;
-  bool isSelected;
+  bool isSelected = false;
 
   Widget _dayItem() {
     return Container(

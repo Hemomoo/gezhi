@@ -58,8 +58,8 @@ class _LoginState extends State<Login> {
               Container(
                 width: MediaQuery.of(context).size.width,
                 child: Center(
-                  child: RaisedButton(
-                    color: GZColors.primary,
+                  child: ElevatedButton(
+                    // child: GZColors.primary,
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.8,
                       decoration: BoxDecoration(

@@ -4,9 +4,9 @@ import 'utils/dates.dart';
 
 class MonthTitle extends StatelessWidget {
   const MonthTitle({
-    @required this.month,
+    required this.month,
     this.color = Colors.black,
-    this.monthNames,
+    this.monthNames = const [],
   });
 
   final Color color;

@@ -48,12 +48,12 @@ class _StorageState extends State<Storage> {
     );
   }
 
-  Widget _storageListWidget({@required String title, String trailingTex, Widget trailing, Function fn}) {
+  Widget _storageListWidget({required String title, String? trailingTex, Widget? trailing, Function? fn}) {
     return ListTile(
       title: Text(title),
-      trailing: trailing == null ? Text(trailingTex) : trailing,
+      trailing: trailing == null ? Text(trailingTex ?? '') : trailing,
       onTap: () {
-        fn();
+        fn?.call();
       },
     );
   }

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 class WeekNumber extends StatefulWidget {
   const WeekNumber({
-    @required this.size,
-    @required this.day,
-    this.isToday,
+    required this.size,
+    required this.day,
+    this.isToday = false,
     this.todayColor = Colors.blue,
   });
 

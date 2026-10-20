@@ -9,9 +9,12 @@ Future request(
   String method = 'POST',
 }) async {
   try {
-    Response response;
     // options.headers["token"]=406;
-    Dio dio = new Dio();
+    Dio dio = new Dio(options);
+    Response response = await dio.request(
+      url,
+      options: Options(method: method),
+    );
     if (response.statusCode == 200) {
       return response;
     } else {

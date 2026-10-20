@@ -28,9 +28,8 @@ class _IndexPageState extends State<IndexPage> {
   ];
 
   Map arguments;
-  int currentIndex;
+  late int currentIndex;
 
-  @override
   _IndexPageState(this.arguments){
     currentIndex = this.arguments['currentIndex'];
   }

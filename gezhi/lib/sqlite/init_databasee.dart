@@ -6,14 +6,14 @@ import 'sql_table.dart';
 
 
 class InitDatabase {
-  static Database db;
+  static Database? db;
 
   // 获取数据库中所有的表
-  Future<List> getTables() async {
+  Future<List<String>> getTables() async {
     if (db == null) {
-      return Future.value([]);
+      return [];
     }
-    List tables = await db
+    List tables = await db!
         .rawQuery('SELECT name FROM sqlite_master WHERE type = "table"');
     List<String> targetList = [];
     tables.forEach((item) {
@@ -52,7 +52,7 @@ class InitDatabase {
 
     if (!tableIsRight) {
       // 关闭上面打开的db，否则无法执行open
-      db.close();
+      db?.close();
       //表不完整
       // Delete the database
       await deleteDatabase(path);

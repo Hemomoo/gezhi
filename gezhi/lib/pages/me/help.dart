@@ -72,7 +72,7 @@ class _HelpState extends State<Help> {
     );
   }
 
-  Widget _helpItem({@required String tit, Widget leading, Function fn}) {
+  Widget _helpItem({required String tit, Widget? leading, Function? fn}) {
     return ListTile(
       title: Text(
         tit,
@@ -99,7 +99,7 @@ class _HelpState extends State<Help> {
         ),
       ),
       onTap: () {
-        fn();
+        fn?.call();
       },
     );
   }

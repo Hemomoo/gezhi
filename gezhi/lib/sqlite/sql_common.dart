@@ -21,10 +21,10 @@ class SqlUtil extends BaseModel {
 
   SqlUtil.setTable(String name)
       : tableName = name,
-        super(InitDatabase.db);
+        super(InitDatabase.db!);
 
   //查询该表中的所有数据
-  Future<List> get() async {
+  Future<List<Map<String, dynamic>>> get() async {
     return await this.querys(tableName);
   }
 
@@ -109,12 +109,12 @@ class SqlUtil extends BaseModel {
   }
 
   //查询数据 传入Sql语句和参数
-  Future<List> rawQuery(String sql, List arguments) async {
+  Future<List<Map<String, dynamic>>> rawQuery(String sql, List arguments) async {
     return await this.db.rawQuery(sql, arguments);
   }
 
   //通过条件查询，可以将表名作为参数传进来，作为公共方法，返回的是一个集合
-  Future<List> query({Map<dynamic, dynamic> conditions}) async {
+  Future<List<Map<String, dynamic>>> query({Map<dynamic, dynamic>? conditions}) async {
     // 如果传入条件为空，就查询该表全部数据
     if (conditions == null || conditions.isEmpty) {
       return this.get();

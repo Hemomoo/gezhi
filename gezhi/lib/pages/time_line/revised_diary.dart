@@ -11,7 +11,7 @@ import 'package:quill_delta/quill_delta.dart';
 
 class RevisedDiary extends StatefulWidget {
   final Map arguments;
-  RevisedDiary({Key key, this.arguments});
+  RevisedDiary({Key? key, this.arguments});
 
   @override
   _RevisedDiaryState createState() => _RevisedDiaryState();
@@ -124,9 +124,14 @@ class _RevisedDiaryState extends State<RevisedDiary> {
         actions: [
           IconButton(
             icon: Icon(Icons.remove_red_eye),
+            onPressed: () {
+            },
+            
           ),
           IconButton(
             icon: Icon(Icons.more_horiz),
+            onPressed: () {
+            },
           )
         ],
       ),
@@ -229,9 +234,17 @@ class _RevisedDiaryState extends State<RevisedDiary> {
           focus
               ? Row(
                   children: [
-                    IconButton(icon: Icon(Icons.font_download)),
+                    IconButton(
+                      icon: Icon(Icons.font_download),
+                      onPressed: () {
+                        // _saveDocument(context);
+                      },
+                    ),
                     IconButton(
                       icon: Icon(Icons.check_circle_outline),
+                      onPressed: () {
+                        // _saveDocument(context);
+                      },
                     ),
                     IconButton(
                       icon: Icon(Icons.image),
@@ -241,6 +254,9 @@ class _RevisedDiaryState extends State<RevisedDiary> {
                     ),
                     IconButton(
                       icon: Icon(Icons.add_circle_outline),
+                      onPressed: () {
+                        // addImage();
+                      },
                     )
                   ],
                 )

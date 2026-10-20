@@ -72,7 +72,7 @@ class _SettingState extends State<Setting> {
     );
   }
 
-  Widget _settingItm({@required String tit, Widget leading, Function fn}) {
+  Widget _settingItm({required String tit, Widget? leading, Function? fn}) {
     return ListTile(
       title: Text(
         tit,
@@ -90,7 +90,7 @@ class _SettingState extends State<Setting> {
         ),
       ),
       onTap: () {
-        fn();
+        fn?.call();
       },
     );
   }

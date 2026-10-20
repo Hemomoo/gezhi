@@ -166,40 +166,24 @@ class _BackupRestoreState extends State<BackupRestore> {
   }
 
   ListTile _item(
-      {@required String tit,
-      String subTit,
-      IconData itemIcon,
-      Function fn,
-      double size}) {
-    if (subTit == null) {
-      return ListTile(
-        title: Text(
-          tit,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-        ),
-        trailing: Icon(
-          itemIcon,
-          size: size,
-        ),
-        onTap: () {
-          fn();
-        },
-      );
-    } else {
-      return ListTile(
-        title: Text(
-          tit,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-        ),
-        subtitle: Text(subTit),
-        trailing: Icon(
-          itemIcon,
-          size: size,
-        ),
-        onTap: () {
-          fn();
-        },
-      );
-    }
+      {required String tit,
+      String subTit = "",
+      IconData? itemIcon,
+      Function? fn,
+      double? size}) {
+    return ListTile(
+      title: Text(
+        tit,
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+      ),
+      subtitle: Text(subTit),
+      trailing: Icon(
+        itemIcon,
+        size: size,
+      ),
+      onTap: () {
+        fn?.call();
+      },
+    );
   }
 }

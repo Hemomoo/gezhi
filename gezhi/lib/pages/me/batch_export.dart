@@ -12,9 +12,9 @@ class BatchExport extends StatefulWidget {
 
 class _BatchExportState extends State<BatchExport> {
   bool _isInclude = false;
-  String _exportModeVal;
-  int selVal;
-  SharedPreferences prefs;
+  late String _exportModeVal;
+  late int selVal;
+  late SharedPreferences prefs;
   List<Map> _modeList = [
     {'val': 0, 'tit': '纯文本'},
     {'val': 1, 'tit': 'Markdown'},
@@ -86,9 +86,9 @@ class _BatchExportState extends State<BatchExport> {
             _trendsWidget(),
             Container(
               margin: EdgeInsets.only(top: 20),
-              child: FlatButton(
-                color: GZColors.primary,
-                minWidth: MediaQuery.of(context).size.width - 36,
+              child: ElevatedButton(
+                // color: GZColors.primary,
+                // minWidth: MediaQuery.of(context).size.width - 36,
                 child: Text(
                   '导出',
                   style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
@@ -102,7 +102,7 @@ class _BatchExportState extends State<BatchExport> {
     );
   }
 
-  Widget _batchExportItem({@required String tit, Widget leading, Function fn}) {
+  Widget _batchExportItem({required String tit, Widget? leading, Function? fn}) {
     return ListTile(
       title: Text(
         tit,
@@ -129,7 +129,7 @@ class _BatchExportState extends State<BatchExport> {
         ),
       ),
       onTap: () {
-        fn();
+        fn?.call(); 
       },
     );
   }

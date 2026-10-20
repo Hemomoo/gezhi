@@ -12,27 +12,27 @@ import 'package:gezhi/widgets/calendar/calendar_list/utils/chang_year.dart';
 
 class MonthView extends StatefulWidget {
   const MonthView({
-    @required this.context,
-    @required this.year,
-    @required this.month,
-    @required this.padding,
-    @required this.dateTimeStart,
-    @required this.dateTimeEnd,
-    @required this.onSelectDayRang,
+    required this.context,
+    required this.year,
+    required this.month,
+    required this.padding,
+    required this.dateTimeStart,
+    required this.dateTimeEnd,
+    required this.onSelectDayRang,
     this.eventBus,
-    this.todayColor,
-    this.monthNames,
+    this.todayColor = Colors.blue,
+    this.monthNames = const [],
   });
 
-  final EventBus eventBus;
+  final EventBus? eventBus;
   final BuildContext context;
   final int year;
   final int month;
   final double padding;
   final Color todayColor;
   final List<String> monthNames;
-  final DateTime dateTimeStart;
-  final DateTime dateTimeEnd;
+  final DateTime? dateTimeStart;
+  final DateTime? dateTimeEnd;
   final Function onSelectDayRang;
 
   double get itemWidth => getDayNumberSize(context, padding);
@@ -42,7 +42,7 @@ class MonthView extends StatefulWidget {
 }
 
 class _MonthViewState extends State<MonthView> {
-  DateTime selectedDate;
+  DateTime? selectedDate;
 
   Widget buildWeek(BuildContext context) {
     List<int> weekList = getWeekNum(widget.year, widget.month);
@@ -64,7 +64,7 @@ class _MonthViewState extends State<MonthView> {
     List<DayNumber> dayRowChildren = <DayNumber>[];
 
     int daysInMonth = getDaysInMonth(widget.year, widget.month);
-    widget.eventBus.fire(Year(widget.year.toString()));
+    widget.eventBus?.fire(Year(widget.year.toString()));
 
     // 日 一 二 三 四 五 六
     int firstWeekdayOfMonth = DateTime(widget.year, widget.month, 2).weekday;

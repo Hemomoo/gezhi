@@ -70,7 +70,7 @@ class _MeDataState extends State<MeData> {
     );
   }
 
-  Widget _dataItem(String tit, {Function fn}) {
+  Widget _dataItem(String tit, {Function? fn}) {
     return ListTile(
       title: Text(
         tit,
@@ -79,7 +79,9 @@ class _MeDataState extends State<MeData> {
       trailing: Icon(Icons.keyboard_arrow_right),
       subtitle: Text('设置'),
       onTap: () {
-        fn();
+        if (fn != null) {
+          fn();
+        }
       },
     );
   }

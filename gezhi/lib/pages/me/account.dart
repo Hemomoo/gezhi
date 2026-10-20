@@ -174,7 +174,7 @@ class Account extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  FlatButton(
+                  ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
@@ -184,7 +184,7 @@ class Account extends StatelessWidget {
                     width: 1,
                     color: Colors.black12,
                   ),
-                  FlatButton(
+                  ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                     },

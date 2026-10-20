@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 
+
+
+
 class LineItem extends StatelessWidget {
+  static void _doNothing() {}
   final String tit;
   final Widget widget;
   final Function onTabFn;
-  LineItem({required this.tit, required this.widget, required this.onTabFn});
+  LineItem({required this.tit, required this.widget, this.onTabFn = _doNothing});
 
   @override
   Widget build(BuildContext context) {

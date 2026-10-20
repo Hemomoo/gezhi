@@ -32,7 +32,7 @@ class _HintLibraryState extends State<HintLibrary>
   List<Map<String, dynamic>> monthTipList = [];
   List<Map<String, dynamic>> yearTipList = [];
 
-  TabController _tabController;
+  late TabController _tabController;
 
   final SqlUtil hintSql = SqlUtil.setTable('tips');
 

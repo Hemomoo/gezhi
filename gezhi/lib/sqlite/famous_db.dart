@@ -7,9 +7,9 @@ final String columnSentence = 'sentence';
 final String columnAuthor = 'author';
 
 class Tip {
-  int id;
-  String sentence;
-  String author;
+  late int id;
+  late String sentence;
+  late String author;
 
   Tip(this.id, this.sentence, this.author);
 
@@ -32,7 +32,7 @@ class Tip {
 }
 
 class TipSqlite {
-  Database db;
+  late Database db;
 
   openSqlite() async {
     // 获取数据库文件的存储路径
@@ -53,7 +53,7 @@ class TipSqlite {
   }
 
   // 插入一条书籍数据
-  Future<Tip> insert(Tip tip) async {
+  Future<void> insert(Tip tip) async {
     try{
       await db.insert(tableTip, tip.toMap());
     }catch(err){
@@ -69,19 +69,19 @@ class TipSqlite {
       columnAuthor,
     ]);
     if (maps == null || maps.length == 0) {
-      return null;
+      return [];
     }
 
     List<Tip> tips = [];
     for (int i = 0; i < maps.length; i++) {
-      tips.add(Tip.fromMap(maps[i]));
+      tips.add(Tip.fromMap(Map<String, dynamic>.from(maps[i])));
     }
 
     return tips;
   }
 
   // 根据ID查找书籍信息
-  Future<Tip> getBook(int id) async {
+  Future<Tip?> getBook(int id) async {
     List<Map> maps = await db.query(tableTip,
         columns: [
           columnId,
@@ -91,7 +91,7 @@ class TipSqlite {
         where: '$columnId = ?',
         whereArgs: [id]);
     if (maps.length > 0) {
-      return Tip.fromMap(maps.first);
+      return Tip.fromMap(Map<String, dynamic>.from(maps.first));
     }
     return null;
   }
