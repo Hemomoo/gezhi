@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 
 class LineItem extends StatelessWidget {
-  static void _doNothing() {}
+  static void _doNothing(BuildContext context) {}
   final String tit;
   final Widget widget;
   final Function onTabFn;
