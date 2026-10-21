@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:launch_review/launch_review.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:gezhi/widgets/me/appbar.dart';
 
 class Help extends StatefulWidget {
@@ -63,8 +63,10 @@ class _HelpState extends State<Help> {
             _helpItem(tit: '帮助我们翻译'),
             _helpItem(
                 tit: '在应用商店上评分',
-                fn: () => LaunchReview.launch(
-                      androidAppId: "com.android.vending",
+                fn: () => launchUrl(
+                      Uri.parse(
+                          'https://play.google.com/store/apps/details?id=com.example.gezhi'),
+                      mode: LaunchMode.externalApplication,
                     )),
           ],
         ),

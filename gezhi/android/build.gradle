@@ -13,6 +13,17 @@ rootProject.layout.buildDirectory.set(newBuildDir)
 subprojects {
     project.layout.buildDirectory.set(newBuildDir.dir(project.name))
 }
+// 统一使用本机已安装的 NDK，避免 AGP 去下载未安装的默认版本
+// 注意：必须在 evaluationDependsOn(":app") 之前注册 afterEvaluate
+subprojects {
+    afterEvaluate { subproject ->
+        def androidExt = subproject.extensions.findByName("android")
+        if (androidExt != null && androidExt.hasProperty("ndkVersion")) {
+            androidExt.ndkVersion = "27.1.12297006"
+        }
+    }
+}
+
 subprojects {
     project.evaluationDependsOn(":app")
 }
