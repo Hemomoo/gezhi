@@ -8,6 +8,8 @@ plugins {
 android {
     namespace "com.example.gezhi"
     compileSdk = flutter.compileSdkVersion
+    // 使用本机已安装的 NDK，避免 AGP 自动下载未安装的默认版本
+    ndkVersion = "27.1.12297006"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
