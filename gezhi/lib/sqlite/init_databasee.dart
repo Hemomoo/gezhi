@@ -64,6 +64,7 @@ class InitDatabase {
             await db.execute(SqlTable.sql_createTable_user);
             await db.execute(SqlTable.sql_createTable_famous);  // 创建名言数据库
             await db.execute(SqlTable.sql_createTable_tips);    // 创建提示的数据
+            await db.execute(SqlTable.sql_createTable_diary);   // 创建日记表
 
 
             print('db created version is $version');
@@ -72,6 +73,8 @@ class InitDatabase {
           });
     } else {
       print("Opening existing database");
+      // 旧版本数据库没有 diary 表, 启动时补建
+      await db!.execute(SqlTable.sql_createTable_diary);
     }
   }
 }

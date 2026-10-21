@@ -129,7 +129,15 @@ class _TimeLineDiaryState extends State<TimeLineDiary> {
           ),
           centerTitle: true,
           actions: [
-            IconButton(icon: Icon(Icons.edit), onPressed: () {}),
+            IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    '/time_line/revised_diary',
+                    arguments: <String, dynamic>{},
+                  );
+                }),
             IconButton(
               icon: Icon(Icons.more_horiz),
               onPressed: () {

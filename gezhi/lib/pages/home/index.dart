@@ -5,7 +5,7 @@ import 'package:gezhi/pages/home/sheets/add_widget_sheet.dart';
 import 'package:gezhi/pages/home/sheets/edit_diary_sheet.dart';
 import 'package:gezhi/pages/home/widgets/diary_book_card.dart';
 import 'package:gezhi/pages/home/widgets/week_day_bar.dart';
-import 'package:gezhi/sqlite/sql_common.dart';
+import 'package:gezhi/sqlite/diary_dao.dart';
 import 'package:gezhi/style/style.dart';
 
 class Home extends StatefulWidget {
@@ -14,18 +14,54 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  Map<String, dynamic>? _todayDiary;
+  bool _loadingDiary = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTodayDiary();
+  }
+
+  Future<void> _loadTodayDiary() async {
+    final row = await DiaryDao.findByDate(_formatDate(DateTime.now()));
+    if (!mounted) return;
+    setState(() {
+      _todayDiary = row;
+      _loadingDiary = false;
+    });
+  }
+
+  Future<void> _openDiaryEditor() async {
+    final now = DateTime.now();
+    final changed = await Navigator.pushNamed(
+      context,
+      '/time_line/revised_diary',
+      arguments: {
+        'id': _todayDiary?['id'],
+        'date': _formatDate(now),
+        'tit': _formatDateCn(now),
+      },
+    );
+    if (changed == true) {
+      _loadTodayDiary();
+    }
+  }
+
+  String _formatDate(DateTime date) {
+    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+  }
+
+  String _formatDateCn(DateTime date) {
+    return '${date.year}年${date.month.toString().padLeft(2, '0')}月${date.day.toString().padLeft(2, '0')}日';
+  }
+
   @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
     final dateSlug =
         '''${now.year.toString()}年${now.month.toString().padLeft(2, '0')}月${now.day.toString().padLeft(2, '0')}''';
     final weekDay = ['一', '二', '三', '四', '五', '六', '日'][now.weekday - 1];
-    final SqlUtil tipSqlite = SqlUtil.setTable('famous');
-
-    (() async {
-      var a = await tipSqlite.query();
-      print(a);
-    })();
 
     return Scaffold(
       appBar: AppBar(
@@ -55,20 +91,38 @@ class _HomeState extends State<Home> {
             SizedBox(
               height: 30,
             ),
-            Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  left: BorderSide(
-                    width: 4, //宽度
-                    color: Colors.grey, //边框颜色
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: _openDiaryEditor,
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                    left: BorderSide(
+                      width: 4, //宽度
+                      color: Colors.grey, //边框颜色
+                    ),
                   ),
                 ),
-              ),
-              child: Container(
-                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[Text('写代码好玩吗？感觉不好好玩啊啊啊'), Text('2年前')],
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        _loadingDiary
+                            ? '加载中...'
+                            : (_todayDiary?['diaryInfo'] as String? ??
+                                '还没有日记，点击记录今天'),
+                        maxLines: 4,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      SizedBox(height: 6),
+                      Text(
+                        _todayDiary == null ? '今天' : '今天 · 点击编辑',
+                        style: TextStyle(color: Colors.black38),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

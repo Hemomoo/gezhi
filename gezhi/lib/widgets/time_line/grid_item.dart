@@ -26,7 +26,11 @@ class GridItem extends StatelessWidget {
               ),
             ),
             onTap: () {
-              Navigator.pushNamed(context, '/time_line/revised_diary', arguments: {'index': index, 'tit': '2020年8月26日'});
+              Navigator.pushNamed(
+                context,
+                '/time_line/revised_diary',
+                arguments: <String, dynamic>{},
+              );
             },
           );
         },

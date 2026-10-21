@@ -33,10 +33,11 @@ class SqlTable {
   ''';
 
   static final String sql_createTable_diary = '''
-    CREATE TABLE diary (
-    id INTEGER PRIMARY KEY,
+    CREATE TABLE IF NOT EXISTS diary (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     tip TEXT,
-    date TEXT)
+    date TEXT NOT NULL,
+    diaryInfo TEXT NOT NULL)
   ''';
 
 }
