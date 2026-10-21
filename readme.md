@@ -1,725 +1,163 @@
-# gezhi
+# 格志（gezhi）
 
-格志项目
+格志是一款日记应用。本仓库是围绕它展开的 monorepo，包含移动端主应用、服务端，以及两版桌面端探索。
 
-## QuickStart
+当前主线是 `gezhi/`（Flutter 移动端），数据全部保存在设备本地；`node/`、`pc/`、`vitepc/` 属于早期版本或实验性尝试。
 
-## pc
-使用了ts elctor vue3.0 vite 来开发的桌面端应用
-<!-- add docs here for user -->
+## 项目一览
 
-see [egg docs][egg] for more detail.
+| 目录 | 定位 | 技术栈 | 状态 |
+|---|---|---|---|
+| [`gezhi/`](gezhi/) | 移动端日记 App（Android / iOS） | Flutter 3.47.7 · Dart 3.13.5 · sqflite · fleather | 主线，持续开发 |
+| [`node/`](node/) | 服务端 API | Egg.js 2 · MySQL · JWT | 早期版本，接口可用 |
+| [`pc/`](pc/) | 桌面端原型 | Vue 3 · Vite 2 · Electron 17 · TypeScript | 原型，页面骨架 + mock 数据 |
+| [`vitepc/`](vitepc/) | 桌面端脚手架 | Electron 21 · electron-vite · Vue 3 · TypeScript · Milkdown | 脚手架，尚未接入业务 |
 
-### Development
+```
+ge_zhi/
+├── gezhi/      Flutter 移动端
+├── node/       Egg.js 服务端
+├── pc/         Electron 桌面端原型
+├── vitepc/     electron-vite 桌面端脚手架
+└── readme.md
+```
+
+## gezhi · 移动端
+
+本地优先的日记 App，支持日记本、时间线、日历、搜索、名言/提示/模板库、备份导出等。详细说明见 [gezhi/README.md](gezhi/README.md)。
+
+项目使用 FVM 管理 Flutter 版本：
 
 ```bash
-npm i
+cd gezhi
+fvm install 3.47.7
+fvm use 3.47.7
+fvm flutter pub get
+fvm flutter run -d <device-id>
+```
+
+打包：
+
+```bash
+fvm flutter build apk --debug
+fvm flutter build apk --release
+```
+
+### 本地数据库
+
+应用启动时会初始化 `gezhi.db`（sqflite），创建 `course`、`user`、`famous`、`tips` 表。若检测到表缺失，会删除旧库并重建。
+
+## node · 服务端
+
+基于 Egg.js 的接口服务，使用 MySQL 存储、JWT 鉴权。
+
+### 启动
+
+环境要求：Node.js >= 10、MySQL 5.7。
+
+```bash
+# 1. 创建数据库并导入表结构与示例数据
+mysql -u root -p gezhi < gezhi.sql
+
+# 2. 在 config/config.local.js 中配置本地 MySQL 连接（host / user / password / database）
+
+# 3. 安装依赖并启动
+cd node
+npm install
 npm run dev
-open http://localhost:7001/
 ```
 
-### Deploy
+服务默认监听 `http://127.0.0.1:7100`。
 
 ```bash
-npm start
-npm stop
+npm run lint   # 代码检查
+npm test       # lint + 单元测试
+npm run cov    # 覆盖率
+npm start      # 生产环境后台运行
+npm stop       # 停止服务
 ```
 
-### npm scripts
+### 接口
 
-- Use `npm run lint` to check code style.
-- Use `npm test` to run unit test.
-- Use `npm run autod` to auto detect dependencies upgrade, see [autod](https://www.npmjs.com/package/autod) for more detail.
+| 方法 | 路径 | 说明 | 需要登录 |
+|---|---|---|---|
+| GET | `/` | 首页 | 否 |
+| GET | `/search` | 搜索日记（FIND_IN_SET 示例查询） | 是 |
+| GET | `/search/total` | 日记 / 天数统计 | 是 |
+| GET | `/search/diary` | 按内容搜索日记 | 是 |
+| POST | `/user/login` | 登录，返回 JWT | 否 |
+| POST | `/user/register` | 注册 | 否 |
+| GET | `/user/tipLibrary` | 查询提示库 | 是 |
+| POST | `/user/add/tipLibrary` | 新增提示 | 是 |
+| GET | `/user/remark` | 随机获取一条名言 | 是 |
+| POST | `/user/add/remark` | 新增名言 | 是 |
 
-[egg]: https://eggjs.
+鉴权中间件读取请求头 `Authorization: Bearer <token>`，登录与注册接口在白名单中。未携带 token 返回 `code: 5008`，token 过期返回 `code: 5009`。
 
-### 错误编码
+### 数据表
 
-code:1  成功
-code:0  失败
+`gezhi.sql` 提供 `date`、`diary`、`tiplibrary`、`user` 四张表的建表语句与示例数据；名言数据由代码中的 `famous_remark` 表承载。
 
+## pc · 桌面端原型
 
+Vue 3 + Vite + Electron 的桌面端尝试，界面基于 naive-ui、element-plus，接口层使用 mockjs 模拟数据。
 
+```bash
+cd pc
+npm install
 
-
-<!--
- * @Author: meetqy
- * @since: 2019-10-11 09:40:28
- * @lastTime: 2019-10-11 14:37:27
- * @LastEditors: meetqy
- -->
-# 代码开发规范 0.1.0 版(借用Flutter-go)
-
-## 代码风格
-
-### 标识符三种类型
-
-#### 大驼峰
-类、枚举、typedef和类型参数
-
-```
-  class SliderMenu { ... }
-  
-  class HttpRequest { ... }
-  
-  typedef Predicate = bool Function<T>(T value);
-```
-
-包括用于元数据注释的类
-
-```
-  class Foo {
-    const Foo([arg]);
-  }
-  
-  @Foo(anArg)
-  class A { ... }
-  
-  @Foo()
-  class B { ... }
-```
-
-#### 使用小写加下划线来命名库和源文件
-
-```
-  library peg_parser.source_scanner;
-  
-  import 'file_system.dart';
-  import 'slider_menu.dart';
-```
-
-不推荐如下写法：
-
-```
-  library pegparser.SourceScanner;
-  
-  import 'file-system.dart';
-  import 'SliderMenu.dart';
-```
-
-
-#### 使用小写加下划线来命名导入前缀
-
-```
-  import 'dart:math' as math;
-  import 'package:angular_components/angular_components'
-      as angular_components;
-  import 'package:js/js.dart' as js;
-```
-
-不推荐如下写法：
-
-```
-  import 'dart:math' as Math;
-  import 'package:angular_components/angular_components'
-      as angularComponents;
-  import 'package:js/js.dart' as JS;
-```
-
-#### 使用小驼峰法命名其他标识符
-
-```
-  var item;
-  
-  HttpRequest httpRequest;
-  
-  void align(bool clearItems) {
-    // ...
-  }
-```
-
-#### 优先使用小驼峰法作为常量命名
-
-```
-  const pi = 3.14;
-  const defaultTimeout = 1000;
-  final urlScheme = RegExp('^([a-z]+):');
-  
-  class Dice {
-    static final numberGenerator = Random();
-  }
-```
-
-不推荐如下写法：
-
-```
-  const PI = 3.14;
-  const DefaultTimeout = 1000;
-  final URL_SCHEME = RegExp('^([a-z]+):');
-  
-  class Dice {
-    static final NUMBER_GENERATOR = Random();
-  }
-```
-
-#### 不使用前缀字母
-因为Dart可以告诉您声明的类型、范围、可变性和其他属性，所以没有理由将这些属性编码为标识符名称。
-
-```
-  defaultTimeout
-```
-
-不推荐如下写法：
-
-```
-  kDefaultTimeout
-```
-
-### 排序
-
-为了使你的文件前言保持整洁，我们有规定的命令，指示应该出现在其中。每个“部分”应该用空行分隔。
-
-#### 在其他引入之前引入所需的dart库
-
-```
-  import 'dart:async';
-  import 'dart:html';
-  
-  import 'package:bar/bar.dart';
-  import 'package:foo/foo.dart';
-```
-
-#### 在相对引入之前先引入在包中的库
-
-```
-  import 'package:bar/bar.dart';
-  import 'package:foo/foo.dart';
-  
-  import 'util.dart';
-```
-
-#### 第三方包的导入先于其他包
-
-```
-  import 'package:bar/bar.dart';
-  import 'package:foo/foo.dart';
-  
-  import 'package:my_package/util.dart';
-```
-
-#### 在所有导入之后，在单独的部分中指定导出
-
-```
-  import 'src/error.dart';
-  import 'src/foo_bar.dart';
-  
-  export 'src/error.dart';
-```
-
-不推荐如下写法：
-
-```
-  import 'src/error.dart';
-  export 'src/error.dart';
-  import 'src/foo_bar.dart';
-```
-
-
-### 所有流控制结构，请使用大括号
-
-这样做可以避免悬浮的else问题
-
-```
-  if (isWeekDay) {
-    print('Bike to work!');
-  } else {
-    print('Go dancing or read a book!');
-  }
-```
-
-#### 例外
-一个if语句没有else子句，其中整个if语句和then主体都适合一行。在这种情况下，如果你喜欢的话，你可以去掉大括号
-
-```
-  if (arg == null) return defaultValue;
-```
-
-如果流程体超出了一行需要分划请使用大括号：
-
-```
-  if (overflowChars != other.overflowChars) {
-    return overflowChars < other.overflowChars;
-  }
-```
-
-不推荐如下写法：
-
-```
-  if (overflowChars != other.overflowChars)
-    return overflowChars < other.overflowChars;
-```
-
-## 注释
-
-### 要像句子一样格式化
-除非是区分大小写的标识符，否则第一个单词要大写。以句号结尾(或“!”或“?”)。对于所有的注释都是如此：doc注释、内联内容，甚至TODOs。即使是一个句子片段。
-
-```
-  greet(name) {
-    // Assume we have a valid name.
-    print('Hi, $name!');
-  }
-```
-
-不推荐如下写法：
-
-```
-  greet(name) {
-    /* Assume we have a valid name. */
-    print('Hi, $name!');
-  }
-```
-
-可以使用块注释(/…/)临时注释掉一段代码，但是所有其他注释都应该使用//
-
-### Doc注释
-使用///文档注释来记录成员和类型。
-
-使用doc注释而不是常规注释，可以让dartdoc找到并生成文档。
-
-```
-  /// The number of characters in this chunk when unsplit.
-  int get length => ...
-```
-
-> 由于历史原因，达特茅斯学院支持道格评论的两种语法:///(“C#风格”)和/**…* /(“JavaDoc风格”)。我们更喜欢/// 因为它更紧凑。/**和*/在多行文档注释中添加两个无内容的行。在某些情况下，///语法也更容易阅读，例如文档注释包含使用*标记列表项的项目符号列表。
-
-### 考虑为私有api编写文档注释
-
-Doc注释并不仅仅针对库的公共API的外部使用者。它们还有助于理解从库的其他部分调用的私有成员
-
-#### 用一句话总结开始doc注释
-
-以简短的、以用户为中心的描述开始你的文档注释，以句号结尾。
-
-```
-/// Deletes the file at [path] from the file system.
-void delete(String path) {
-  ...
-}
-```
-
-不推荐如下写法：
-
-```
-  /// Depending on the state of the file system and the user's permissions,
-  /// certain operations may or may not be possible. If there is no file at
-  /// [path] or it can't be accessed, this function throws either [IOError]
-  /// or [PermissionError], respectively. Otherwise, this deletes the file.
-  void delete(String path) {
-    ...
-  }
-```
-
-#### “doc注释”的第一句话分隔成自己的段落
-
-在第一个句子之后添加一个空行，把它分成自己的段落
-
-```
-  /// Deletes the file at [path].
-  ///
-  /// Throws an [IOError] if the file could not be found. Throws a
-  /// [PermissionError] if the file is present but could not be deleted.
-  void delete(String path) {
-    ...
-  }
-```
-
-## Flutter_Go 使用参考
-
-### 库的引用
-
-flutter go 中，导入lib下文件库，统一指定包名，避免过多的```../../```
-```
-package:flutter_go/
-```
-
-### 字符串的使用
-
-#### 使用相邻字符串连接字符串文字
-如果有两个字符串字面值(不是值，而是实际引用的字面值)，则不需要使用+连接它们。就像在C和c++中，简单地把它们放在一起就能做到。这是创建一个长字符串很好的方法但是不适用于单独一行。
-
-```
-raiseAlarm(
-    'ERROR: Parts of the spaceship are on fire. Other '
-    'parts are overrun by martians. Unclear which are which.');
-```
-
-不推荐如下写法:
-
-```
-raiseAlarm('ERROR: Parts of the spaceship are on fire. Other ' +
-    'parts are overrun by martians. Unclear which are which.');
+npm run dev       # 仅启动渲染进程（Vite）
+npm run dev:ele   # 启动 Electron 主进程
+npm run dev:all   # 同时启动以上两个
+npm run build     # vue-tsc 类型检查 + vite 构建
 ```
 
-#### 优先使用模板字符串
-```
-'Hello, $name! You are ${year - birth} years old.';
-```
-
-#### 在不需要的时候，避免使用花括号
-
-```
-  'Hi, $name!'
-  "Wear your wildest $decade's outfit."
-```
-
-不推荐如下写法：
-
-```
-  'Hello, ' + name + '! You are ' + (year - birth).toString() + ' y...';
-```
-
-不推荐如下写法：
-
-```
-  'Hi, ${name}!'
-  "Wear your wildest ${decade}'s outfit."
-```
-
-### 集合
-
-#### 尽可能使用集合字面量
-
-如果要创建一个不可增长的列表，或者其他一些自定义集合类型，那么无论如何，都要使用构造函数。
-
-```
-  var points = [];
-  var addresses = {};
-  var lines = <Lines>[];
-```
-
-不推荐如下写法：
-
-```
-  var points = List();
-  var addresses = Map();
-```
-
-#### 不要使用.length查看集合是否为空
-
-```
-if (lunchBox.isEmpty) return 'so hungry...';
-if (words.isNotEmpty) return words.join(' ');
-```
-
-不推荐如下写法：
-
-```
-  if (lunchBox.length == 0) return 'so hungry...';
-  if (!words.isEmpty) return words.join(' ');
-```
-
-#### 考虑使用高阶方法转换序列
-
-如果有一个集合，并且希望从中生成一个新的修改后的集合，那么使用.map()、.where()和Iterable上的其他方便的方法通常更短，也更具有声明性
-
-```
-  var aquaticNames = animals
-      .where((animal) => animal.isAquatic)
-      .map((animal) => animal.name);
-```
-#### 避免使用带有函数字面量的Iterable.forEach()
-
-在Dart中，如果你想遍历一个序列，惯用的方法是使用循环。
-
-```
-for (var person in people) {
-  ...
-}
-```
-
-不推荐如下写法：
-
-```
-  people.forEach((person) {
-    ...
-  });
-```
-
-#### 不要使用List.from()，除非打算更改结果的类型
-
-给定一个迭代，有两种明显的方法可以生成包含相同元素的新列表
-
-```
-var copy1 = iterable.toList();
-var copy2 = List.from(iterable);
-```
-
-明显的区别是第一个比较短。重要的区别是第一个保留了原始对象的类型参数
-
-```
-// Creates a List<int>:
-var iterable = [1, 2, 3];
-
-// Prints "List<int>":
-print(iterable.toList().runtimeType);
-```
-
-```
-// Creates a List<int>:
-var iterable = [1, 2, 3];
-
-// Prints "List<dynamic>":
-print(List.from(iterable).runtimeType);
-```
-
-### 参数的使用
-
-#### 使用=将命名参数与其默认值分割开
-
-由于遗留原因，Dart均允许“:”和“=”作为指定参数的默认值分隔符。为了与可选的位置参数保持一致，使用“=”。
-
-```
-  void insert(Object item, {int at = 0}) { ... }
-```
-
-不推荐如下写法：
-
-```
-  void insert(Object item, {int at: 0}) { ... }
-```
-
-#### 不要使用显式默认值null
-
-如果参数是可选的，但没有给它一个默认值，则语言隐式地使用null作为默认值，因此不需要编写它
-
-```
-void error([String message]) {
-  stderr.write(message ?? '\n');
-}
-```
-
-不推荐如下写法:
-
-```
-void error([String message = null]) {
-  stderr.write(message ?? '\n');
-}
-```
-
-### 变量
-
-#### 不要显式地将变量初始化为空
-在Dart中，未显式初始化的变量或字段自动被初始化为null。不要多余赋值null
-
-```
-  int _nextId;
-  
-  class LazyId {
-    int _id;
-  
-    int get id {
-      if (_nextId == null) _nextId = 0;
-      if (_id == null) _id = _nextId++;
-  
-      return _id;
-    }
-  }
-```
-
-不推荐如下写法：
-
-```
-  int _nextId = null;
-  
-  class LazyId {
-    int _id = null;
-  
-    int get id {
-      if (_nextId == null) _nextId = 0;
-      if (_id == null) _id = _nextId++;
-  
-      return _id;
-    }
-  }
-```
-
-#### 避免储存你能计算的东西
-
-在设计类时，您通常希望将多个视图公开到相同的底层状态。通常你会看到在构造函数中计算所有视图的代码，然后存储它们:
-
-应该避免的写法：
-
-```
-  class Circle {
-    num radius;
-    num area;
-    num circumference;
-  
-    Circle(num radius)
-        : radius = radius,
-          area = pi * radius * radius,
-          circumference = pi * 2.0 * radius;
-  }
-```
-
-如上代码问题：
-
-- 浪费内存
-- 缓存的问题是无效——如何知道何时缓存过期需要重新计算？
-
-推荐的写法如下：
-
-```
-  class Circle {
-    num radius;
-  
-    Circle(this.radius);
-  
-    num get area => pi * radius * radius;
-    num get circumference => pi * 2.0 * radius;
-  }
-```
-
-### 类成员
+主进程固定加载 `http://localhost:3000`，因此需要先启动 Vite 开发服务器。
 
-#### 不要把不必要地将字段包装在getter和setter中
+> 注意：`dev:ele` 直接让 Electron 运行 `src/main/index.ts`，而该入口目前是未经编译的 TypeScript 原型，桌面端启动链路尚未补全构建步骤。
 
-不推荐如下写法：
+渲染进程入口为 `src/render/main.ts`，使用 hash 路由，页面包括：
 
-```
-  class Box {
-    var _contents;
-    get contents => _contents;
-    set contents(value) {
-      _contents = value;
-    }
-  }
-```
-
-#### 优先使用final字段来创建只读属性
-
-尤其对于 ```StatelessWidget```
-
-#### 在不需要的时候不要用this
-
-不推荐如下写法：
-
-```
-  class Box {
-    var value;
-    
-    void clear() {
-      this.update(null);
-    }
-    
-    void update(value) {
-      this.value = value;
-    }
-  }
-```
-
-推荐如下写法：
-
-```
-  class Box {
-    var value;
-  
-    void clear() {
-      update(null);
-    }
-  
-    void update(value) {
-      this.value = value;
-    }
-  }
-```
-
-### 构造函数
-
-#### 尽可能使用初始化的形式
-
-不推荐如下写法：
-
-```
-  class Point {
-    num x, y;
-    Point(num x, num y) {
-      this.x = x;
-      this.y = y;
-    }
-  }
-```
-
-推荐如下写法：
-
-```
-class Point {
-  num x, y;
-  Point(this.x, this.y);
-}
-```
+- 今日（`today`）
+- 时间线（`time-line`）
+- 日历（`calendar`）
+- 日记本（`diary` / `edit-diary`）
+- 附件（`attachment`）
+- 资源库（`resource-library`：名言、模板、提示）
 
-#### 不要使用new
+## vitepc · 桌面端脚手架
 
-Dart2使new 关键字可选
+基于 electron-vite 的 Electron + Vue 3 + TypeScript 工程，内置 Milkdown 编辑器依赖，目前仍是脚手架状态。
 
-推荐写法：
-
-```
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        RaisedButton(
-          child: Text('Increment'),
-        ),
-        Text('Click!'),
-      ],
-    );
-  }
-```
+```bash
+cd vitepc
+npm install
 
-不推荐如下写法：
+npm run dev         # 开发模式
+npm run build       # 类型检查 + 构建
+npm run typecheck   # 仅类型检查
+npm run lint        # ESLint
+npm run format      # Prettier
 
-```
-  Widget build(BuildContext context) {
-    return new Row(
-      children: [
-        new RaisedButton(
-          child: new Text('Increment'),
-        ),
-        new Text('Click!'),
-      ],
-    );
-  }
+npm run build:win   # 打包 Windows
+npm run build:mac   # 打包 macOS
+npm run build:linux # 打包 Linux
 ```
-
-### 异步
-
-#### 优先使用async/await代替原始的futures
 
-async/await语法提高了可读性，允许你在异步代码中使用所有Dart控制流结构。
+目录遵循 electron-vite 约定：
 
 ```
-  Future<int> countActivePlayers(String teamName) async {
-    try {
-      var team = await downloadTeam(teamName);
-      if (team == null) return 0;
-  
-      var players = await team.roster;
-      return players.where((player) => player.isActive).length;
-    } catch (e) {
-      log.error(e);
-      return 0;
-    }
-  }
+src/
+├── main/       # 主进程
+├── preload/    # 预加载脚本
+└── renderer/   # 渲染进程（Vue）
 ```
 
-#### 当异步没有任何用处时，不要使用它
+## 约定
 
-如果可以在不改变函数行为的情况下省略异步，那么就这样做。、
+- 服务端业务响应统一使用 `code` 字段：`1` 表示成功，`0` 表示失败。
+- 移动端所有日记数据仅存于本地 SQLite，不依赖服务端。
 
-```
-  Future afterTwoThings(Future first, Future second) {
-    return Future.wait([first, second]);
-  }
-```
+## 相关链接
 
-不推荐写法：
-
-```
-  Future afterTwoThings(Future first, Future second) async {
-    return Future.wait([first, second]);
-  }
-```
+- GitHub：<https://github.com/Hemomoo/gezhi>
