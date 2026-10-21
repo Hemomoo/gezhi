@@ -55,26 +55,24 @@ void editDiary(BuildContext context) {
                         ),
                       ),
                       PopupMenuItem(
-                          value: '锁住',
-                          child: Row(
-                            children: [
-                              Icon(Icons.lock),
-                              Padding(
-                                padding: EdgeInsets.only(left: 10),
-                                child: Text('锁住'),
-                              )
-                            ],
-                          ))
+                        value: '锁住',
+                        child: Row(
+                          children: [
+                            Icon(Icons.lock),
+                            Padding(
+                              padding: EdgeInsets.only(left: 10),
+                              child: Text('锁住'),
+                            ),
+                          ],
+                        ),
+                      ),
                     ];
                   },
-                )
+                ),
               ],
             ),
             Expanded(
-              child: Container(
-                width: double.infinity,
-                child: DiaryList(),
-              ),
+              child: Container(width: double.infinity, child: DiaryList()),
             ),
             // DiaryList(),
           ],

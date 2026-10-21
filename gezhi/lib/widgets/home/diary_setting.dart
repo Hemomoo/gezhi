@@ -14,7 +14,7 @@ class DiarySetting extends StatefulWidget {
 
 class _DiarySettingState extends State<DiarySetting> {
 
-  final TextStyle itemTextStyle = TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.black54);
+  final TextStyle itemTextStyle = TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.black54);
 
 
   @override
@@ -43,7 +43,7 @@ class _DiarySettingState extends State<DiarySetting> {
                 padding: EdgeInsets.all(0.0),
                 onSelected: (val) {
                   if (val == 'copy') {
-                    Clipboard.setData(ClipboardData(text: val as String)).then(
+                    Clipboard.setData(ClipboardData(text: val)).then(
                       (value) {
                         ToastContext().init(context);
                         Toast.show("复制成功");
@@ -147,7 +147,7 @@ class Setting extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(tit,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+          Text(tit,style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
           Row(
             children: [
               widget,
