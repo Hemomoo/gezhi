@@ -84,7 +84,7 @@ class _ModelLibraryState extends State<ModelLibrary> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 8, //阴影模糊程度
               spreadRadius: 4 //阴影扩散程度
               )
