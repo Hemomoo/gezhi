@@ -121,11 +121,6 @@ class _CalendarListState extends State<CalendarList> {
     );
   }
 
-  void _finishSelect() {
-    if (selectStartTime != null) {
-      widget.onSelectFinish(selectStartTime, selectEndTime);
-    }
-  }
 
   Widget _getMonthView(DateTime dateTime, EventBus eventBus) {
     int year = dateTime.year;
