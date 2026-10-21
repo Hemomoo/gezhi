@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide SearchBar;
 import 'package:gezhi/widgets/search/search_bar.dart';
 import 'package:gezhi/widgets/search/statistics.dart';
 import 'package:gezhi/widgets/search/img_box.dart';

@@ -20,14 +20,13 @@
 
 | 分类 | 选型 |
 |---|---|
-| 框架 | Flutter 3.3.10 / Dart 2.18.6 |
-| 状态管理 | provider |
+| 框架 | Flutter 3.47.7 / Dart 3.13.5 |
 | 本地存储 | sqflite（SQLite） |
 | 网络请求 | dio |
 | 路由 | 命名路由 + `onGenerateRoute` |
 | 页面适配 | flutter_screenutil |
 | 富文本 | fleather |
-| 其他 | webview_flutter、image_picker、url_launcher、shared_preferences、flutter_slidable、event_bus |
+| 其他 | webview_flutter、image_picker、card_swiper、shared_preferences、event_bus |
 
 ## 环境要求
 
@@ -35,11 +34,11 @@
 
 ```bash
 # 安装项目锁定的 Flutter 版本
-fvm install 3.3.10
-fvm use 3.3.10
+fvm install 3.47.7
+fvm use 3.47.7
 ```
 
-> **必须使用 Flutter 3.3.10（Dart 2.18.6）**。项目的 SDK 约束为 `>=2.17.4 <3.0.0`，部分依赖的旧版本无法在 Dart 3 下编译，升级 Flutter 会导致大量 API 变更。
+> 项目已迁移到 Dart 3，SDK 约束为 `>=3.13.0 <4.0.0`，可直接以 sound null safety 编译运行。
 
 ## 运行
 
@@ -69,11 +68,12 @@ fvm flutter build apk --release
 
 | 项 | 版本 |
 |---|---|
-| AGP | 7.3.1 |
-| Gradle | 7.4 |
-| Kotlin | 1.8.22 |
-| compileSdk / targetSdk | 33 |
-| minSdk | 21 |
+| AGP | 9.1.0 |
+| Gradle | 9.3.1 |
+| Kotlin | 2.4.0 |
+| JDK | 17 |
+| compileSdk / targetSdk | 36 |
+| minSdk | 24 |
 
 Gradle 与 pub 均配置了国内镜像源，以规避境外网络访问失败的问题。
 
