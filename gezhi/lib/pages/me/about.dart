@@ -19,7 +19,7 @@ class About extends StatelessWidget {
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
-                    fontSize: 20,
+                    fontSize: 18,
                   ),
                 ),
               ),
@@ -42,7 +42,7 @@ class About extends StatelessWidget {
               tit: '版本',
               trailing: Text(
                 '1.75(153)',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black54),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black54),
               ),
             ),
             _aboutItem(

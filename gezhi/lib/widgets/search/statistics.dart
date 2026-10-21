@@ -43,10 +43,10 @@ class Statistics extends StatelessWidget {
             Padding(padding: EdgeInsets.only(top: 20)),
             Container(
               height: ScreenUtil().setHeight(240.0).toDouble(),
-              padding: EdgeInsets.all(14),
+              padding: EdgeInsets.all(12),
               child: GridView.count(
                 crossAxisCount: 3,
-                childAspectRatio: 2,
+                childAspectRatio: 1.6,
                 children: <Widget>[
                   _gridWidget('798', '日记'),
                   _gridWidget('901', '格志'),
@@ -64,19 +64,24 @@ class Statistics extends StatelessWidget {
   }
 
   Widget _gridWidget(String data, String title) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          data,
-          style: TextStyle(
-              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        Text(
-          title,
-          style: TextStyle(color: Colors.white),
-        ),
-      ],
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      alignment: Alignment.centerLeft,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            data,
+            style: TextStyle(
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          Text(
+            title,
+            style: TextStyle(color: Colors.white),
+          ),
+        ],
+      ),
     );
   }
 }

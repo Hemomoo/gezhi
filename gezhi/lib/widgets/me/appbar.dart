@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class MeAppbar extends StatelessWidget {
   final String tit;
   final String url;
-  MeAppbar({@required this.url = '',this.tit=''});
+  MeAppbar({this.url = '', this.tit = ''});
 
   @override
   Widget build(BuildContext context) {

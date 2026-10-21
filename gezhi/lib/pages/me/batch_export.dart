@@ -214,26 +214,16 @@ class _BatchExportState extends State<BatchExport> {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 18),
-              child: Container(
-                height: 30,
-                child: Center(
-                  child: _batchExportItem(
-                    tit: 'PDF尺寸',
-                    leading: Text('A4'),
-                  ),
-                ),
+              child: _batchExportItem(
+                tit: 'PDF尺寸',
+                leading: Text('A4'),
               ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 18),
-              child: Container(
-                height: 30,
-                child: Center(
-                  child: _batchExportItem(
-                    tit: 'PDF文件选项',
-                    leading: Text('合并成一个文件'),
-                  ),
-                ),
+              child: _batchExportItem(
+                tit: 'PDF文件选项',
+                leading: Text('合并成一个文件'),
               ),
             ),
           ],
@@ -245,45 +235,36 @@ class _BatchExportState extends State<BatchExport> {
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 18),
-                child: Container(
-                  height: 30,
-                  child: _batchExportItem(
-                    tit: '印象笔记用户',
-                    leading: Text(
-                      '授权',
-                      style: TextStyle(color: GZColors.primary),
-                    ),
-                    fn: _authEvernotr,
+                child: _batchExportItem(
+                  tit: '印象笔记用户',
+                  leading: Text(
+                    '授权',
+                    style: TextStyle(color: GZColors.primary),
+                  ),
+                  fn: _authEvernotr,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 18),
+                child: _batchExportItem(
+                  tit: '覆盖已经已有标签',
+                  leading: CupertinoSwitch(
+                    value: false,
+                    onChanged: (val) {
+                      print(val);
+                    },
                   ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 18),
-                child: Container(
-                  height: 30,
-                  child: _batchExportItem(
-                    tit: '覆盖已经已有标签',
-                    leading: CupertinoSwitch(
-                      value: false,
-                      onChanged: (val) {
-                        print(val);
-                      },
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 18),
-                child: Container(
-                  height: 30,
-                  child: _batchExportItem(
-                    tit: '包含标签',
-                    leading: CupertinoSwitch(
-                      value: false,
-                      onChanged: (val) {
-                        print(val);
-                      },
-                    ),
+                child: _batchExportItem(
+                  tit: '包含标签',
+                  leading: CupertinoSwitch(
+                    value: false,
+                    onChanged: (val) {
+                      print(val);
+                    },
                   ),
                 ),
               )

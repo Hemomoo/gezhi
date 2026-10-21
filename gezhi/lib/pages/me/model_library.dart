@@ -59,11 +59,13 @@ class _ModelLibraryState extends State<ModelLibrary> {
               .map(
                 (e) => Column(
                   children: [
-                    InkWell(
-                      child: _template(),
-                      onLongPress: () {
-                        print('121');
-                      },
+                    Expanded(
+                      child: InkWell(
+                        child: _template(),
+                        onLongPress: () {
+                          print('121');
+                        },
+                      ),
                     ),
                     Text('默认模板')
                   ],
